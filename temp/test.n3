@@ -1,0 +1,424 @@
+@prefix ns1: <http://data.open.ac.uk/kmi/ontoRob/property/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Accel> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Directional_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/angular>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/linear> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/AccelStamped> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Directional_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/accel::angular>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/accel::linear> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/AccelWithCovariance> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Directional_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/accel::angular>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/accel::linear> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/AccelWithCovarianceStamped> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Directional_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/accel::accel::angular>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/accel::accel::linear> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/BatteryState> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Battery_Sensing>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/Self_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/CompressedImage> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Vision> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/data> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/DisparityImage> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Vision> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/image>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/valid_window> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/stereo_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/GetMap> a <http://data.open.ac.uk/kmi/ontoRob#act>,
+        <http://data.open.ac.uk/kmi/ontoRob#srv> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Map_representation> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/nav_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/GetPlan> a <http://data.open.ac.uk/kmi/ontoRob#srv> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Navigation_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/goal>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/plan>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/start> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/nav_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/GridCells> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Map_representation> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/nav_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Illuminance> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Light_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/illuminance> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Image> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Vision> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/data>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/height>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/width> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Imu> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Robot_position>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/Robot_speed> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/angular_velocity>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/linear_acceleration>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/orientation> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/JointState> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Body_part_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/effort[k]>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/name[k]>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/position[k]>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/velocity[k]> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/JointTrajectory> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Body_part_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/joint_names>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/points> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/trajectory_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/JointTrajectoryPoint> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Body_part_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/acceleration[k]>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/effort[k]>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/position[k]>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/velocities[k]> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/trajectory_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Joy> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Teleoperation> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/axes>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/buttons> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/JoyFeedback> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Teleoperation> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/id>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/intensity>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/type> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/JoyFeedbackArray> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Teleoperation> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/array[k]> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/LaserEcho> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Depth_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/echoes[k]> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/LaserScan> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Depth_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/ranges[k]> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> ;
+    ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/scan> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MagneticField> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Magnetic_Field_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/magnetic_field> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MapMetaData> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Map_representation> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/nav_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Mesh> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Internal_Representation_Shape> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/shape_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MeshTriangle> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Internal_Representation_Shape> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/shape_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MoveBaseAction> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Navigation_Movement> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/move_base_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MoveBaseActionFeedback> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Navigation_Movement> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/move_base_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MoveBaseActionGoal> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Navigation_Movement> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/move_base_msgs> ;
+    ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/move_base/goal> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MoveBaseActionResult> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Navigation_Movement> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/move_base_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MoveBaseFeedback> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Navigation_Movement> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/move_base_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MoveBaseGoal> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Navigation_Movement> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/move_base_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MoveBaseResult> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Navigation_Movement> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/move_base_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MultiDOFJointState> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Body_part_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/joint_names[k]>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/transform[k]>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/twist[k]>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/wrench[k]> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MultiDOFJointTrajectory> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Body_part_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/joint_names>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/points> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/trajectory_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MultiDOFJointTrajectoryPoint> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Body_part_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/acceleration[k]>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/transform[k]>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/velocities[k]> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/trajectory_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/MultiEchoLaserScan> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Depth_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/ranges[k]::echoes[k]> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/NavSatFix> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/GPS_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/altitude>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/latitude>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/longitude>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/status::status> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/OccupancyGrid> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Map_representation> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/nav_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Odometry> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Robot_position>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/Robot_speed> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/pose::orientation>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/pose::position>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/twist::angular>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/twist::linear> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/nav_msgs> ;
+    ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/odom> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Path> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Navigation_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/poses[k]::pose::orientation>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/poses[k]::pose::position> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/nav_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Plane> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Internal_Representation_Shape> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/shape_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/PointCloud> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Depth_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/points[k]> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/PointCloud2> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Depth_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Pose> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Robot_position> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/orientation>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/position> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Pose2D> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Robot_position> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/theta>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/x>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/y> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/PoseStamped> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Robot_position> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/pose::orientation>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/pose::position> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/PoseWithCovariance> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Robot_position> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/pose::orientation>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/pose::position> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/PoseWithCovarianceStamped> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Robot_position> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/pose::pose::orientation>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/pose::pose::position> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Range> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Depth_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/range> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/RegionOfInterest> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Vision> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/height>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/width>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/x_offset>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/y_offset> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/RelativeHumidity> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Humidity_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/relative_humidity> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/SetMap> a <http://data.open.ac.uk/kmi/ontoRob#srv> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Map_representation> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/nav_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/SolidPrimitive> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Internal_Representation_Shape> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/shape_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Temperature> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Temperature_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/temperature> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/TimeReference> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Time_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/time_ref> ;
+    ns1:hasParamType "read" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Twist> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Directional_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/angular>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/linear> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/TwistStamped> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Directional_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/twist::angular>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/twist::linear> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/TwistWithCovariance> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Directional_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/twist::angular>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/twist::linear> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/TwistWithCovarianceStamped> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/Directional_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/twist::twist::angular>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/twist::twist::linear> ;
+    ns1:hasParamType "write" ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Battery_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/GPS_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Humidity_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Light_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Magnetic_Field_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Self_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Temperature_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Time_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/move_base/goal> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/odom> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/scan> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Robot_speed> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Teleoperation> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Internal_Representation_Shape> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Vision> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Map_representation> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Body_part_Movement> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Depth_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Robot_position> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Directional_Movement> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/Navigation_Movement> a <http://data.open.ac.uk/kmi/ontoRob#Capability> .
+

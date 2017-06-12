@@ -1,0 +1,16 @@
+<title>Hello from Flask</title>
+{% for item in data.query %}
+  <p>   <strong>Component</strong>: {{ item }}<br/>
+	  {% for elt in data.query[item] %}
+	  <strong>Msg</strong>: {{ elt }}<br/>
+	  {% endfor %} 
+  </p>
+{% endfor %}
+<hr/>
+{% for item in data.resp %}
+  <p>   <strong>Name</strong>: {{ item.name }}<br/>
+	  {% for elt in item.capabs %}
+	  <strong>Capability</strong>: {{ elt }}<br/>
+	  {% endfor %} 
+  </p>
+{% endfor %}

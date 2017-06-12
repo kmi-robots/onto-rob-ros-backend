@@ -1,0 +1,93 @@
+in
+[ { "node":"/stageros", "topic":"/odom", "message":"nav_msgs/Odometry", "method":"msg" }, { "node":"/stageros", "topic":"/scan", "message":"sensor_msgs/LaserScan", "method":"msg" }, { "node":"/move_base", "topic":"/move_base/goal", "message":"move_base_msgs/MoveBaseActionGoal", "method":"msg" } ]
+
+out
+
+[
+  {
+    "capabs": {
+      "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Robot_position": [
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.x", 
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.x", 
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.y", 
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.z", 
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.w", 
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.z", 
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.y"
+      ], 
+      "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Robot_speed": [
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/twist.twist.angular.y", 
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/twist.twist.linear.x", 
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/twist.twist.linear.z", 
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/twist.twist.angular.x", 
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/twist.twist.linear.y", 
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/twist.twist.angular.z"
+      ]
+    }, 
+    "node_name": "/stageros"
+  }, 
+  {
+    "capabs": {
+      "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Depth_Sensing": [
+        "http://data.open.ac.uk/kmi/ontoRob/resource/field/anges__LIST"
+      ]
+    }, 
+    "node_name": "/stageros"
+  }, 
+  {
+    "capabs": {}, 
+    "node_name": "/move_base"
+  }
+]
+
+---------
+
+out
+"package": "geometry_msgs", 
+"name": "PoseStamped", 
+"topic": "/move_base_simple/goal", 
+"fields": ["header.frame_id", "pose.position.x", "pose.position.y", "pose.position.z", 
+"pose.orientation.x", "pose.orientation.y", "pose.orientation.z", "pose.orientation.w"], 
+"header.frame_id": "map", 
+"pose.position.x": -1.059, 
+"pose.position.y": -0.986, 
+"pose.position.z": 0.0, 
+"pose.orientation.x": 0.0, 
+"pose.orientation.y": 0.0, 
+"pose.orientation.z": 0.910988849763, 
+"pose.orientation.w": 0.412430982842
+}
+
+
+    # TODO capability=capability={"type":"Robot_position","parameters":{"x":10.0,"y":-12.3,"theta":0.0}}
+    # {"type":"Navigation_Movement","parameters":{"plan":10.0,"goal":-12.3}}
+    # {"type":"Robot_position","parameters":{"pose.pose.position.x":10.0,"pose.pose.position.y":10.0,"twist.twist.angular.x":-12.3,"twist.twist.angular.y":-11.3,"twist.twist.angular.z":-12.3}}
+	
+	
+----
+GEt capability w/ components
+        # for component in nodes:
+#             component_obj= { 'name' : component, 'capabs' :[] }
+#             query_string=self.build_query(nodes[component])
+#             print query_string
+#             # one query per component
+#             qres = self.__G.query(query_string)
+#             for row in qres:
+#                 component_obj['capabs'].append("%s" % row)
+#
+#             response_array.append(component_obj)
+
+---
+def get_nodes(json_string):
+    """
+    utility fct to parse json
+    """
+    node_dict = dict()
+    
+    for node in json_string:
+        # print node
+        component = node['node'][1:].replace("/","::")+"::"+node['topic'][1:].replace("/","::")
+        if not node_dict.has_key(component):
+            node_dict[component]=list()
+        node_dict[component].append(node['message'][node['message'].rfind("/")+1:])
+    return node_dict
