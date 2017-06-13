@@ -130,7 +130,7 @@ class OntoRobServer():
         return topic       
     
     def saveGraph(self):
-        s = g.serialize(format='turtle')
+        s = self.__G.serialize(format='turtle')
         fw = codecs.open("../temp_graph.n3",'w')
         fw.write(s)
         fw.close()
@@ -138,27 +138,50 @@ class OntoRobServer():
         
 app = Flask(__name__)
 onto_server = OntoRobServer()
-g = onto_server.getGraph()  
 
 @app.route("/")
 def index():
     return "OntoRobServer ready for listening"
 
-@app.route("/node/<node>")
+@app.route("/msg/<msg>")
 def ask_nodes(node):
     """
     queries the KB : which capabilities are evoked by this node?
     """
     result = ""
+    g = onto_server.getGraph()
     qres = g.query(
         """SELECT DISTINCT ?b
            WHERE {
                <http://data.open.ac.uk/kmi/ontoRob/resource/%s> <http://data.open.ac.uk/kmi/ontoRob/property/evokes> ?b.
-           } """ % node)
+           } """ % msg)
     
     for row in qres:
         result+="%s <br/>" % row
     return result,200
+    
+@app.route("/capability_temp")
+def ask_temp_capa():
+    result = ""
+    g = onto_server.getGraph()
+    qres = g.query(
+        """SELECT DISTINCT ?b
+           WHERE {
+               <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/PoseStamped> <http://data.open.ac.uk/kmi/ontoRob/property/evokes> <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation_Movement>.
+                <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation_Movement> <http://data.open.ac.uk/kmi/ontoRob/property/hasParameter> ?b .
+                <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/PoseStamped> <http://data.open.ac.uk/kmi/ontoRob/property/hasField> ?b.
+           } """
+    )  
+    result = dict()
+    result['node_name'] = "/move_base"
+    result['msg'] = "/geometry_msgs/PoseStamped"
+    result['capabs'] = list()
+    result['capabs'].append({'params' : list(), 'type': 'http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation_Movement'})
+    for row in qres:
+        # print row
+        result['capabs'][0]['params'].append(row[0])
+    return jsonify(result),200
+
 
 @app.route("/capability/<capa>")
 def ask_capability(capa):
@@ -166,6 +189,7 @@ def ask_capability(capa):
     queries the KB : which nodes evoke such capability?
     """
     result = ""
+    g = onto_server.getGraph()
     qres = g.query(
         """SELECT DISTINCT ?b
            WHERE {
@@ -178,7 +202,6 @@ def ask_capability(capa):
 
 @app.route('/capabilities')
 def ask_capabilities():
-    
     
     parsed_json = get_nodes()
     
