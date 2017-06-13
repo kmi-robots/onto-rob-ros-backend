@@ -1,8 +1,12 @@
 from flask import Flask, request, render_template, jsonify
 import json
 from rdflib import URIRef, Graph, RDF, Namespace
-import sys
 import codecs
+
+import rospy
+import importlib
+import functools
+
 
 class OntoRobServer():
     __GRAPHFILE = '../out.n3'
@@ -223,12 +227,49 @@ def triggerCapability():
     # get topic from Msg
     topic = onto_server.getTopicFromMsg(msg)
     robot_input['topic']=topic
+
+    send_command(robot_input)
      
-    return jsonify(robot_input),200
-     
+    return jsonify(robot_input), 200
+
+
+def rsetattr(obj, attr, val):
+    pre, _, post = attr.rpartition('.')
+    return setattr(functools.reduce(getattr, [obj]+pre.split('.')) if pre else obj, post, val)
+
+
+def gen_message(jp, attr):
+    fields = jp['fields']
+    tmsg = attr()
+    for f in fields:
+        rsetattr(tmsg, f, jp['param_values'][f])
+    return tmsg
+
+
+def activate_publisher(jp):
+    attr = getattr(importlib.import_module(jp['pkg'] + '.msg'), jp['name'])
+    pub = rospy.Publisher(jp['topic'], attr, queue_size=1)
+    return pub, attr
+
+
+def send_command(input_d):
+    rospy.init_node('talker', disable_signals=True)
+    print input_d
+    input_d['topic'] = '/move_base_simple/goal'
+    pub, attr = activate_publisher(input_d)
+    msg = gen_message(input_d, attr)
+    rate = rospy.Rate(1)
+    while not rospy.is_shutdown():
+        if pub.get_num_connections() > 0:
+            pub.publish(msg)
+            break
+        rate.sleep()
+
+
 def get_nodes():
     #TODO : include ROStalker
     return json.loads('[ { "node":"/stageros", "topic":"/odom", "message":"nav_msgs/Odometry", "method":"msg" }, { "node":"/stageros", "topic":"/scan", "message":"sensor_msgs/LaserScan", "method":"msg" }, { "node":"/move_base", "topic":"/move_base/goal", "message":"move_base_msgs/MoveBaseActionGoal", "method":"msg" } ]')   
+
 
 if __name__ == "__main__":
   
