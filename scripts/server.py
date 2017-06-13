@@ -1,23 +1,83 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, make_response, request, current_app, jsonify
 import json
 from rdflib import URIRef, Graph, RDF, Namespace
 import codecs
 
+
+from datetime import timedelta
+from functools import update_wrapper
+
 import rospy
+import rosnode
+from RosNode import RosNode
 import importlib
 import functools
 
 
-class OntoRobServer():
+def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_to_all=True, automatic_options=True):
+    """Decorator function that allows crossdomain requests.
+     Courtesy of
+     https://blog.skyred.fi/articles/better-crossdomain-snippet-for-flask.html
+   """
+    if methods is not None:
+        methods = ', '.join(sorted(x.upper() for x in methods))
+    if headers is not None and not isinstance(headers, basestring):
+        headers = ', '.join(x.upper() for x in headers)
+    if not isinstance(origin, basestring):
+        origin = ', '.join(origin)
+    if isinstance(max_age, timedelta):
+        max_age = max_age.total_seconds()
+
+    def get_methods():
+        """ Determines which methods are allowed
+       """
+        if methods is not None:
+            return methods
+
+        options_resp = current_app.make_default_options_response()
+        return options_resp.headers['allow']
+
+    def decorator(f):
+        """The decorator function
+       """
+
+        def wrapped_function(*args, **kwargs):
+            """Caries out the actual cross domain code
+           """
+            if automatic_options and request.method == 'OPTIONS':
+                resp = current_app.make_default_options_response()
+            else:
+                resp = make_response(f(*args, **kwargs))
+            if not attach_to_all and request.method != 'OPTIONS':
+                return resp
+
+            h = resp.headers
+            h['Access-Control-Allow-Origin'] = origin
+            h['Access-Control-Allow-Methods'] = get_methods()
+            h['Access-Control-Max-Age'] = str(max_age)
+            h['Access-Control-Allow-Credentials'] = 'true'
+            h['Access-Control-Allow-Headers'] = \
+                "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+            if headers is not None:
+                h['Access-Control-Allow-Headers'] = headers
+            return resp
+
+        f.provide_automatic_options = False
+        return update_wrapper(wrapped_function, f)
+
+    return decorator
+
+
+class OntoRobServer:
     __GRAPHFILE = '../out.n3'
-    __ONTOROB_RES = Namespace("http://data.open.ac.uk/kmi/ontoRob/resource/");
-    __ONTOROB_CLASS = Namespace("http://data.open.ac.uk/kmi/ontoRob#");
-    __ONTOROB_PROP = Namespace("http://data.open.ac.uk/kmi/ontoRob/property/");
+    __ONTOROB_RES = Namespace("http://data.open.ac.uk/kmi/ontoRob/resource/")
+    __ONTOROB_CLASS = Namespace("http://data.open.ac.uk/kmi/ontoRob#")
+    __ONTOROB_PROP = Namespace("http://data.open.ac.uk/kmi/ontoRob/property/")
     
     def __init__(self): 
         self.readKB()
 
-    def setKBfile(self,inputFile):
+    def setKBfile(self, inputFile):
         """
         load a different file if needed
         """
@@ -31,11 +91,11 @@ class OntoRobServer():
     def getGraph(self):
         return self.__G
         
-    def addTopics(self,data):
-        for node in data: 
-            topic = URIRef(self.__ONTOROB_RES.topic+"/"+ node['topic'][1:])
-            self.__G.add( (URIRef(self.__ONTOROB_RES+node['message']), URIRef(self.__ONTOROB_PROP.publishedOn) , topic))
-            self.__G.add( (topic, RDF.type, URIRef(self.__ONTOROB_CLASS.Topic)))
+    def addTopics(self, data):
+        for node in data:
+            topic = URIRef(self.__ONTOROB_RES.topic + "/" + node['topic'][1:])
+            self.__G.add((URIRef(self.__ONTOROB_RES+node['message']), URIRef(self.__ONTOROB_PROP.publishedOn), topic))
+            self.__G.add((topic, RDF.type, URIRef(self.__ONTOROB_CLASS.Topic)))
     
 
     def query_KB(self,jsonString):
@@ -51,7 +111,7 @@ class OntoRobServer():
             
             query_string=self.build_query([item['message']]) # TODO : ONE per array?
             
-            print query_string
+            # print query_string
             
             qres = self.__G.query(query_string)
             for row in qres:
@@ -62,15 +122,12 @@ class OntoRobServer():
                 
                 ix = 0
                 for c in component_obj['capabs']:
-                    print c
                     if c['type'] == row.capa: 
-                        ix = component_obj['capabs'].index(c) 
-                    #component_obj['capabs'][row.capa] = []
-                component_obj['capabs'][ix]['params'].append(row.param)   
-                # component_obj['capabs'][row.capa].append(row.param)
+                        ix = component_obj['capabs'].index(c)
+                component_obj['capabs'][ix]['params'].append({"p" : row.param, "mode" : "write"})
                 
                 
-            response_array.append(component_obj)  
+            response_array.append(component_obj)
               
         return response_array
         
@@ -85,18 +142,19 @@ class OntoRobServer():
     
         query = "SELECT ?capa ?param WHERE { " + values + " ?res <"+self.__ONTOROB_PROP.evokes+"> ?capa . ?res <"+self.__ONTOROB_PROP.hasField +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParameter +"> ?param . }";
         return query
-    
+
+
     def getPackage(self,msg):
         query = "SELECT ?pkg WHERE { <"+msg+"> <"+self.__ONTOROB_PROP.hasPkg+"> ?pkg . }"
         
-        print 2,query
+        # print 2,query
         qres = self.__G.query(query)
         
         ix = 0
         pkg=""
         res = ""
         for row in qres:
-            print row
+            # print row
             if ix > 1: break
             res=row.pkg
             ix+=1   
@@ -106,9 +164,9 @@ class OntoRobServer():
         triples=""
         for param in parameters:
             triples+= "?msg <"+self.__ONTOROB_PROP.hasField+"> <"+self.__ONTOROB_RES.field+"/"+param+">. "
-        query = "SELECT ?msg WHERE { ?msg <"+self.__ONTOROB_PROP.evokes+"> <"+self.__ONTOROB_RES.capability+"/"+capability+"> . "+ triples + " }"
+        query = "SELECT ?msg WHERE { ?msg <"+self.__ONTOROB_PROP.evokes+"> <"+capability+"> . "+ triples + " }"
         
-        print 1,query
+        # print 1,query
         qres = self.__G.query(query)
         
         ix = 0
@@ -122,7 +180,7 @@ class OntoRobServer():
         
     def getTopicFromMsg(self,msg):
         query = "SELECT ?topic WHERE { <"+msg+"> <"+self.__ONTOROB_PROP.publishedOn+"> ?topic .  }"
-        print query
+        # print query
         qres = self.__G.query(query)
         
         ix = 0
@@ -148,7 +206,7 @@ def index():
     return "OntoRobServer ready for listening"
 
 @app.route("/msg/<msg>")
-def ask_nodes(node):
+def ask_nodes(msg):
     """
     queries the KB : which capabilities are evoked by this node?
     """
@@ -163,10 +221,11 @@ def ask_nodes(node):
     for row in qres:
         result+="%s <br/>" % row
     return result,200
-    
-@app.route("/capability_temp")
+
+
+@app.route("/capability_temp", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
 def ask_temp_capa():
-    result = ""
     g = onto_server.getGraph()
     qres = g.query(
         """SELECT DISTINCT ?b
@@ -183,11 +242,12 @@ def ask_temp_capa():
     result['capabs'].append({'params' : list(), 'type': 'http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation_Movement'})
     for row in qres:
         # print row
-        result['capabs'][0]['params'].append(row[0])
-    return jsonify(result),200
+        result['capabs'][0]['params'].append({'p': row[0], 'mode': 'write'})
+    return json.dumps([result]), 200
 
 
-@app.route("/capability/<capa>")
+@app.route("/capability/<capa>", methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
 def ask_capability(capa):
     """
     queries the KB : which nodes evoke such capability?
@@ -201,14 +261,16 @@ def ask_capability(capa):
            } """ % capa)
 
     for row in qres:
-        result+="%s <br/>" % row
-    return jsonify(result),200
+        result += "%s <br/>" % row
+    return jsonify(result), 200
 
-@app.route('/capabilities')
+
+@app.route('/capabilities', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
 def ask_capabilities():
     
     parsed_json = get_nodes()
-    
+
     # add topics dynamically
     onto_server.addTopics(parsed_json)
     
@@ -216,17 +278,18 @@ def ask_capabilities():
     
     # get capabilitites
     response_array = onto_server.query_KB(parsed_json)
-    
-    return jsonify(response_array)
 
-@app.route('/trigger',methods=['GET','POST'])
+    return json.dumps(response_array)
+
+@app.route('/trigger',methods=['GET','POST','OPTIONS'])
+@crossdomain(origin='*')
 def triggerCapability():
     """
     in : capability + params
     out : (json) msg + topic + params
     """
-    if request.method == 'POST':    
-        response = json.loads(str(request.data['capability'])) # TODO check it works
+    if request.method == 'POST':
+        response = json.loads(request.data)['capability']
     elif request.method == 'GET':
         response = json.loads(str(request.args['capability']))
     else :
@@ -249,7 +312,7 @@ def triggerCapability():
     
     # get topic from Msg
     topic = onto_server.getTopicFromMsg(msg)
-    robot_input['topic']=topic
+    robot_input['topic'] = topic
 
     send_command(robot_input)
      
@@ -258,7 +321,11 @@ def triggerCapability():
 
 def rsetattr(obj, attr, val):
     pre, _, post = attr.rpartition('.')
-    return setattr(functools.reduce(getattr, [obj]+pre.split('.')) if pre else obj, post, val)
+    try:
+        v = float(val)
+    except ValueError:
+        v = val
+    return setattr(functools.reduce(getattr, [obj]+pre.split('.')) if pre else obj, post, v)
 
 
 def gen_message(jp, attr):
@@ -277,8 +344,6 @@ def activate_publisher(jp):
 
 def send_command(input_d):
     rospy.init_node('talker', disable_signals=True)
-    print input_d
-    input_d['topic'] = '/move_base_simple/goal'
     pub, attr = activate_publisher(input_d)
     msg = gen_message(input_d, attr)
     rate = rospy.Rate(1)
@@ -290,8 +355,16 @@ def send_command(input_d):
 
 
 def get_nodes():
-    #TODO : include ROStalker
-    return json.loads('[ { "node":"/stageros", "topic":"/odom", "message":"nav_msgs/Odometry", "method":"msg" }, { "node":"/stageros", "topic":"/scan", "message":"sensor_msgs/LaserScan", "method":"msg" }, { "node":"/move_base", "topic":"/move_base/goal", "message":"move_base_msgs/MoveBaseActionGoal", "method":"msg" } ]')   
+    nodelist = rosnode.get_node_names()
+    capabilities = []
+    for nodename in nodelist:
+        # initialise RosNode object
+        node = RosNode(nodename)
+        capabilities.extend(node.get_capability_msg())
+
+    return capabilities
+    # TODO : include ROStalker
+    # return json.loads('[ { "node":"/stageros", "topic":"/odom", "message":"nav_msgs/Odometry", "method":"msg" }, { "node":"/stageros", "topic":"/scan", "message":"sensor_msgs/LaserScan", "method":"msg" }, { "node":"/move_base", "topic":"/move_base/goal", "message":"move_base_msgs/MoveBaseActionGoal", "method":"msg" } ]')
 
 
 if __name__ == "__main__":
