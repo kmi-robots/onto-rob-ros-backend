@@ -364,10 +364,6 @@ def get_nodes():
 	msgs_topic_collection = update_msgs_collection(node.get_capability_msg(), msgs_topic_collection) 
         #msgs_topic_collection.extend(node.get_capability_msg())
     
-    # this transform every set in a list in the field 'nodes'
-    for item in msgs_topic_collection:
-	item["nodes"] = list(item["nodes"])
-
     print msgs_topic_collection
     return msgs_topic_collection
     # TODO : include ROStalker
