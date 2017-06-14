@@ -3,7 +3,6 @@ import json
 from rdflib import URIRef, Graph, RDF, Namespace
 import codecs
 
-
 from datetime import timedelta
 from functools import update_wrapper
 
@@ -75,41 +74,40 @@ class OntoRobServer:
     __ONTOROB_PROP = Namespace("http://data.open.ac.uk/kmi/ontoRob/property/")
     
     def __init__(self): 
-        self.readKB()
+        self.read_kb()
 
-    def setKBfile(self, inputFile):
+    def set_kb_file(self, input_file):
         """
         load a different file if needed
         """
-        self.__GRAPHFILE = inputFile
-        self.readKB()
+        self.__GRAPHFILE = input_file
+        self.read_kb()
         
-    def readKB(self):
+    def read_kb(self):
          self.__G = Graph()
          self.__G.parse(self.__GRAPHFILE, format="n3")
          
-    def getGraph(self):
+    def get_graph(self):
         return self.__G
         
-    def addTopics(self, data):
+    def add_topics(self, data):
         for node in data:
             topic = URIRef(self.__ONTOROB_RES.topic + "/" + node['topic'][1:])
             self.__G.add((URIRef(self.__ONTOROB_RES+node['message']), URIRef(self.__ONTOROB_PROP.publishedOn), topic))
             self.__G.add((topic, RDF.type, URIRef(self.__ONTOROB_CLASS.Topic)))
-    
 
-    def query_KB(self,jsonString):
+    def query_kb(self, json_str):
         """
         TODO change name of method. 
         """
         response_array = list()
         # print jsonString
         
-        for item in jsonString : 
+        for item in json_str:
             # print "fff", item['message']
-            component_obj= { 'node_name' : item['node'], 'msg': item['message'], 'capabs' : []  }
+            component_obj = {'node_name': item['node'], 'msg': item['message'], 'capabs': []}
             
-            query_string=self.build_query([item['message']]) # TODO : ONE per array?
+            query_string = self.build_query([item['message']])
             
             # print query_string
             
@@ -118,53 +116,51 @@ class OntoRobServer:
                 # print row
                 
                 if len(component_obj['capabs']) == 0 or row.capa not in list(c['type'] for c in component_obj['capabs']):
-                    component_obj['capabs'].append( {'type' : row.capa, 'params' : []} )
+                    component_obj['capabs'].append({'type': row.capa, 'params': []})
                 
                 ix = 0
                 for c in component_obj['capabs']:
                     if c['type'] == row.capa: 
                         ix = component_obj['capabs'].index(c)
-                component_obj['capabs'][ix]['params'].append({"p" : row.param, "mode" : "write"})
-                
-                
+                component_obj['capabs'][ix]['params'].append({"p" : row.param, "mode": "write"})
+
             response_array.append(component_obj)
               
         return response_array
         
-    def build_query(self,msg_list):
+    def build_query(self, msg_list):
         """
         select capabilities given a set of topics
         """
         values="VALUES(?res) {"
         for msg in msg_list:
             values += "( <"+self.__ONTOROB_RES + msg + ">) "
-        values+="}"
+        values += "}"
     
         query = "SELECT ?capa ?param WHERE { " + values + " ?res <"+self.__ONTOROB_PROP.evokes+"> ?capa . ?res <"+self.__ONTOROB_PROP.hasField +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParameter +"> ?param . }";
         return query
 
-
-    def getPackage(self,msg):
+    def get_package(self, msg):
         query = "SELECT ?pkg WHERE { <"+msg+"> <"+self.__ONTOROB_PROP.hasPkg+"> ?pkg . }"
         
         # print 2,query
         qres = self.__G.query(query)
         
         ix = 0
-        pkg=""
         res = ""
         for row in qres:
             # print row
-            if ix > 1: break
-            res=row.pkg
-            ix+=1   
+            if ix > 1:
+                break
+            res = row.pkg
+            ix += 1
         return res 
     
-    def getMessageName(self,capability, parameters):
-        triples=""
+    def get_message_name(self, capability, parameters):
+        triples = ""
         for param in parameters:
-            triples+= "?msg <"+self.__ONTOROB_PROP.hasField+"> <"+self.__ONTOROB_RES.field+"/"+param+">. "
-        query = "SELECT ?msg WHERE { ?msg <"+self.__ONTOROB_PROP.evokes+"> <"+capability+"> . "+ triples + " }"
+            triples += "?msg <"+self.__ONTOROB_PROP.hasField+"> <"+self.__ONTOROB_RES.field+"/"+param+">. "
+        query = "SELECT ?msg WHERE { ?msg <"+self.__ONTOROB_PROP.evokes+"> <"+capability+"> . " + triples + " }"
         
         # print 1,query
         qres = self.__G.query(query)
@@ -172,13 +168,14 @@ class OntoRobServer:
         ix = 0
         res = ""
         for row in qres:
-            if ix > 1: break
-            res=row.msg
-            ix+=1
+            if ix > 1:
+                break
+            res = row.msg
+            ix += 1
              
         return res
         
-    def getTopicFromMsg(self,msg):
+    def get_topic_from_msg(self, msg):
         query = "SELECT ?topic WHERE { <"+msg+"> <"+self.__ONTOROB_PROP.publishedOn+"> ?topic .  }"
         # print query
         qres = self.__G.query(query)
@@ -191,7 +188,7 @@ class OntoRobServer:
             ix+=1
         return topic       
     
-    def saveGraph(self):
+    def save_graph(self):
         s = self.__G.serialize(format='turtle')
         fw = codecs.open("../temp_graph.n3",'w')
         fw.write(s)
@@ -201,9 +198,11 @@ class OntoRobServer:
 app = Flask(__name__)
 onto_server = OntoRobServer()
 
+
 @app.route("/")
 def index():
     return "OntoRobServer ready for listening"
+
 
 @app.route("/msg/<msg>")
 def ask_nodes(msg):
@@ -211,7 +210,7 @@ def ask_nodes(msg):
     queries the KB : which capabilities are evoked by this node?
     """
     result = ""
-    g = onto_server.getGraph()
+    g = onto_server.get_graph()
     qres = g.query(
         """SELECT DISTINCT ?b
            WHERE {
@@ -219,14 +218,14 @@ def ask_nodes(msg):
            } """ % msg)
     
     for row in qres:
-        result+="%s <br/>" % row
-    return result,200
+        result += "%s <br/>" % row
+    return result, 200
 
 
 @app.route("/capability_temp", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def ask_temp_capa():
-    g = onto_server.getGraph()
+    g = onto_server.get_graph()
     qres = g.query(
         """SELECT DISTINCT ?b
            WHERE {
@@ -239,7 +238,7 @@ def ask_temp_capa():
     result['node_name'] = "/move_base"
     result['msg'] = "/geometry_msgs/PoseStamped"
     result['capabs'] = list()
-    result['capabs'].append({'params' : list(), 'type': 'http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation_Movement'})
+    result['capabs'].append({'params': list(), 'type': 'http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation_Movement'})
     for row in qres:
         # print row
         result['capabs'][0]['params'].append({'p': row[0], 'mode': 'write'})
@@ -253,7 +252,7 @@ def ask_capability(capa):
     queries the KB : which nodes evoke such capability?
     """
     result = ""
-    g = onto_server.getGraph()
+    g = onto_server.get_graph()
     qres = g.query(
         """SELECT DISTINCT ?b
            WHERE {
@@ -272,18 +271,19 @@ def ask_capabilities():
     parsed_json = get_nodes()
 
     # add topics dynamically
-    onto_server.addTopics(parsed_json)
+    onto_server.add_topics(parsed_json)
     
-    onto_server.saveGraph()
+    onto_server.save_graph()
     
     # get capabilitites
-    response_array = onto_server.query_KB(parsed_json)
+    response_array = onto_server.query_kb(parsed_json)
 
     return json.dumps(response_array)
 
+
 @app.route('/trigger',methods=['GET','POST','OPTIONS'])
 @crossdomain(origin='*')
-def triggerCapability():
+def trigger_capability():
     """
     in : capability + params
     out : (json) msg + topic + params
@@ -303,15 +303,15 @@ def triggerCapability():
     robot_input['fields']=fields
     
     # get message name from capability+parameters
-    msg = onto_server.getMessageName(response['type'],response['parameters'])
+    msg = onto_server.get_message_name(response['type'], response['parameters'])
     robot_input['name']=msg.split("/")[-1]
     
     # get pkg
-    pkg = onto_server.getPackage(msg)
+    pkg = onto_server.get_package(msg)
     robot_input['pkg']=pkg.split("/")[-1]
     
     # get topic from Msg
-    topic = onto_server.getTopicFromMsg(msg)
+    topic = onto_server.get_topic_from_msg(msg)
     robot_input['topic'] = topic
 
     send_command(robot_input)
@@ -363,8 +363,6 @@ def get_nodes():
         capabilities.extend(node.get_capability_msg())
 
     return capabilities
-    # TODO : include ROStalker
-    # return json.loads('[ { "node":"/stageros", "topic":"/odom", "message":"nav_msgs/Odometry", "method":"msg" }, { "node":"/stageros", "topic":"/scan", "message":"sensor_msgs/LaserScan", "method":"msg" }, { "node":"/move_base", "topic":"/move_base/goal", "message":"move_base_msgs/MoveBaseActionGoal", "method":"msg" } ]')
 
 
 if __name__ == "__main__":
