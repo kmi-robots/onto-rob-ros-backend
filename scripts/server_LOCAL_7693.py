@@ -84,8 +84,8 @@ class OntoRobServer:
         self.read_kb()
         
     def read_kb(self):
-        self.__G = Graph()
-        self.__G.parse(self.__GRAPHFILE, format="n3")
+         self.__G = Graph()
+         self.__G.parse(self.__GRAPHFILE, format="n3")
          
     def get_graph(self):
         return self.__G
@@ -122,10 +122,9 @@ class OntoRobServer:
                 for c in component_obj['capabs']:
                     if c['type'] == row.capa: 
                         ix = component_obj['capabs'].index(c)
-                component_obj['capabs'][ix]['params'].append({"p" : row.param, "mode" : "write"})
-                
-            if len(component_obj['capabs']) != 0:
-                response_array.append(component_obj)
+                component_obj['capabs'][ix]['params'].append({"p" : row.param, "mode": "write"})
+
+            response_array.append(component_obj)
               
         return response_array
         
@@ -270,8 +269,7 @@ def ask_capability(capa):
 def ask_capabilities():
     
     parsed_json = get_nodes()
-    
-    # print parsed_json
+
     # add topics dynamically
     onto_server.add_topics(parsed_json)
     
@@ -283,7 +281,7 @@ def ask_capabilities():
     return json.dumps(response_array)
 
 
-@app.route('/trigger', methods=['GET', 'POST', 'OPTIONS'])
+@app.route('/trigger',methods=['GET','POST','OPTIONS'])
 @crossdomain(origin='*')
 def trigger_capability():
     """
@@ -300,17 +298,17 @@ def trigger_capability():
     robot_input = dict()
     
     # add parameters to robotinput
-    robot_input['param_values'] = response['parameters']
-    fields = list(param for param in robot_input['param_values'].keys())
-    robot_input['fields'] = fields
+    robot_input['param_values']=response['parameters']
+    fields = list( param for param in robot_input['param_values'].keys())
+    robot_input['fields']=fields
     
     # get message name from capability+parameters
     msg = onto_server.get_message_name(response['type'], response['parameters'])
-    robot_input['name'] = msg.split("/")[-1]
+    robot_input['name']=msg.split("/")[-1]
     
     # get pkg
     pkg = onto_server.get_package(msg)
-    robot_input['pkg'] = pkg.split("/")[-1]
+    robot_input['pkg']=pkg.split("/")[-1]
     
     # get topic from Msg
     topic = onto_server.get_topic_from_msg(msg)
@@ -358,43 +356,14 @@ def send_command(input_d):
 
 def get_nodes():
     nodelist = rosnode.get_node_names()
-    msgs_topic_collection = []
+    capabilities = []
     for nodename in nodelist:
         # initialise RosNode object
         node = RosNode(nodename)
-        print node.get_capability_msg()
-        msgs_topic_collection = update_msgs_collection(node.get_capability_msg(), msgs_topic_collection)
-        #msgs_topic_collection.extend(node.get_capability_msg())
-    
-    # this transform every set in a list in the field 'nodes'
-    for item in msgs_topic_collection:
-        item["nodes"] = list(item["nodes"])
+        capabilities.extend(node.get_capability_msg())
 
-    print msgs_topic_collection
-    return msgs_topic_collection
+    return capabilities
 
-
-def update_msgs_collection(cur_node_msgs, msgs_topic_collection):
-    for msg in cur_node_msgs:
-        topic_message_found = False
-        topic = msg["topic"]
-        message = msg["message"]
-        node_name = msg["node"]
-
-        for msg_topic in msgs_topic_collection:
-            if msg_topic["topic"] == topic and msg_topic["message"] == message:
-                msg_topic["nodes"].add(node_name)
-                topic_message_found = True
-
-        if not topic_message_found:
-            new_msg_topic = {}
-            new_msg_topic["topic"] = topic
-            new_msg_topic["message"] = message
-            new_msg_topic["nodes"] = set([node_name])
-            new_msg_topic["capabilities"] = []
-            msgs_topic_collection.append(new_msg_topic)
-
-    return msgs_topic_collection
 
 if __name__ == "__main__":
   
