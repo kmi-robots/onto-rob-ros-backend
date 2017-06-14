@@ -106,8 +106,8 @@ class OntoRobServer:
         # print jsonString
         
         for item in jsonString : 
-            # print "fff", item['message']
-            component_obj= { 'node_name' : item['node'], 'msg': item['message'], 'capabs' : []  }
+            #print "fff", item['message']
+            component_obj= {  'msg': item['message'], 'capabs' : [], 'topic' : item['topic'] }
             
             query_string=self.build_query([item['message']]) # TODO : ONE per array?
             
@@ -126,8 +126,8 @@ class OntoRobServer:
                         ix = component_obj['capabs'].index(c)
                 component_obj['capabs'][ix]['params'].append({"p" : row.param, "mode" : "write"})
                 
-                
-            response_array.append(component_obj)
+            if len(component_obj['capabs']) != 0:
+                response_array.append(component_obj)
               
         return response_array
         
@@ -270,7 +270,8 @@ def ask_capability(capa):
 def ask_capabilities():
     
     parsed_json = get_nodes()
-
+	
+    # print parsed_json
     # add topics dynamically
     onto_server.addTopics(parsed_json)
     

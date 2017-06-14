@@ -106,8 +106,8 @@ class OntoRobServer:
         # print jsonString
         
         for item in jsonString : 
-            # print "fff", item['message']
-            component_obj= { 'node_name' : item['node'], 'msg': item['message'], 'capabs' : []  }
+            #print "fff", item['message']
+            component_obj= {  'msg': item['message'], 'capabs' : [], 'topic' : item['topic'] }
             
             query_string=self.build_query([item['message']]) # TODO : ONE per array?
             
@@ -270,7 +270,8 @@ def ask_capability(capa):
 def ask_capabilities():
     
     parsed_json = get_nodes()
-
+	
+    # print parsed_json
     # add topics dynamically
     onto_server.addTopics(parsed_json)
     
@@ -364,6 +365,10 @@ def get_nodes():
 	msgs_topic_collection = update_msgs_collection(node.get_capability_msg(), msgs_topic_collection) 
         #msgs_topic_collection.extend(node.get_capability_msg())
     
+    # this transform every set in a list in the field 'nodes'
+    for item in msgs_topic_collection:
+	item["nodes"] = list(item["nodes"])
+
     print msgs_topic_collection
     return msgs_topic_collection
     # TODO : include ROStalker
