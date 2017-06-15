@@ -1,0 +1,112 @@
+{
+  "instructions": [
+    {
+      "pkg": "geometry_msgs",
+      "name": "PoseStamped",
+      "topic": "/move_base_simple/goal",
+      "fields": [
+        "header.frame_id",
+        "pose.position.x",
+        "pose.position.y",
+        "pose.position.z",
+        "pose.orientation.x",
+        "pose.orientation.y",
+        "pose.orientation.z",
+        "pose.orientation.w"
+      ],
+      "header.frame_id": "map",
+      "pose.position.x": -1.0,
+      "pose.position.y": -1.0,
+      "pose.position.z": 0.0,
+      "pose.orientation.x": 0.0,
+      "pose.orientation.y": 0.0,
+      "pose.orientation.z": 0.0,
+      "pose.orientation.w": 1.0
+    },
+    {
+      "id": "0",
+      "type": "if",
+      "condition": {
+        "topic": "/chatter",
+        "pkg": "std_msgs",
+        "name": "Int32",
+        "field": "data",
+        "operator": "==",
+        "val": 3
+      },
+      "then": [
+        {
+          "pkg": "geometry_msgs",
+          "name": "PoseStamped",
+          "topic": "/move_base_simple/goal",
+          "fields": [
+            "header.frame_id",
+            "pose.position.x",
+            "pose.position.y",
+            "pose.position.z",
+            "pose.orientation.x",
+            "pose.orientation.y",
+            "pose.orientation.z",
+            "pose.orientation.w"
+          ],
+          "header.frame_id": "map",
+          "pose.position.x": 1.0,
+          "pose.position.y": 1.0,
+          "pose.position.z": 0.0,
+          "pose.orientation.x": 0.0,
+          "pose.orientation.y": 0.0,
+          "pose.orientation.z": 0.0,
+          "pose.orientation.w": 1.0
+        }
+      ],
+      "else": [
+        {
+          "pkg": "geometry_msgs",
+          "name": "PoseStamped",
+          "topic": "/move_base_simple/goal",
+          "fields": [
+            "header.frame_id",
+            "pose.position.x",
+            "pose.position.y",
+            "pose.position.z",
+            "pose.orientation.x",
+            "pose.orientation.y",
+            "pose.orientation.z",
+            "pose.orientation.w"
+          ],
+          "header.frame_id": "map",
+          "pose.position.x": 1.0,
+          "pose.position.y": 1.0,
+          "pose.position.z": 0.0,
+          "pose.orientation.x": 0.0,
+          "pose.orientation.y": 0.0,
+          "pose.orientation.z": 0.0,
+          "pose.orientation.w": 1.0
+        }
+      ]
+    },
+    {
+      "pkg": "geometry_msgs",
+      "name": "PoseStamped",
+      "topic": "/move_base_simple/goal",
+      "fields": [
+        "header.frame_id",
+        "pose.position.x",
+        "pose.position.y",
+        "pose.position.z",
+        "pose.orientation.x",
+        "pose.orientation.y",
+        "pose.orientation.z",
+        "pose.orientation.w"
+      ],
+      "header.frame_id": "map",
+      "pose.position.x": 0.0,
+      "pose.position.y": 0.0,
+      "pose.position.z": 0.0,
+      "pose.orientation.x": 0.0,
+      "pose.orientation.y": 0.0,
+      "pose.orientation.z": 0.0,
+      "pose.orientation.w": 1.0
+    }
+  ]
+}
