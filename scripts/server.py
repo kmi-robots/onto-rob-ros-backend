@@ -104,7 +104,7 @@ class OntoRobServer:
         # print jsonString
         
         for item in json_str:
-            print item
+            #print item
             if item["topic"] == "/move_base_simple/goal":
                 print "found"
             # print "fff", item['message']
@@ -121,8 +121,8 @@ class OntoRobServer:
 
             for row in qres:
                 # print row
-                if item["topic"] == "/move_base_simple/goal":
-                    print row
+                """if item["topic"] == "/move_base_simple/goal":
+                    print row"""
                 if len(component_obj['capabs']) == 0 or row.capa not in list(c['type'] for c in component_obj['capabs']):
                     component_obj['capabs'].append({'type': row.capa, 'params': []})
                 
@@ -301,30 +301,34 @@ def trigger_capability():
     out : (json) msg + topic + params
     """
     if request.method == 'POST':
-        response = json.loads(request.data)['capability']
+        req_capability = json.loads(request.data)['capability']
     elif request.method == 'GET':
-        response = json.loads(str(request.args['capability']))
+        req_capability = json.loads(str(request.args['capability']))
     else :
         return "Method not allowed", 403
 
     robot_input = dict()
     
     # add parameters to robotinput
-    robot_input['param_values'] = response['parameters']
+    robot_input['param_values'] = req_capability['parameters']
     fields = list(param for param in robot_input['param_values'].keys())
     robot_input['fields'] = fields
     
     # get message name from capability+parameters
-    msg = onto_server.get_message_name(response['type'], response['parameters'])
-    robot_input['name'] = msg.split("/")[-1]
+    #msg = onto_server.get_message_name(req_capability['type'], req_capability['parameters'])
+
+    # bypassing the KB. All the infos come from the application. We'll see later
+    # ROS msgs and pkgs system is alwats pkg/msgName, so 0 a 1 are ok indexes for all the cases
+    msg = req_capability["message"]
+    robot_input['name'] = msg.split("/")[1]
     
     # get pkg
-    pkg = onto_server.get_package(msg)
-    robot_input['pkg'] = pkg.split("/")[-1]
+    #pkg = onto_server.get_package(msg)
+    robot_input['pkg'] = msg.split("/")[0]
     
     # get topic from Msg
     #topic = onto_server.get_topic_from_msg(msg)
-    topic = response["topic"]
+    topic = req_capability["topic"]
 
     robot_input['topic'] = topic
 
@@ -352,7 +356,7 @@ def gen_message(jp, attr):
 
 def activate_publisher(jp):
     attr = getattr(importlib.import_module(jp['pkg'] + '.msg'), jp['name'])
-    print jp['topic']
+    #print jp['topic']
     pub = rospy.Publisher(jp['topic'], attr, queue_size=1)
     return pub, attr
 
@@ -372,6 +376,7 @@ def send_command(input_d):
 def get_nodes():
     nodelist = rosnode.get_node_names()
     msgs_topic_collection = []
+
     for nodename in nodelist:
         # initialise RosNode object
         node = RosNode(nodename)
@@ -379,6 +384,14 @@ def get_nodes():
         msgs_topic_collection = update_msgs_collection(node.get_capability_msg(), msgs_topic_collection)
         #msgs_topic_collection.extend(node.get_capability_msg())
     
+        """if nodename == "/move_base":
+            print "MOVE_BASE"
+            for a in node.get_capability_msg():
+                if a["topic"] == "/move_base_simple/goal":
+                    print "AAAAA: %s" % a["topic"]
+                else:
+                    print a"""
+
     # this transform every set in a list in the field 'nodes'
     for item in msgs_topic_collection:
         item["nodes"] = list(item["nodes"])
@@ -389,12 +402,6 @@ def get_nodes():
 
 def update_msgs_collection(cur_node_msgs, msgs_topic_collection):
     for msg in cur_node_msgs:
-	if msg["node"] == "/move_base":
-		print msg["topic"]
-
-        if msg["topic"] == "/move_base_simple/goal":
-             print "PORCODDIO"
-
         topic_message_found = False
         topic = msg["topic"]
         message = msg["message"]

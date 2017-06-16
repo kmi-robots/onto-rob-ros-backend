@@ -52,7 +52,7 @@ class RosNode(object):
             msg = self.get_topic_type(topic)
             #msg = self.get_msg(line.rstrip())
             if topic == "/move_base_simple/goal":
-		print "DIO BANANE"
+		print "RosNode has found %s" % topic
 
             sub_topic = {"topic":topic,"msg":msg}
             self.subscribed_topics.append(sub_topic)
@@ -104,7 +104,7 @@ class RosNode(object):
             to_add = {"method":"msg","act":"pub","node":self.name,"topic":pt["topic"], "message":pt["msg"]}
             ret.append(to_add)
 
-        for st in self.published_topics:
+        for st in self.subscribed_topics:
             to_add = {"method":"msg","act":"sub","node":self.name,"topic":st["topic"], "message":st["msg"]}
             ret.append(to_add)
             
