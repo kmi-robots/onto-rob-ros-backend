@@ -51,9 +51,6 @@ class RosNode(object):
             info_text = rostopic.get_info_text(topic)
             msg = self.get_topic_type(topic)
             #msg = self.get_msg(line.rstrip())
-            if topic == "/move_base_simple/goal":
-		print "DIO BANANE"
-
             sub_topic = {"topic":topic,"msg":msg}
             self.subscribed_topics.append(sub_topic)
             #print "This is a subscribed topic: %s with msg:%s" % (topic,msg)

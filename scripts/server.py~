@@ -389,9 +389,6 @@ def get_nodes():
 
 def update_msgs_collection(cur_node_msgs, msgs_topic_collection):
     for msg in cur_node_msgs:
-	if msg["node"] == "/move_base":
-		print msg["topic"]
-
         if msg["topic"] == "/move_base_simple/goal":
              print "PORCODDIO"
 
