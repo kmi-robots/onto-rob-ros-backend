@@ -1,0 +1,120 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  /*padding-top: 50px;
+  padding-bottom: 20px;*/
+}
+
+.panel-heading {
+	padding-top:3px;
+	padding-bottom:3px;
+	/*background-color : #007DA9;*/
+	color: black;
+}
+
+.btn-custom {
+	color: #b8e7f9;
+	background-color : #007DA9;
+	border-color : #007DA9;
+}
+
+.navbar-custom {
+	background-color : #9F1F1F;
+}
+
+.navbar-inverse .navbar-brand  {
+	color : #007da9;
+}
+
+.navbar-inverse .navbar-brand:focus  ,
+.navbar-inverse .navbar-brand:hover  {
+	color : #F5A9A9;	
+}
+
+.header {
+	background-color : #007DA9;
+}
+
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+	background-color:#F5A9A9;	
+	border-color:#F5A9A9;	
+}
+
+.fa-android{
+	color:#F5A9A9;
+}
+
+.centered {
+    display: table-cell;
+    vertical-align: middle;
+	margin: 0 auto;
+}
+
+.jumbotron {
+	padding-top: 20px;
+	height:800px;
+}
+
+/* d3 */
+
+
+.overlay {
+  position: absolute;
+  background: rgba(100,100,100,0);
+  top:0px;
+  bottom:0px;
+  left:0px;
+  right:0px;
+}
+
+.element {
+  background: none;
+  position: absolute;
+  opacity: 1;
+  width: 150px; 
+  height: 100px;
+}
+
+.kb_container {
+	position:relative;
+}
+
+.map_container {
+	display:inline-block;
+	position:relative;
+	margin-top:150px;
+}
+
+.robot {
+	position:absolute; 
+}
+
+.map {
+	position:absolute;
+	top:0px; 
+	left:0px;
+}
+
+.querycell {
+	padding: 2px;
+}
+
+img#logo {
+    height: 50px;
+    width: auto;
+}
+
+/*.kb-table tr {
+	background-color:#F5A9A9;	
+}*/
+
+.room-heading {
+/*		background-color : #007DA9;*/
+/*		color:  #b8e7f9;*/
+	color : #333;
+}
+
+.panel-cstm {
+	border: 2px solid  #007DA9 ;
+	border-radius: 6px;
+}
+
