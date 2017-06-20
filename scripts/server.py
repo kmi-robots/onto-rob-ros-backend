@@ -289,7 +289,7 @@ def ask_capabilities():
     
     # get capabilitites
     response_array = onto_server.query_kb(parsed_json)
-
+    print json.dumps(response_array)
     return json.dumps(response_array)
 
 

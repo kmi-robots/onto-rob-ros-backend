@@ -1,0 +1,16 @@
+<h1>HELLO Ontorob!</h1>
+		
+     	<div class="col-lg-4" id="capability_container">
+		<h4>Capability List</h4>
+	</div>
+     	<div class="col-lg-4" id="program_container">
+		<h4>Program</h4>
+		<button type="button" class="btn" ng-click="run()">Run program</button>
+	</div> 
+     	<div class="col-lg-4" id="blocks_container">
+		<h4>Programming blocks</h4>
+		<div>statement <button type="button" class="btn" ng-click="addToProgram(\"statement\")">Add</button></div>
+		<div>if-then-else <button type="button" class="btn" ng-click="addToProgram(\"if-then-else\")">Add</button></div>
+		<div>while-do <button type="button" class="btn" ng-click="addToProgram(\"while-do\")">Add</button></div>
+		<div>repeat <button type="button" class="btn" ng-click="addToProgram(\"repeat\")">Add</button></div>
+	</div>  

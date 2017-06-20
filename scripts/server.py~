@@ -121,8 +121,8 @@ class OntoRobServer:
 
             for row in qres:
                 # print row
-                if item["topic"] == "/move_base_simple/goal":
-                    print row
+                """if item["topic"] == "/move_base_simple/goal":
+                    print row"""
                 if len(component_obj['capabs']) == 0 or row.capa not in list(c['type'] for c in component_obj['capabs']):
                     component_obj['capabs'].append({'type': row.capa, 'params': []})
                 
@@ -384,13 +384,13 @@ def get_nodes():
         msgs_topic_collection = update_msgs_collection(node.get_capability_msg(), msgs_topic_collection)
         #msgs_topic_collection.extend(node.get_capability_msg())
     
-        if nodename == "/move_base":
+        """if nodename == "/move_base":
             print "MOVE_BASE"
             for a in node.get_capability_msg():
                 if a["topic"] == "/move_base_simple/goal":
                     print "AAAAA: %s" % a["topic"]
                 else:
-                    print a
+                    print a"""
 
     # this transform every set in a list in the field 'nodes'
     for item in msgs_topic_collection:
