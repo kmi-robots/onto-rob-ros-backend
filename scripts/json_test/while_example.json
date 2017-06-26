@@ -24,10 +24,10 @@
       "pose.orientation.w": 1.0
     },
     {
-      "id": "0",
       "type": "while",
 	  "conditions":[
 		  {
+              "id": "0",
 	          "topic": "/chatter",
 	          "pkg": "std_msgs",
 	          "name": "Int32",
@@ -40,6 +40,7 @@
 			  "value":"or"
 		  },
 		  {
+              "id": "1",
 	          "topic": "/chatter",
 	          "pkg": "std_msgs",
 	          "name": "Int32",

@@ -9,8 +9,8 @@ topic_list = collections.defaultdict(list)
 last_value = {}
 
 
-def send_command(i):
-    print i
+def send_command(ist):
+    rospy.loginfo("%s", str(ist))
 
 
 def filterd_flatten(l, flt):
@@ -23,22 +23,40 @@ def filterd_flatten(l, flt):
                 yield el
 
 
-def manage_while(i):
-    cond = i['condition']
-    while i['id'] not in last_value:
-        rate.sleep()
-    result = eval(str(last_value[i['id']]) + str(cond['operator']) + str(cond['val']))
+def manage_while(ist):
+    cond_to_test = ''
+    for cond in ist['conditions']:
+        if 'type' not in cond:
+            while cond['id'] not in last_value:
+                rate.sleep()
+            cond_to_test += str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
+        else:
+            cond_to_test += str(cond['value']) + ' '
+    rospy.loginfo('%s', cond_to_test)
+    result = eval(cond_to_test)
 
     while result:
-        execute(i['do'])
-        result = eval(str(last_value[i['id']]) + str(cond['operator']) + str(cond['val']))
+        execute(ist['do'])
+        cond_to_test = ''
+        for cond in ist['conditions']:
+            if 'type' not in cond:
+                cond_to_test += str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
+            else:
+                cond_to_test += str(cond['value']) + ' '
+        rospy.loginfo('%s', cond_to_test)
+        result = eval(cond_to_test)
 
 
-def manage_if(i):
-    cond = i['condition']
-    while i['id'] not in last_value:
-        rate.sleep()
-    result = eval(str(last_value[i['id']]) + str(cond['operator']) + str(cond['val']))
+def manage_if(ist):
+    cond_to_test = ''
+    for cond in ist['conditions']:
+        if 'type' not in cond:
+            while cond['id'] not in last_value:
+                rate.sleep()
+            cond_to_test += str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
+        else:
+            cond_to_test += str(cond['value']) + ' '
+    result = eval(cond_to_test)
 
     if result:
         execute(i['then'])
@@ -46,8 +64,8 @@ def manage_if(i):
         execute(i['else'])
 
 
-def manage_repeat(i):
-    val = i['times']
+def manage_repeat(ist):
+    val = ist['times']
     for _ in range(0, val):
         execute(i['do'])
 
@@ -60,32 +78,34 @@ def callback(msg, topic):
 def execute(instructions):
     if not instructions:
         return
-    for i in instructions:
-        if 'type' in i:
-            if i['type'] == 'if':
-                manage_if(i)
-            if i['type'] == 'while':
-                manage_while(i)
-            if i['type'] == 'repeat':
-                manage_repeat(i)
+    for ist in instructions:
+        if 'type' in ist:
+            if ist['type'] == 'if':
+                manage_if(ist)
+            if ist['type'] == 'while':
+                manage_while(ist)
+            if ist['type'] == 'repeat':
+                manage_repeat(ist)
         else:
-            send_command(i)
+            send_command(ist)
 
 if __name__ == '__main__':
     rospy.init_node('dynamic_listener')
     rate = rospy.Rate(1)
-    # listing = json.load(open('/home/gianluca/catkin_ws/src/dynamic_node/scripts/if_example.json'))
-    # listing = json.load(open('/home/gianluca/catkin_ws/src/dynamic_node/scripts/while_example.json'))
-    listing = json.load(open('/home/gianluca/catkin_ws/src/dynamic_node/scripts/repeat_example.json'))
-    rospy.loginfo("node ready")
-    condition_flat_list = filterd_flatten(listing['instructions'], 'condition')
+    listing = json.load(open('if_example.json'))
+    # listing = json.load(open('while_example.json'))
+    # listing = json.load(open('/home/gianluca/catkin_ws/src/dynamic_node/scripts/repeat_example.json'))
+    # rospy.loginfo("node ready")
+    condition_flat_list = filterd_flatten(listing['instructions'], 'conditions')
 
-    for ci in condition_flat_list:
-        if ci['type'] == 'if' or ci['type'] == 'while':
-            c = ci['condition']
-            attr = getattr(importlib.import_module(c['pkg'] + '.msg'), c['name'])
-            topic_list[c['topic']].append([c['field'], ci['id']])
-            rospy.loginfo("new subscriber on topic %s", c['topic'])
-            rospy.Subscriber(c['topic'], attr, callback, callback_args=c['topic'])
+    for i in condition_flat_list:
+        if i['type'] == 'if' or i['type'] == 'while':
+            for c in i['conditions']:
+                if 'topic' in c:
+                    attr = getattr(importlib.import_module(c['pkg'] + '.msg'), c['name'])
+                    if c['topic'] not in topic_list:
+                        rospy.loginfo("new subscriber on topic %s", c['topic'])
+                        rospy.Subscriber(c['topic'], attr, callback, callback_args=c['topic'])
+                    topic_list[c['topic']].append([c['field'], c['id']])
 
     execute(listing['instructions'])

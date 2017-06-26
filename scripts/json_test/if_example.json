@@ -24,10 +24,10 @@
       "pose.orientation.w": 1.0
     },
     {
-      "id": "0",
       "type": "if",
 	  "conditions":[
 		  {
+              "id": "0",
 	          "topic": "/chatter",
 	          "pkg": "std_msgs",
 	          "name": "Int32",
@@ -37,9 +37,23 @@
 		  },
 		  {
 			  "type":"logicOperator",
-			  "value":"or"
+			  "value":"and"
 		  },
 		  {
+              "id": "1",
+	          "topic": "/chatter",
+	          "pkg": "std_msgs",
+	          "name": "Int32",
+	          "field": "data",
+	          "operator": ">",
+	          "val": 10
+		  },
+		  {
+			  "type":"logicOperator",
+			  "value":"or"
+		  },
+          {
+              "id": "2",
 	          "topic": "/chatter",
 	          "pkg": "std_msgs",
 	          "name": "Int32",
@@ -64,8 +78,8 @@
             "pose.orientation.w"
           ],
           "header.frame_id": "map",
-          "pose.position.x": 1.0,
-          "pose.position.y": 1.0,
+          "pose.position.x": 4.0,
+          "pose.position.y": 4.0,
           "pose.position.z": 0.0,
           "pose.orientation.x": 0.0,
           "pose.orientation.y": 0.0,
@@ -89,8 +103,8 @@
             "pose.orientation.w"
           ],
           "header.frame_id": "map",
-          "pose.position.x": 1.0,
-          "pose.position.y": 1.0,
+          "pose.position.x": 5.0,
+          "pose.position.y": 5.0,
           "pose.position.z": 0.0,
           "pose.orientation.x": 0.0,
           "pose.orientation.y": 0.0,
