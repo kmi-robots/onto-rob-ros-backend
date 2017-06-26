@@ -1,3 +1,29 @@
-<div>
-	<p>if-then-else</p>
+<div class="if-then-else group">
+	IF: 
+	<div class="if">
+		<div id="conditions">
+			<div ng-repeat="condition in block.conditions">
+				<div ng-include="'condition.html'">
+				</div>
+			</div>
+		</div>
+		<button type="button" class="btn" ng-click="addCondition(block)">Add another condition</button>
+	</div>
+	THEN:
+	<div class="then block" ng-click="select(block.then,$event)" ng-style="{background: block.then.backgroundColor}">
+		<div class="placeholder" ng-if="block.then.sequence.length == 0">BLOCK</div>
+		<div ng-repeat="thenblock in block.then.sequence">
+			<div ng-include="thenblock.class+'.html'" ng-init="block = thenblock">
+			</div>
+		</div>
+	</div>
+	ELSE:
+	<div class="else block" ng-click="select(block.else,$event)" ng-style="{background: block.else.backgroundColor}">
+		<div class="placeholder" ng-if="block.else.sequence.length == 0">BLOCK</div>
+		<div ng-repeat="elseblock in block.else.sequence">
+			<div ng-include="elseblock.class+'.html'" ng-init="block = elseblock">
+			</div>
+		</div>
+	</div>
 </div>
+

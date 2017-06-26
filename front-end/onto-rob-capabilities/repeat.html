@@ -1,3 +1,14 @@
-<div>
-	<p>repeat</p>
+<div class="group repeat">
+	REPEAT:
+	<div class="times">
+		<input type="input" name="times"> TIMES
+	</div>
+	<div class="do block" ng-click="select(block.do,$event)" ng-style="{background: block.do.backgroundColor}">
+		<div class="placeholder" ng-if="block.do.sequence.length == 0">BLOCK</div>
+		<div ng-repeat="doblock in block.do.sequence">
+			<div ng-include="doblock.class+'.html'" ng-init="block = doblock">
+			</div>
+		</div>
+	</div>
 </div>
+

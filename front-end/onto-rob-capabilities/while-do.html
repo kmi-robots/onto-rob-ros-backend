@@ -1,3 +1,20 @@
-<div>
-	<p>while-do</p>
+<div class="while-do group">
+	WHILE:
+	<div class="while">
+		<div id="conditions">
+			<div ng-repeat="condition in block.conditions">
+				<div ng-include="'condition.html'">
+				</div>
+			</div>
+		</div>
+		<button type="button" class="btn" ng-click="addCondition(block)">Add another condition</button>
+	</div>
+	DO:
+	<div class="do block" ng-click="select(block.do,$event)" ng-style="{background: block.do.backgroundColor}">
+		<div class="placeholder" ng-if="block.do.sequence.length == 0">BLOCK</div>
+		<div ng-repeat="doblock in block.do.sequence">
+			<div ng-include="doblock.class+'.html'" ng-init="block = doblock">
+			</div>
+		</div>
+	</div>
 </div>

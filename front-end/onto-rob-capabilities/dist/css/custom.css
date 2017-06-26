@@ -120,6 +120,7 @@ img#logo {
 
 .capability {
 	border: 1px solid black;
+	background: #C0C0C0;
 	/*width: 350px;*/
 }
 
@@ -137,4 +138,84 @@ p.name {
 
 #blocks_container {
 	border: 1px solid red;
+}
+
+.block {
+	background: #C0C0C0;
+	border:3px dashed gray;
+	padding: 3px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	margin-left: 3px;
+	margin-right: 3px;
+	overflow: auto;
+	/*height: 70px;*/
+}
+
+.group {
+	background: #e5e5e5;
+	border:3px solid gray;
+	padding: 2px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
+.block .placeholder {
+	position: relative;
+	float: left;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-weight: bold;
+	font-size: 2em;
+	color: gray;
+}
+
+.if {
+	background: #e5e5e5;
+	border:3px solid gray;
+	padding: 2px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	overflow: auto;
+}
+
+.condition {
+	overflow: auto;
+}
+
+.parameter {
+	background: #C0C0C0;
+	border:3px dashed gray;
+	padding: 3px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	height: 40px;
+}
+
+.placeholder {
+	/*position: relative;
+	float: left;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);*/
+	font-weight: bold;
+	font-size: 1.5em;
+	color: gray;
+}
+
+.container {
+	width: 1500px;
+}
+
+.program {
+	border:3px dashed yellow;
+}
+
+.capability-parameter {
+	padding: 2px;
+}
+
+.parameter-name {
+	height:40px;
 }

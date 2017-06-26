@@ -1,3 +1,12 @@
-<div>
-	<p>statement</p>
+<div class="block statement" id="statement" ng-click="select(block,$event)" ng-style="{background: block.backgroundColor}">
+	<div class="placeholder" ng-if="block.capability == null">CAPABILITY</div>
+	<div ng-if="block.capability != null">
+		<p class="name">{{getNameFromURI(block.capability.type)}}</p>
+		<div ng-repeat="parameter in block.capability.params">
+			<div ng-if="parameter.mode == 'write'" ng-style="{background: parameter.backgroundColor }">		
+					{{getNameFromURI(parameter.p)}} <input type="text" ng-model="parameter.value" ng-click="stopPropagation($event)"/>
+			</div>
+		</div>
+	</div>
 </div>
+

@@ -26,14 +26,28 @@
     {
       "id": "0",
       "type": "if",
-      "condition": {
-        "topic": "/chatter",
-        "pkg": "std_msgs",
-        "name": "Int32",
-        "field": "data",
-        "operator": "==",
-        "val": 3
-      },
+	  "conditions":[
+		  {
+	          "topic": "/chatter",
+	          "pkg": "std_msgs",
+	          "name": "Int32",
+	          "field": "data",
+	          "operator": "==",
+	          "val": 3
+		  },
+		  {
+			  "type":"logicOperator",
+			  "value":"or"
+		  },
+		  {
+	          "topic": "/chatter",
+	          "pkg": "std_msgs",
+	          "name": "Int32",
+	          "field": "data",
+	          "operator": ">",
+	          "val": 10
+		  }
+	  ],
       "then": [
         {
           "pkg": "geometry_msgs",
