@@ -34,7 +34,7 @@
 	          "field": "data",
 	          "operator": "==",
 	          "val": 3,
-			  "not":false
+			  "not":true
 		  },
 		  {
 			  "type":"logicOperator",
@@ -48,20 +48,7 @@
 	          "field": "data",
 	          "operator": ">",
 	          "val": 10,
-			  "not":true
-		  },
-		  {
-			  "type":"logicOperator",
-			  "value":"or"
-		  },
-          {
-              "id": "2",
-	          "topic": "/chatter",
-	          "pkg": "std_msgs",
-	          "name": "Int32",
-	          "field": "data",
-	          "operator": ">",
-	          "val": 10
+			  "not":false
 		  }
 	  ],
       "then": [

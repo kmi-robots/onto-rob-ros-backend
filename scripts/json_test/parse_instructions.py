@@ -29,7 +29,8 @@ def manage_while(ist):
         if 'type' not in cond:
             while cond['id'] not in last_value:
                 rate.sleep()
-            cond_to_test += str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
+            not_str = 'not ' if cond['not'] else ''
+            cond_to_test += not_str + str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
         else:
             cond_to_test += str(cond['value']) + ' '
     rospy.loginfo('%s', cond_to_test)
@@ -40,7 +41,8 @@ def manage_while(ist):
         cond_to_test = ''
         for cond in ist['conditions']:
             if 'type' not in cond:
-                cond_to_test += str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
+                not_str = 'not ' if cond['not'] else ''
+                cond_to_test += not_str + str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
             else:
                 cond_to_test += str(cond['value']) + ' '
         rospy.loginfo('%s', cond_to_test)
@@ -53,7 +55,8 @@ def manage_if(ist):
         if 'type' not in cond:
             while cond['id'] not in last_value:
                 rate.sleep()
-            cond_to_test += str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
+            not_str = 'not ' if cond['not'] else ''
+            cond_to_test += not_str + str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
         else:
             cond_to_test += str(cond['value']) + ' '
     result = eval(cond_to_test)
