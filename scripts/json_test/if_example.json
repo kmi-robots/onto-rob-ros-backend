@@ -33,7 +33,8 @@
 	          "name": "Int32",
 	          "field": "data",
 	          "operator": "==",
-	          "val": 3
+	          "val": 3,
+			  "not":false
 		  },
 		  {
 			  "type":"logicOperator",
@@ -46,7 +47,8 @@
 	          "name": "Int32",
 	          "field": "data",
 	          "operator": ">",
-	          "val": 10
+	          "val": 10,
+			  "not":true
 		  },
 		  {
 			  "type":"logicOperator",
