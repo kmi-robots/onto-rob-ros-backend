@@ -173,6 +173,8 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 	// this function runs the program built so far
 	// it "parses" the sequence of instantiated blocks and 
 	// translates them into the needed json
+	// TODO: check the updating of capability in the program panel
+	// as they are all the same object
 	$scope.run = function () {
 		console.log("Running the current program");	
 		console.log($scope.program)
@@ -794,16 +796,21 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 	}
 	
 	$scope.addCapability = function (capability) {
-		
-		$scope.selectedBlock.capability = capability;
+		var copiedCapability = {};
+		angular.copy(capability, copiedCapability);
+		$scope.selectedBlock.capability = copiedCapability;
 		
 	}
 	
 	$scope.addParameter = function (parameter,capability) {
-		
+		var copiedParameter = {}
+		var copiedCapability = {};
+		angular.copy(capability, copiedCapability);
+		angular.copy(parameter, copiedParameter);
+
 		comparisonParameter = {}
-		comparisonParameter.parameter = parameter;
-		comparisonParameter.capability = capability;
+		comparisonParameter.parameter = copiedParameter;
+		comparisonParameter.capability = copiedCapability;
 		$scope.selectedBlock.parameter = comparisonParameter;
 		
 	}
