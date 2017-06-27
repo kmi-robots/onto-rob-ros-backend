@@ -322,10 +322,12 @@ def ask_capabilities():
 def execute():
     print "Received execute"
     print request.form
-    cap = request.form["cap"]
-    topic = request.form["topic"]
+    print request.data
+    print request.args
+    #cap = request.form["cap"]
+    #topic = request.form["topic"]
     #params = json.loads(request.data)
-    print onto_server.get_msg_and_pkg(topic,cap)
+    #print onto_server.get_msg_and_pkg(topic,cap)
 
     return "OK",200
 

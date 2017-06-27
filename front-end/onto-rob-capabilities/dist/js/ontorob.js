@@ -187,6 +187,23 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		console.log(programObject);
 		
 		//send
+		$http({
+			
+			method: 'POST',
+			url: "http://localhost:5000/execute",
+			//url: "http://137.108.122.193:5000/trigger",
+			//url: "http://10.229.169.122:5000/trigger",
+			data: {"program": programObject}
+			
+		}).then(function successCallback(response) {
+			
+			console.log("Response "+ response.status);	
+				
+		}, function errorCallback(response) {
+			
+			console.log("Problems while contacting the KB server " + response.status);
+			
+		});
 	}
 
 	function parseBlock(block) {
