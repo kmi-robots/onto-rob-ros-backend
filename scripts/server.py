@@ -152,13 +152,16 @@ class OntoRobServer:
         return query
 
     def get_msg_and_pkg(self, topic, capability):
-        q = "SELECT ?msg ?pkg WHERE {  ?msg <"+self.__ONTOROB_PROP.evokes+"> <%s> . ?msg <"+self.__ONTOROB_PROP.publishedOn+"> <%s> . ?msg <"+self.__ONTOROB_PROP.hasPkg+"> ?pkg } " % ( capability, topic)  
+	print topic
+	print capability
+        q = "SELECT ?msg ?pkg WHERE {  ?msg <"+self.__ONTOROB_PROP.evokes+"> <"+capability+"> . ?msg <"+self.__ONTOROB_PROP.publishedOn+"> <"+topic+"> . ?msg <"+self.__ONTOROB_PROP.hasPkg+"> ?pkg } "
         print q
         
         qres = self.__G.query(q)
         print qres
         ix = 0
-        msg, pkg = ''
+        msg = "" 
+	pkg = ""
         for row in qres:
             if ix > 1 : break
             pkg = row.pkg
@@ -314,7 +317,17 @@ def ask_capabilities():
     print json.dumps(response_array)
     return json.dumps(response_array)
 
-    
+@app.route('/execute', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def execute():
+    print "Received execute"
+    print request.form
+    cap = request.form["cap"]
+    topic = request.form["topic"]
+    #params = json.loads(request.data)
+    print onto_server.get_msg_and_pkg(topic,cap)
+
+    return "OK",200
 
 @app.route('/trigger', methods=['GET', 'POST', 'OPTIONS'])
 @crossdomain(origin='*')

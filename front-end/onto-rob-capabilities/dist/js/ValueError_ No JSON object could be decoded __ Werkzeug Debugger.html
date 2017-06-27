@@ -1,0 +1,346 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!-- saved from url=(0029)http://localhost:5000/execute -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>ValueError: No JSON object could be decoded // Werkzeug Debugger</title>
+    <link rel="stylesheet" href="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute" type="text/css">
+    <!-- We need to make sure this has a favicon so that the debugger does
+         not by accident trigger a request to /favicon.ico which might
+         change the application state. -->
+    <link rel="shortcut icon" href="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)">
+    <script src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(1)"></script>
+    <script src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(2)"></script>
+    <script type="text/javascript">
+      var TRACEBACK = 140114868719312,
+          CONSOLE_MODE = false,
+          EVALEX = true,
+          EVALEX_TRUSTED = false,
+          SECRET = "CFPvmcMe1iOCS2PfL8kC";
+    </script>
+  </head>
+  <body>
+    <div class="debugger">
+<h1>ValueError</h1>
+<div class="detail">
+  <p class="errormsg">ValueError: No JSON object could be decoded</p>
+</div>
+<h2 class="traceback" style="cursor: pointer;">Traceback <em>(most recent call last)</em></h2>
+<div class="traceback">
+  
+  <ul><li><div class="frame" id="frame-140114868719184">
+  <h4>File <cite class="filename">"/usr/local/lib/python2.7/dist-packages/flask/app.py"</cite>,
+      line <em class="line">1836</em>,
+      in <code class="function">__call__</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                                </span>'Flask.blueprints instead'), stacklevel=2)</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>return self.blueprints</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>def __call__(self, environ, start_response):</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>"""Shortcut for :attr:`wsgi_app`."""</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>return self.wsgi_app(environ, start_response)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>def __repr__(self):</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>return '&lt;%s %r&gt;' % (</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>self.__class__.__name__,</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>self.name,</pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868719440">
+  <h4>File <cite class="filename">"/usr/local/lib/python2.7/dist-packages/flask/app.py"</cite>,
+      line <em class="line">1820</em>,
+      in <code class="function">wsgi_app</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>try:</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>try:</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>response = self.full_dispatch_request()</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>except Exception as e:</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>error = e</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>response = self.make_response(self.handle_exception(e))</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>return response(environ, start_response)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>finally:</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>if self.should_ignore_error(error):</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>error = None</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>ctx.auto_pop(error)</pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868288144">
+  <h4>File <cite class="filename">"/usr/local/lib/python2.7/dist-packages/flask/app.py"</cite>,
+      line <em class="line">1403</em>,
+      in <code class="function">handle_exception</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span># if we want to repropagate the exception, we can attempt to</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span># raise it with the whole traceback in case we can do that</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span># (the function was actually called from the except part)</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span># otherwise, we just raise the error again</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>if exc_value is e:</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>reraise(exc_type, exc_value, tb)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>else:</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>raise e</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>self.log_exception((exc_type, exc_value, tb))</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>if handler is None:</pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868288208">
+  <h4>File <cite class="filename">"/usr/local/lib/python2.7/dist-packages/flask/app.py"</cite>,
+      line <em class="line">1817</em>,
+      in <code class="function">wsgi_app</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>ctx = self.request_context(environ)</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>ctx.push()</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>error = None</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>try:</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>try:</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>response = self.full_dispatch_request()</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>except Exception as e:</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>error = e</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>response = self.make_response(self.handle_exception(e))</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>return response(environ, start_response)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>finally:</pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868288272">
+  <h4>File <cite class="filename">"/usr/local/lib/python2.7/dist-packages/flask/app.py"</cite>,
+      line <em class="line">1477</em>,
+      in <code class="function">full_dispatch_request</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>request_started.send(self)</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>rv = self.preprocess_request()</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>if rv is None:</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>rv = self.dispatch_request()</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>except Exception as e:</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>rv = self.handle_user_exception(e)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>response = self.make_response(rv)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>response = self.process_response(response)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>request_finished.send(self, response=response)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>return response</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868288336">
+  <h4>File <cite class="filename">"/usr/local/lib/python2.7/dist-packages/flask/app.py"</cite>,
+      line <em class="line">1381</em>,
+      in <code class="function">handle_user_exception</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>app_handlers = self.error_handler_spec[None].get(None, ())</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>for typecheck, handler in chain(blueprint_handlers, app_handlers):</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>if isinstance(e, typecheck):</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>return handler(e)</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>reraise(exc_type, exc_value, tb)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>def handle_exception(self, e):</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>"""Default exception handling that kicks in when an exception</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>occurs that is not caught.  In debug mode the exception will</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>be re-raised immediately, otherwise it is logged and the handler</pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868288400">
+  <h4>File <cite class="filename">"/usr/local/lib/python2.7/dist-packages/flask/app.py"</cite>,
+      line <em class="line">1475</em>,
+      in <code class="function">full_dispatch_request</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>self.try_trigger_before_first_request_functions()</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>try:</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>request_started.send(self)</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>rv = self.preprocess_request()</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>if rv is None:</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>rv = self.dispatch_request()</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>except Exception as e:</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>rv = self.handle_user_exception(e)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>response = self.make_response(rv)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>response = self.process_response(response)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>request_finished.send(self, response=response)</pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868288464">
+  <h4>File <cite class="filename">"/usr/local/lib/python2.7/dist-packages/flask/app.py"</cite>,
+      line <em class="line">1461</em>,
+      in <code class="function">dispatch_request</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span># request came with the OPTIONS method, reply automatically</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>if getattr(rule, 'provide_automatic_options', False) \</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">           </span>and req.method == 'OPTIONS':</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>return self.make_default_options_response()</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span># otherwise dispatch to the handler for that endpoint</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>return self.view_functions[rule.endpoint](**req.view_args)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>def full_dispatch_request(self):</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>"""Dispatches the request and on top of that performs request</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>pre and postprocessing as well as HTTP exception catching and</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>error handling.</pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868288528">
+  <h4>File <cite class="filename">"/home/bender/Projects/ros/indigo/test/src/onto-rob-server/scripts/server.py"</cite>,
+      line <em class="line">49</em>,
+      in <code class="function">wrapped_function</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>"""Caries out the actual cross domain code</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">           </span>"""</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>if automatic_options and request.method == 'OPTIONS':</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>resp = current_app.make_default_options_response()</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>else:</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>resp = make_response(f(*args, **kwargs))</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>if not attach_to_all and request.method != 'OPTIONS':</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">                </span>return resp</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>h = resp.headers</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>h['Access-Control-Allow-Origin'] = origin</pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868288080">
+  <h4>File <cite class="filename">"/home/bender/Projects/ros/indigo/test/src/onto-rob-server/scripts/server.py"</cite>,
+      line <em class="line">321</em>,
+      in <code class="function">execute</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span>@app.route('/execute', methods=['GET', 'OPTIONS'])</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span>@crossdomain(origin='*')</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span>def execute():</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>print request</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>params = json.loads(request.data)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>print params</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>return "OK",200</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span>@app.route('/trigger', methods=['GET', 'POST', 'OPTIONS'])</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span>@crossdomain(origin='*')</pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868288016">
+  <h4>File <cite class="filename">"/usr/lib/python2.7/json/__init__.py"</cite>,
+      line <em class="line">338</em>,
+      in <code class="function">loads</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>"""</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>if (cls is None and encoding is None and object_hook is None and</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>parse_int is None and parse_float is None and</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>parse_constant is None and object_pairs_hook is None and not kw):</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>return _default_decoder.decode(s)</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>if cls is None:</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>cls = JSONDecoder</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>if object_hook is not None:</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>kw['object_hook'] = object_hook</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>if object_pairs_hook is not None:</pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868286160">
+  <h4>File <cite class="filename">"/usr/lib/python2.7/json/decoder.py"</cite>,
+      line <em class="line">366</em>,
+      in <code class="function">decode</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">    </span>def decode(self, s, _w=WHITESPACE.match):</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>"""Return the Python representation of ``s`` (a ``str`` or ``unicode``</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>instance containing a JSON document)</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>"""</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>obj, end = self.raw_decode(s, idx=_w(s, 0).end())</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>end = _w(s, end).end()</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>if end != len(s):</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>raise ValueError(errmsg("Extra data", s, end, len(s)))</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>return obj</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre></div>
+</div>
+
+</li><li><div class="frame" id="frame-140114868288592">
+  <h4>File <cite class="filename">"/usr/lib/python2.7/json/decoder.py"</cite>,
+      line <em class="line">384</em>,
+      in <code class="function">raw_decode</code></h4>
+  <div class="source"><pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws"></span> </pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>"""</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>try:</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>obj, end = self.scan_once(s, idx)</pre>
+<pre class="line before"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>except StopIteration:</pre>
+<pre class="line current"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">            </span>raise ValueError("No JSON object could be decoded")</pre>
+<pre class="line after"><img src="./ValueError_ No JSON object could be decoded __ Werkzeug Debugger_files/execute(3)" title="Open an interactive python shell in this frame"><span class="ws">        </span>return obj, end</pre></div>
+</div>
+</li></ul>
+  <blockquote>ValueError: No JSON object could be decoded</blockquote>
+</div>
+
+<div class="plain" style="display: none;">
+  <form action="http://localhost:5000/?__debugger__=yes&amp;cmd=paste" method="post">
+    <p>
+      <input type="hidden" name="language" value="pytb">
+      This is the Copy/Paste friendly version of the traceback.  <span class="pastemessage">You can also paste this traceback into
+      a <a href="https://gist.github.com/">gist</a>:
+      <input type="submit" value="create paste"></span>
+    </p>
+    <pre>Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1836, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1820, in wsgi_app
+    response = self.make_response(self.handle_exception(e))
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1403, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1817, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1477, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1381, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1475, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1461, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/bender/Projects/ros/indigo/test/src/onto-rob-server/scripts/server.py", line 49, in wrapped_function
+    resp = make_response(f(*args, **kwargs))
+  File "/home/bender/Projects/ros/indigo/test/src/onto-rob-server/scripts/server.py", line 321, in execute
+    params = json.loads(request.data)
+  File "/usr/lib/python2.7/json/__init__.py", line 338, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python2.7/json/decoder.py", line 366, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python2.7/json/decoder.py", line 384, in raw_decode
+    raise ValueError("No JSON object could be decoded")
+ValueError: No JSON object could be decoded</pre>
+  </form>
+</div>
+<div class="explanation">
+  The debugger caught an exception in your WSGI application.  You can now
+  look at the traceback which led to the error.  <span class=""><p>To switch between the interactive traceback and the plaintext one, you can click on the "Traceback" headline.  From the text traceback you can also create a paste of it. For code execution mouse-over the frame you want to debug and click on the console icon on the right side.</p><p>You can execute arbitrary Python code in the stack frames and there are some extra helpers available for introspection:</p><ul><li><code>dump()</code> shows all variables in the frame</li><li><code>dump(obj)</code> dumps all that's known about the object</li></ul></span>
+</div>
+      <div class="footer">
+        Brought to you by <strong class="arthur">DON'T PANIC</strong>, your
+        friendly Werkzeug powered traceback interpreter.
+      </div>
+    </div>
+
+    <div class="pin-prompt">
+      <div class="inner">
+        <h3>Console Locked</h3>
+        <p>
+          The console is locked and needs to be unlocked by entering the PIN.
+          You can find the PIN printed out on the standard output of your
+          shell that runs the server.
+        </p><form>
+          <p>PIN:
+            <input type="text" name="pin" size="14">
+            <input type="submit" name="btn" value="Confirm Pin">
+        </p></form>
+      </div>
+    </div>
+  
+
+
+<!--
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1836, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1820, in wsgi_app
+    response = self.make_response(self.handle_exception(e))
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1403, in handle_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1817, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1477, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1381, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1475, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/usr/local/lib/python2.7/dist-packages/flask/app.py", line 1461, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/bender/Projects/ros/indigo/test/src/onto-rob-server/scripts/server.py", line 49, in wrapped_function
+    resp = make_response(f(*args, **kwargs))
+  File "/home/bender/Projects/ros/indigo/test/src/onto-rob-server/scripts/server.py", line 321, in execute
+    params = json.loads(request.data)
+  File "/usr/lib/python2.7/json/__init__.py", line 338, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python2.7/json/decoder.py", line 366, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+  File "/usr/lib/python2.7/json/decoder.py", line 384, in raw_decode
+    raise ValueError("No JSON object could be decoded")
+ValueError: No JSON object could be decoded
+
+-->
+</body></html>

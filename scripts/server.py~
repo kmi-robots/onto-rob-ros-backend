@@ -105,8 +105,8 @@ class OntoRobServer:
         
         for item in json_str:
             #print item
-            if item["topic"] == "/move_base_simple/goal":
-                print "found"
+            # if item["topic"] == "/move_base_simple/goal":
+#                 print "found"
             # print "fff", item['message']
             component_obj = {'msg': item['message'], 'topic':item['topic'], 'capabs': []}
             
@@ -116,13 +116,13 @@ class OntoRobServer:
             
             qres = self.__G.query(query_string)
 
-            if item["topic"] == "/move_base_simple/goal":
-                print len(qres)
+            # if item["topic"] == "/move_base_simple/goal":
+#                 print len(qres)
 
             for row in qres:
                 # print row
-                """if item["topic"] == "/move_base_simple/goal":
-                    print row"""
+                # if item["topic"] == "/move_base_simple/goal":
+#                     print row
                 if len(component_obj['capabs']) == 0 or row.capa not in list(c['type'] for c in component_obj['capabs']):
                     component_obj['capabs'].append({'type': row.capa, 'params': []})
                 
@@ -151,7 +151,27 @@ class OntoRobServer:
         query = "SELECT ?capa ?param WHERE { " + values + " ?res <"+self.__ONTOROB_PROP.evokes+"> ?capa . ?res <"+self.__ONTOROB_PROP.hasField +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParameter +"> ?param . }";
         return query
 
+    def get_msg_and_pkg(self, topic, capability):
+	print topic
+	print capability
+        q = "SELECT ?msg ?pkg WHERE {  ?msg <"+self.__ONTOROB_PROP.evokes+"> <"+capability+"> . ?msg <"+self.__ONTOROB_PROP.publishedOn+"> <"+topic+"> . ?msg <"+self.__ONTOROB_PROP.hasPkg+"> ?pkg } "
+        print q
+        
+        qres = self.__G.query(q)
+        print qres
+        ix = 0
+        msg, pkg = ''
+        for row in qres:
+            if ix > 1 : break
+            pkg = row.pkg
+            msg = row.msg
+        return (msg,pkg)
+        
+        
     def get_package(self, msg):
+        """
+        TODO remove this fct if unused
+        """
         query = "SELECT ?pkg WHERE { <"+msg+"> <"+self.__ONTOROB_PROP.hasPkg+"> ?pkg . }"
         
         # print 2,query
@@ -231,11 +251,15 @@ def ask_nodes(msg):
     for row in qres:
         result += "%s <br/>" % row
     return result, 200
-
+    
+    
 
 @app.route("/capability_temp", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def ask_temp_capa():
+    """
+    TODO REMOVE THIS
+    """
     g = onto_server.get_graph()
     qres = g.query(
         """SELECT DISTINCT ?b
@@ -289,9 +313,20 @@ def ask_capabilities():
     
     # get capabilitites
     response_array = onto_server.query_kb(parsed_json)
-
+    print json.dumps(response_array)
     return json.dumps(response_array)
 
+@app.route('/execute', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def execute():
+    print "Received execute"
+    print request.form
+    cap = request.form["cap"]
+    topic = request.form["topic"]
+    #params = json.loads(request.data)
+    print onto_server.get_msg_and_pkg(topic,cap)
+
+    return "OK",200
 
 @app.route('/trigger', methods=['GET', 'POST', 'OPTIONS'])
 @crossdomain(origin='*')
