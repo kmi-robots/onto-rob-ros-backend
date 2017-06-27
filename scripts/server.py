@@ -6,11 +6,10 @@ import codecs
 from datetime import timedelta
 from functools import update_wrapper
 
-import rospy
 import rosnode
 from RosNode import RosNode
-import importlib
-import functools
+
+import parse_instructions
 
 
 def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_to_all=True, automatic_options=True):
@@ -152,7 +151,7 @@ class OntoRobServer:
         return query
 
     def fill_msg_and_pkg(self,instruction):
-	print "Filling!"
+        print "Filling!"
 
         if instruction["type"] == "capability":
             topic = self.__ONTOROB_RES.topic + instruction["topic"]
@@ -205,15 +204,15 @@ class OntoRobServer:
         qres = self.__G.query(q)
         print qres
         ix = 0
-	ret = {}
+        ret = {}
         for row in qres:
 	
-	    #TODO watch out
+            #TODO watch out
             if ix > 1 :
-		print "Multiple result"
-		break
+                print "Multiple result"
+                break
 
-	    ret["pkg"] = str(row.pkg)
+            ret["pkg"] = str(row.pkg)
             ret["msg"] = str(row.msg)
 
         return ret
@@ -225,15 +224,14 @@ class OntoRobServer:
         qres = self.__G.query(q)
         print qres
         ix = 0
-	ret = {}
+        ret = {}
         for row in qres:
-	
-	    #TODO watch out
+            #TODO watch out
             if ix > 1 :
-		print "Multiple result"
-		break
+                print "Multiple result"
+                break
 
-	    ret["pkg"] = str(row.pkg)
+            ret["pkg"] = str(row.pkg)
             ret["msg"] = str(row.msg)
 
         return ret 
@@ -451,42 +449,6 @@ def trigger_capability():
     return jsonify(robot_input), 200
 
 
-def rsetattr(obj, attr, val):
-    pre, _, post = attr.rpartition('.')
-    try:
-        v = float(val)
-    except ValueError:
-        v = val
-    return setattr(functools.reduce(getattr, [obj]+pre.split('.')) if pre else obj, post, v)
-
-
-def gen_message(jp, attr):
-    fields = jp['fields']
-    tmsg = attr()
-    for f in fields:
-        rsetattr(tmsg, f, jp['param_values'][f])
-    return tmsg
-
-
-def activate_publisher(jp):
-    attr = getattr(importlib.import_module(jp['pkg'] + '.msg'), jp['name'])
-    #print jp['topic']
-    pub = rospy.Publisher(jp['topic'], attr, queue_size=1)
-    return pub, attr
-
-
-def send_command(input_d):
-    rospy.init_node('talker', disable_signals=True)
-    pub, attr = activate_publisher(input_d)
-    msg = gen_message(input_d, attr)
-    rate = rospy.Rate(1)
-    while not rospy.is_shutdown():
-        if pub.get_num_connections() > 0:
-            pub.publish(msg)
-            break
-        rate.sleep()
-
-
 def get_nodes():
     nodelist = rosnode.get_node_names()
     msgs_topic_collection = []
@@ -536,8 +498,10 @@ def update_msgs_collection(cur_node_msgs, msgs_topic_collection):
 
     return msgs_topic_collection
 
+
 def execute_on_robot(program):
-    print "executing %s" % program
+    parse_instructions.run_program(program)
+
 
 if __name__ == "__main__":
   
