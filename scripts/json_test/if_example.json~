@@ -27,7 +27,7 @@
       "type": "if",
 	  "conditions":[
 		  {
-              	  "id": "0",
+              "id": "0",
 	          "topic": "/chatter",
 	          "pkg": "std_msgs",
 	          "name": "Int32",

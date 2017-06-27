@@ -28,6 +28,10 @@ angular.module('ontoRobApp', ['ui.bootstrap','ui.router'])
 
 function dataService () {
 	this.capabilities = {};
+	this.ip = "http://137.108.114.0:5000/";
+	//this.ip = "http://localhost:5000/";
+	//this.ip = "http://137.108.122.193:5000/"
+	//this.ip = "http://10.229.169.122:5000/"
 }
 
 function testController($scope,$http,$timeout,$window,$state, Data) {
@@ -95,9 +99,7 @@ function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 
 	$http({
 		method: 'GET',
-		url: "http://localhost:5000/capabilities"
-		//url: "http://137.108.122.193:5000/capabilities"
-		//url: "http://10.229.169.122:5000/capabilities"
+		url: Data.ip + "capabilities"
 	}).then(function successCallback(response) {
 		//$scope.capabilities = response.data;
 		Data.capabilities = response.data; 
@@ -158,6 +160,10 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 			capability.topic = messageCapability.topic;
 			disable(capability);
 			
+			capability["params"].sort(function(a, b) {
+				return a["p"].localeCompare(b["p"]);
+			});
+
 			angular.forEach(capability["params"],function(parameter) {
 				
 				parameter.class = "parameter";
@@ -195,9 +201,7 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		$http({
 			
 			method: 'POST',
-			url: "http://localhost:5000/execute",
-			//url: "http://137.108.122.193:5000/trigger",
-			//url: "http://10.229.169.122:5000/trigger",
+			url: Data.ip + "execute",
 			data: {"program": programObject}
 			
 		}).then(function successCallback(response) {
@@ -679,9 +683,7 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		$http({
 			
 			method: 'POST',
-			url: "http://localhost:5000/trigger",
-			//url: "http://137.108.122.193:5000/trigger",
-			//url: "http://10.229.169.122:5000/trigger",
+			url: Data.ip + "trigger",
 			data: {"capability": toSend}
 			
 		}).then(function successCallback(response) {
