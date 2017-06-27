@@ -66,6 +66,10 @@ def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_t
     return decorator
 
 
+def get_name_from_uri(string):
+    return string[string.rfind('/') + 1:]
+
+
 class OntoRobServer:
     __GRAPHFILE = '../out.n3'
     __ONTOROB_RES = Namespace("http://data.open.ac.uk/kmi/ontoRob/resource/")
@@ -157,17 +161,18 @@ class OntoRobServer:
             topic = self.__ONTOROB_RES.topic + instruction["topic"]
             capability = instruction["capability"]
             r = self.get_msg_and_pkg(topic, capability)
-            instruction["pkg"] = r["pkg"]
-            instruction["name"] = r["msg"]
+            instruction["pkg"] = get_name_from_uri(r["pkg"])
+            instruction["name"] = get_name_from_uri(r["msg"])
 
         elif instruction["type"] == "if":
             conditions = instruction["conditions"]
             for condition in conditions:
-                topic = self.__ONTOROB_RES.topic + condition["topic"]
-                r = self.get_msg_and_pkg_from_topic(topic)
-                condition["pkg"] = r["pkg"]
-                condition["name"] = r["msg"]
-	
+                if condition["type"] == "condition":
+                    topic = self.__ONTOROB_RES.topic + condition["topic"]
+                    r = self.get_msg_and_pkg_from_topic(topic)
+                    condition["pkg"] = get_name_from_uri(r["pkg"])
+                    condition["name"] = get_name_from_uri(r["msg"])
+
             thens = instruction["then"]
             for then in thens:
                 self.fill_msg_and_pkg(then)
@@ -181,8 +186,8 @@ class OntoRobServer:
             for condition in conditions:
                 topic = self.__ONTOROB_RES.topic + condition["topic"]
                 r = self.get_msg_and_pkg_from_topic(topic)
-                condition["pkg"] = r["pkg"]
-                condition["name"] = r["msg"]
+                condition["pkg"] = get_name_from_uri(r["pkg"])
+                condition["name"] = get_name_from_uri(r["msg"])
 
             dos = instruction["do"]
             for do in dos:
@@ -206,9 +211,8 @@ class OntoRobServer:
         ix = 0
         ret = {}
         for row in qres:
-	
-            #TODO watch out
-            if ix > 1 :
+            # TODO watch out
+            if ix > 1:
                 print "Multiple result"
                 break
 
@@ -444,8 +448,6 @@ def trigger_capability():
 
     robot_input['topic'] = topic
 
-    send_command(robot_input)
-     
     return jsonify(robot_input), 200
 
 
@@ -500,10 +502,12 @@ def update_msgs_collection(cur_node_msgs, msgs_topic_collection):
 
 
 def execute_on_robot(program):
+    print "starting execution"
     parse_instructions.run_program(program)
 
 
 if __name__ == "__main__":
   
     print "Starting server"
+    parse_instructions.init()
     app.run(debug=True, use_reloader=True, threaded=True, host='0.0.0.0')

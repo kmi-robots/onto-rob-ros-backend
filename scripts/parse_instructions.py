@@ -7,7 +7,7 @@ import functools
 
 topic_list = collections.defaultdict(list)
 last_value = {}
-rate = rospy.Rate(1)
+global rate
 
 
 def filterd_flatten(l, flt):
@@ -23,12 +23,12 @@ def filterd_flatten(l, flt):
 def manage_while(ist):
     cond_to_test = ''
     for cond in ist['conditions']:
-        if 'type' not in cond:
+        if cond['type'] == 'condition':
             while cond['id'] not in last_value:
                 rate.sleep()
             not_str = 'not ' if cond['not'] else ''
             cond_to_test += not_str + str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
-        else:
+        elif cond['type'] == 'logicOperator':
             cond_to_test += str(cond['value']) + ' '
     result = eval(cond_to_test)
 
@@ -36,10 +36,10 @@ def manage_while(ist):
         execute(ist['do'])
         cond_to_test = ''
         for cond in ist['conditions']:
-            if 'type' not in cond:
+            if cond['type'] == 'condition':
                 not_str = 'not ' if cond['not'] else ''
                 cond_to_test += not_str + str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
-            else:
+            elif cond['type'] == 'logicOperator':
                 cond_to_test += str(cond['value']) + ' '
         result = eval(cond_to_test)
 
@@ -47,12 +47,12 @@ def manage_while(ist):
 def manage_if(ist):
     cond_to_test = ''
     for cond in ist['conditions']:
-        if 'type' not in cond:
+        if cond['type'] == 'condition':
             while cond['id'] not in last_value:
                 rate.sleep()
             not_str = 'not ' if cond['not'] else ''
             cond_to_test += not_str + str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
-        else:
+        elif cond['type'] == 'logicOperator':
             cond_to_test += str(cond['value']) + ' '
     result = eval(cond_to_test)
 
@@ -70,21 +70,21 @@ def manage_repeat(ist):
 
 def callback(msg, topic):
     for t in topic_list[topic]:
-        last_value[t[1]] = getattr(msg, t[0])
+        last_value[t[1]] = rgetattr(msg, t[0])
 
 
 def execute(instructions):
+    print instructions
     if not instructions:
         return
     for ist in instructions:
-        if 'type' in ist:
-            if ist['type'] == 'if':
-                manage_if(ist)
-            if ist['type'] == 'while':
-                manage_while(ist)
-            if ist['type'] == 'repeat':
-                manage_repeat(ist)
-        else:
+        if ist['type'] == 'if':
+            manage_if(ist)
+        if ist['type'] == 'while':
+            manage_while(ist)
+        if ist['type'] == 'repeat':
+            manage_repeat(ist)
+        if ist['type'] == 'capability':
             send_command(ist)
 
 
@@ -94,14 +94,18 @@ def rsetattr(obj, attr, val):
         v = float(val)
     except ValueError:
         v = val
-    return setattr(functools.reduce(getattr, [obj]+pre.split('.')) if pre else obj, post, v)
+    return setattr(rgetattr(obj, pre) if pre else obj, post, v)
+
+
+def rgetattr(obj, attr):
+    return functools.reduce(getattr, [obj]+attr.split('.'))
 
 
 def gen_message(jp, attr):
     fields = jp['fields']
     tmsg = attr()
     for f in fields:
-        rsetattr(tmsg, f, jp['param_values'][f])
+        rsetattr(tmsg, f, jp[f])
     return tmsg
 
 
@@ -112,6 +116,7 @@ def activate_publisher(jp):
 
 
 def send_command(input_d):
+
     pub, attr = activate_publisher(input_d)
     msg = gen_message(input_d, attr)
     while not rospy.is_shutdown():
@@ -119,10 +124,10 @@ def send_command(input_d):
             pub.publish(msg)
             break
         rate.sleep()
+    print "done"
 
 
 def run_program(listing):
-    rospy.init_node('dynamic_node', disable_signals=True)
     condition_flat_list = filterd_flatten(listing['instructions'], 'conditions')
 
     for i in condition_flat_list:
@@ -135,4 +140,12 @@ def run_program(listing):
                         rospy.Subscriber(c['topic'], attr, callback, callback_args=c['topic'])
                     topic_list[c['topic']].append([c['field'], c['id']])
 
+    print listing
     execute(listing['instructions'])
+
+
+def init():
+    rospy.init_node('dynamic_node', disable_signals=True)
+    global rate
+    rate = rospy.Rate(1)
+
