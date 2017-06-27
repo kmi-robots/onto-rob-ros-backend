@@ -125,7 +125,8 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 	$scope.program.backgroundColor = $scope.blockUnselectedBackgroundColor;
 	
 	$scope.blockCounter = 0;
-	
+	$scope.conditionCounter = 0;
+
 	$scope.program.blockTypes = []
 	initialiseBlockTypes($scope.program.blockTypes);
 	
@@ -178,6 +179,8 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		
 		//parse
 		programObject = {"instructions":[]}
+
+		// TODO: I need to run some consistency checking before
 		angular.forEach($scope.program.sequence,function (block) {
 			parsedInstruction = parseBlock(block);
 			programObject.instructions.push(parsedInstruction);
@@ -198,12 +201,13 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		}).then(function successCallback(response) {
 			
 			console.log("Response "+ response.status);	
-				
+			
 		}, function errorCallback(response) {
 			
 			console.log("Problems while contacting the KB server " + response.status);
 			
 		});
+		$scope.conditionCounter = 0;
 	}
 
 	function parseBlock(block) {
@@ -238,8 +242,9 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		ret["topic"] = statement.capability.topic;
 		ret["fields"] = [];
 		ret["capability"] = statement.capability.type;
-		
-		angular.forEach(statement.capability.params,function (parameter) {
+		ret["type"] = "capability";
+
+		angular.forEach(statement.capability.params, function (parameter) {
 			
 			paramName = $scope.getNameFromURI(parameter.p);
 			ret.fields.push(paramName);
@@ -343,21 +348,25 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 	function parseCondition(condition) {
 		
 		if(condition.logicOperator) {
-			
+
+			$scope.conditionCounter++;
+
 			logicOp = {
-				
+				"id":$scope.conditionCounter,
 				"type":"logicOperator",
 				"value":condition.logicOperator
 				
 			};
-			
+
+			$scope.conditionCounter++;
+
 			cond = {};
-			
+			cond["id"] = $scope.conditionCounter;			
 			cond["type"] = "condition";
-			cond["topic"] = condition
+			cond["topic"] = condition.parameter.capability.topic
 			cond["pkg"] = null;
 			cond["name"] = null;
-			cond["field"] = condition.parameter;
+			cond["field"] = $scope.getNameFromURI(condition.parameter.parameter.p);
 			cond["operator"] = condition.comparator;
 			cond["val"] = condition.value;
 			cond["not"] = condition.not;
@@ -366,14 +375,16 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		
 		}
 		else {
-		
+
+			$scope.conditionCounter++;
+
 			cond = {};
-			
+			cond["id"] = $scope.conditionCounter;
 			cond["type"] = "condition";
-			cond["topic"] = condition
+			cond["topic"] = condition.parameter.capability.topic
 			cond["pkg"] = null;
 			cond["name"] = null;
-			cond["field"] = condition.parameter;
+			cond["field"] = $scope.getNameFromURI(condition.parameter.parameter.p);
 			cond["operator"] = condition.comparator;
 			cond["val"] = condition.value;
 			cond["not"] = condition.not;
@@ -393,7 +404,7 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		angular.forEach(repeat.do.sequence, function (doBlock) {
 		
 			parsedInstruction = parseBlock(doBlock);
-			ret.then.push(parsedInstruction);
+			ret.do.push(parsedInstruction);
 		
 		});
 		

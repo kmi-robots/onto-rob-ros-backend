@@ -72,7 +72,7 @@ class OntoRobServer:
     __ONTOROB_RES = Namespace("http://data.open.ac.uk/kmi/ontoRob/resource/")
     __ONTOROB_CLASS = Namespace("http://data.open.ac.uk/kmi/ontoRob#")
     __ONTOROB_PROP = Namespace("http://data.open.ac.uk/kmi/ontoRob/property/")
-    
+
     def __init__(self): 
         self.read_kb()
 
@@ -151,22 +151,92 @@ class OntoRobServer:
         query = "SELECT ?capa ?param WHERE { " + values + " ?res <"+self.__ONTOROB_PROP.evokes+"> ?capa . ?res <"+self.__ONTOROB_PROP.hasField +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParameter +"> ?param . }";
         return query
 
+    def fill_msg_and_pkg(self,instruction):
+	print "Filling!"
+
+        if instruction["type"] == "capability":
+            topic = self.__ONTOROB_RES.topic + instruction["topic"]
+            capability = instruction["capability"]
+            r = self.get_msg_and_pkg(topic, capability)
+            instruction["pkg"] = r["pkg"]
+            instruction["name"] = r["msg"]
+
+        elif instruction["type"] == "if":
+            conditions = instruction["conditions"]
+            for condition in conditions:
+                topic = self.__ONTOROB_RES.topic + condition["topic"]
+                r = self.get_msg_and_pkg_from_topic(topic)
+                condition["pkg"] = r["pkg"]
+                condition["name"] = r["msg"]
+	
+            thens = instruction["then"]
+            for then in thens:
+                self.fill_msg_and_pkg(then)
+
+            elses = instruction["else"]
+            for els in esles:
+                self.fill_msg_and_pkg(els)
+
+        elif instruction["type"] == "while":
+            conditions = instruction["conditions"]
+            for condition in conditions:
+                topic = self.__ONTOROB_RES.topic + condition["topic"]
+                r = self.get_msg_and_pkg_from_topic(topic)
+                condition["pkg"] = r["pkg"]
+                condition["name"] = r["msg"]
+
+            dos = instruction["do"]
+            for do in dos:
+                self.fill_msg_and_pkg(do)
+
+        elif instruction["type"] == "repeat":
+            dos = instruction["do"]
+            for do in dos:
+                self.fill_msg_and_pkg(do)            
+
+    def update_program_with_msg_and_pkg(self,program):
+        for instruction in program["instructions"]:
+            self.fill_msg_and_pkg(instruction)
+
     def get_msg_and_pkg(self, topic, capability):
-	print topic
-	print capability
         q = "SELECT ?msg ?pkg WHERE {  ?msg <"+self.__ONTOROB_PROP.evokes+"> <"+capability+"> . ?msg <"+self.__ONTOROB_PROP.publishedOn+"> <"+topic+"> . ?msg <"+self.__ONTOROB_PROP.hasPkg+"> ?pkg } "
         print q
         
         qres = self.__G.query(q)
         print qres
         ix = 0
-        msg, pkg = ''
+	ret = {}
         for row in qres:
-            if ix > 1 : break
-            pkg = row.pkg
-            msg = row.msg
-        return (msg,pkg)
+	
+	    #TODO watch out
+            if ix > 1 :
+		print "Multiple result"
+		break
+
+	    ret["pkg"] = str(row.pkg)
+            ret["msg"] = str(row.msg)
+
+        return ret
+    
+    def get_msg_and_pkg_from_topic(self, topic):
+        q = "SELECT ?msg ?pkg WHERE {  ?msg <"+self.__ONTOROB_PROP.publishedOn+"> <"+topic+"> . ?msg <"+self.__ONTOROB_PROP.hasPkg+"> ?pkg } "
+        print q
         
+        qres = self.__G.query(q)
+        print qres
+        ix = 0
+	ret = {}
+        for row in qres:
+	
+	    #TODO watch out
+            if ix > 1 :
+		print "Multiple result"
+		break
+
+	    ret["pkg"] = str(row.pkg)
+            ret["msg"] = str(row.msg)
+
+        return ret 
         
     def get_package(self, msg):
         """
@@ -302,7 +372,7 @@ def ask_capability(capa):
 @app.route('/capabilities', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def ask_capabilities():
-    
+    print "Received capabilities request"
     parsed_json = get_nodes()
     
     # print parsed_json
@@ -320,11 +390,20 @@ def ask_capabilities():
 @crossdomain(origin='*')
 def execute():
     print "Received execute"
-    print request.form
-    cap = request.form["cap"]
-    topic = request.form["topic"]
+    print request.data
+
+    program = json.loads(request.data)["program"]
+
+    onto_server.update_program_with_msg_and_pkg(program)
+    
+    print "AFTER"
+    print json.dumps(program)
+    #print program
+    execute_on_robot(program)
+    #cap = request.form["cap"]
+    #topic = request.form["topic"]
     #params = json.loads(request.data)
-    print onto_server.get_msg_and_pkg(topic,cap)
+    #print onto_server.get_msg_and_pkg(topic,cap)
 
     return "OK",200
 
@@ -457,7 +536,10 @@ def update_msgs_collection(cur_node_msgs, msgs_topic_collection):
 
     return msgs_topic_collection
 
+def execute_on_robot(program):
+    print "executing %s" % program
+
 if __name__ == "__main__":
   
     print "Starting server"
-    app.run(debug=True, use_reloader=True, host='0.0.0.0')
+    app.run(debug=True, use_reloader=True, threaded=True, host='0.0.0.0')
