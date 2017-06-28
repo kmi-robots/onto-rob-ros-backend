@@ -28,8 +28,8 @@ angular.module('ontoRobApp', ['ui.bootstrap','ui.router'])
 
 function dataService () {
 	this.capabilities = {};
-	this.ip = "http://137.108.114.0:5000/";
-	//this.ip = "http://localhost:5000/";
+	//this.ip = "http://137.108.114.0:5000/";
+	this.ip = "http://localhost:5000/";
 	//this.ip = "http://137.108.122.193:5000/"
 	//this.ip = "http://10.229.169.122:5000/"
 }
@@ -103,8 +103,8 @@ function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 	}).then(function successCallback(response) {
 		//$scope.capabilities = response.data;
 		Data.capabilities = response.data; 
-		console.log("I should redirect now");
-		console.log(Data.capabilities);
+		//console.log("I should redirect now");
+		//console.log(Data.capabilities);
 		$state.go("capabilities-ui");	
 	
 	}, function errorCallback(response) {
@@ -132,6 +132,8 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 	$scope.program.blockTypes = []
 	initialiseBlockTypes($scope.program.blockTypes);
 	
+	// this hashmap is used to understand which class needs to be
+	// disabled when an item in the interface is pressed
 	$scope.disablingHash = {
 		"condition":"parameter",
 		"statement":"capability",
@@ -183,7 +185,7 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 	// as they are all the same object
 	$scope.run = function () {
 		console.log("Running the current program");	
-		console.log($scope.program)
+		//console.log($scope.program)
 		
 		//parse
 		programObject = {"instructions":[]}
@@ -195,7 +197,7 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 			//console.log(parsedInstruction);
 		})
 		
-		console.log(programObject);
+		//console.log(programObject);
 		
 		//send
 		$http({
@@ -315,9 +317,7 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		ret.type = "while";
 		ret.conditions = [];
 		ret.do = [];
-		
-		console.log(ret);
-		
+
 		// parsing conditions
 		angular.forEach(whileDo.conditions, function (condition) {
 				
@@ -343,7 +343,6 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		angular.forEach(whileDo.do.sequence, function (doBlock) {
 		
 			parsedInstruction = parseBlock(doBlock);
-			console.log(ret.do);
 			ret.do.push(parsedInstruction);
 		
 		});
@@ -450,14 +449,20 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 			initialiseRepeat(curBlock);
 			
 		}
-		console.log("Current block");
-		console.log(curBlock);
-		console.log("Adding to sequnce of");
-		console.log($scope.selectedBlock);
+		else if(block == "no-op") {
+			
+			console.log("Adding " + block + " statement");
+			initialiseRepeat(curBlock);
+			
+		}
+		//console.log("Current block");
+		//console.log(curBlock);
+		//console.log("Adding to sequnce of");
+		//console.log($scope.selectedBlock);
 		
 		$scope.selectedBlock.sequence.push(curBlock);
 		
-		console.log($scope.program);
+		//console.log($scope.program);
 	}
 	
 	
@@ -531,7 +536,7 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 	$scope.select = function (clickedBlock,$event) {
 		
 		$event.stopPropagation();
-		console.log(clickedBlock);
+		//console.log(clickedBlock);
 		$scope.selectedBlock = clickedBlock;
 				
 		clickedBlock.backgroundColor = $scope.blockSelectedBackgroundColor;
@@ -789,15 +794,20 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		repeat = {}
 		repeat.class = "repeat";
 		repeat.disabled = false;
+
+		noOp = {}
+		noOp.class = "no-op";
+		noOp.disabled = false;
 		
 		blockArray.push(statement);
 		blockArray.push(ifThenElse);
 		blockArray.push(whileDo);
 		blockArray.push(repeat);
-		
+		blockArray.push(noOp);
 	}
 	
 	$scope.addCapability = function (capability) {
+		
 		var copiedCapability = {};
 		angular.copy(capability, copiedCapability);
 		$scope.selectedBlock.capability = copiedCapability;
@@ -805,6 +815,7 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 	}
 	
 	$scope.addParameter = function (parameter,capability) {
+		
 		var copiedParameter = {}
 		var copiedCapability = {};
 		angular.copy(capability, copiedCapability);
@@ -820,6 +831,92 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 	$scope.stopPropagation = function ($event) {
 		
 		$event.stopPropagation();
+		
+	}
+	
+	$scope.removeInstruction = function (instruction,$event) {
+		$event.stopPropagation();
+
+		removeRecursively($scope.program.sequence,instruction);
+		
+	}
+	
+	function removeRecursively (instructionArray, instructionToRemove) {
+		
+		angular.forEach(instructionArray,function(curInstruction) {
+			console.log(instructionToRemove);
+			console.log(instructionToRemove.$$hashKey);
+			console.log(curInstruction);
+			console.log(curInstruction.$$hashKey);
+			
+			if(instructionToRemove.$$hashKey == curInstruction.$$hashKey) {
+				
+				console.log("YEAH, they're the same");
+				var index = instructionArray.indexOf(instructionToRemove);
+				removeFromInstructionArray(instructionArray,index);
+				return true;
+				
+			}
+			else {
+				
+				if(curInstruction.class == "if-then-else") {
+					
+					console.log("YEAH, if-then-else");
+					if(removeRecursively(curInstruction.conditions,instructionToRemove)) {
+						console.log("YEAH, if-then-else conditions");
+						return true;
+						
+					}
+					console.log("Now I'm gonna do then");
+					if(curInstruction.then.sequence.length > 0 && removeRecursively(curInstruction.then.sequence,instructionToRemove)) {
+						console.log("YEAH, if-then-else then");
+						return true;
+						
+					}
+					console.log("Now I'm gonna do else");
+					if(curInstruction.else.sequence.length > 0 && removeRecursively(curInstruction.else.sequence,instructionToRemove)) {
+						
+						return true;
+						
+					}
+						
+				}
+				else if(curInstruction.class == "while-do") {
+					
+					if(removeRecursively(curInstruction.conditions,instructionToRemove)) {
+						
+						return true;
+						
+					}
+					if(curInstruction.do.sequence.length > 0 && removeRecursively(curInstruction.do.sequence,instructionToRemove)) {
+						
+						return true;
+						
+					}
+				
+				}
+				else if(instructionToRemove.class == "repeat") {
+					
+					if(curInstruction.do.sequence.length > 0 && removeRecursively(curInstruction.do.sequence,instructionToRemove)) {
+						
+						return true;
+						
+					}
+					
+				}
+				
+			}
+			
+			return false;
+				
+		});
+		
+	}
+	
+	function removeFromInstructionArray(instructionArray,index) {
+		
+		console.log(instructionArray[index]);
+		instructionArray.splice(index,1);
 		
 	}
 }
