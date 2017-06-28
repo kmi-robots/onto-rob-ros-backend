@@ -65,6 +65,13 @@ def capability():
         return lines[0]
     #return "[{\"capabs\":[{\"type\":\"http://data.open.ac.uk/kmi/ontoRob/resource/capability/Robot_position\", \"params\":[{\"p\": \"http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.z\",\"mode\": \"write\"},{\"p\": \"http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.x\",\"mode\": \"write\"},{\"p\": \"http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.y\",\"mode\": \"write\"}]}]}]", 200
 
+@app.route("/execute", methods=['POST','OPTIONS'])
+@crossdomain(origin='*')
+def execute():
+    print "executeee"
+        
+    return "OK",200
+
 @app.route("/trigger", methods=['POST','OPTIONS'])
 @crossdomain(origin='*')
 def trigger():

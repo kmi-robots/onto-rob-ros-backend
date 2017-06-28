@@ -60,10 +60,19 @@ def crossdomain(origin=None, methods=None, headers=None, max_age=21600,
 @app.route("/capabilities", methods=['GET','OPTIONS'])
 @crossdomain(origin='*')
 def capability():
-    with open("/Users/emanuelebastianeli/Work/KMi/Research/Robotics/RobotCapability/capabilities_temp.json","r") as f:
+    with open("../../temp/capability_example.json","r") as f:
         lines = f.readlines()
         return lines[0]
     #return "[{\"capabs\":[{\"type\":\"http://data.open.ac.uk/kmi/ontoRob/resource/capability/Robot_position\", \"params\":[{\"p\": \"http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.z\",\"mode\": \"write\"},{\"p\": \"http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.x\",\"mode\": \"write\"},{\"p\": \"http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.y\",\"mode\": \"write\"}]}]}]", 200
+
+@app.route("/execute", methods=['POST','OPTIONS'])
+@crossdomain(origin='*')
+def trigger():
+    if request.method == 'POST':
+        d = json.loads(request.data)
+        print d
+        
+    return "ciao",200
 
 @app.route("/trigger", methods=['POST','OPTIONS'])
 @crossdomain(origin='*')

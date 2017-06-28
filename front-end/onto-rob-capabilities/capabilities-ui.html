@@ -6,7 +6,7 @@
 				<div class="capability" ng-if="capability.params.length > 0" ng-style="{background: capability.backgroundColor}">
 					<p class="name">{{getNameFromURI(capability.type)}} - ({{messageCapability.topic}} - {{messageCapability.msg}})<button type="button" class="btn pull-right" ng-click="addCapability(capability)" ng-if="!capability.disabled">add</button></p>
 					<div ng-repeat="parameter in capability.params">
-						<div ng-if="parameter.mode == 'write'" ng-style="{background: parameter.backgroundColor }">		
+						<div ng-if="parameter.mode == 'write'" ng-style="{background: parameter.backgroundColor }">	
 								<div class="parameter-name">{{getNameFromURI(parameter.p)}} <button type="button" class="btn pull-right" ng-click="addParameter(parameter,capability)" ng-if="!parameter.disabled">add</button></div>
 						</div>
 					</div>

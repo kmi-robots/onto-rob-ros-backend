@@ -1,16 +1,35 @@
-<h1>HELLO Ontorob!</h1>
-		
-     	<div class="col-lg-4" id="capability_container">
+<h1>HELLO Ontorob!</h1>	
+     <div class="col-lg-4" id="capability_container">
 		<h4>Capability List</h4>
+		<div ng-repeat="messageCapability in capabilities">
+			<div ng-repeat="capability in messageCapability.capabs">
+				<div class="capability" ng-if="capability.params.length > 0" ng-style="{background: capability.backgroundColor}">
+					<p class="name">{{getNameFromURI(capability.type)}} - ({{messageCapability.topic}} - {{messageCapability.msg}})<button type="button" class="btn pull-right" ng-click="addCapability(capability)" ng-if="!capability.disabled">add</button></p>
+					<div ng-repeat="parameter in capability.params">
+						<div ng-if="parameter.mode == 'write'" ng-style="{background: parameter.backgroundColor }">		
+								<div class="parameter-name">{{getNameFromURI(parameter.p)}} <button type="button" class="btn pull-right" ng-click="addParameter(parameter,capability)" ng-if="!parameter.disabled">add</button></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-     	<div class="col-lg-4" id="program_container">
+     <div class="col-lg-5" id="program_container">
 		<h4>Program</h4>
 		<button type="button" class="btn" ng-click="run()">Run program</button>
+		<div class="program" ng-click="select(program,$event)" ng-style="{background: program.backgroundColor}">
+			<div ng-if="program.sequence.length == 0">PROGRAM</div>
+			<div ng-if="program.sequence.length > 0">
+				<div ng-repeat="block in program.sequence">
+					<div ng-include="block.class+'.html'" ng-init="block = block">
+					</div>
+				</div>
+			</div>
+		</div>
 	</div> 
-     	<div class="col-lg-4" id="blocks_container">
+     <div class="col-lg-3" id="blocks_container" >
 		<h4>Programming blocks</h4>
-		<div>statement <button type="button" class="btn" ng-click="addToProgram(\"statement\")">Add</button></div>
-		<div>if-then-else <button type="button" class="btn" ng-click="addToProgram(\"if-then-else\")">Add</button></div>
-		<div>while-do <button type="button" class="btn" ng-click="addToProgram(\"while-do\")">Add</button></div>
-		<div>repeat <button type="button" class="btn" ng-click="addToProgram(\"repeat\")">Add</button></div>
+		<div ng-repeat="block in program.blockTypes" ng-style="{background: block.backgroundColor}">
+			{{block.class}} <button type="button" class="btn" ng-click="addToProgram(block.class)" ng-if="!block.disabled">Add</button>
+		</div>
 	</div>  

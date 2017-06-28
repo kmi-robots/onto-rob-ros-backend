@@ -28,8 +28,8 @@ angular.module('ontoRobApp', ['ui.bootstrap','ui.router'])
 
 function dataService () {
 	this.capabilities = {};
-	//this.ip = "http://137.108.114.0:5000/";
-	this.ip = "http://localhost:5000/";
+	this.ip = "http://137.108.114.0:5000/";
+	//this.ip = "http://localhost:5000/";
 	//this.ip = "http://137.108.122.193:5000/"
 	//this.ip = "http://10.229.169.122:5000/"
 }
@@ -143,6 +143,32 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		"program":"block"
 	}
 	
+	$scope.requireReadings = function(topic, capability) {
+
+		console.log("Requiring " + topic + " " + capability);
+		toRequest = {
+			"topic":topic,
+			"capability":capability
+		}
+
+		$http({
+			
+			method: 'GET',
+			url: Data.ip + "read",
+			params: {"question": toRequest}
+			
+		}).then(function successCallback(response) {
+			
+			console.log("Response "+ response.status);	
+			console.log(response.data);
+
+		}, function errorCallback(response) {
+			
+			console.log("Problems while contacting the KB server " + response.status);
+			
+		});
+	}
+
 	// this variable is used to keep track of the selected block in the program
 	// I may use a function that retrieves it, as every block has a "selected" field
 	// but I'll do a try with this one
@@ -162,8 +188,12 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			capability.topic = messageCapability.topic;
 			disable(capability);
 			
+			capability.hasReadParameter = false;
+			
 			capability["params"].sort(function(a, b) {
+
 				return a["p"].localeCompare(b["p"]);
+			
 			});
 
 			angular.forEach(capability["params"],function(parameter) {
@@ -171,25 +201,33 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 				parameter.class = "parameter";
 				parameter.value = null;
 				disable(parameter);
+				
+				if(parameter.mode == "read") {
+
+					capability.hasReadParameter = true;
+		
+				}
 					
 			});
 			
+			if(capability.hasReadParameter) {
+
+				//capability.readRequestPromise = $interval($scope.requireReadings, 2000, 0, true, messageCapability.topic, capability.type);
+
+			}
 		});
 		
 	});
 
-	$scope.requireReadings = function(gno) {
-		console.log("Requiring " + gno);
-	}
-	
 //	$interval($scope.requireReadings, 2000);
-	$interval($scope.requireReadings, 2000,0,true,20); 
+	//$interval($scope.requireReadings, 2000,0,true,20); 
 
 	// this function runs the program built so far
 	// it "parses" the sequence of instantiated blocks and 
 	// translates them into the needed json
 	// TODO: check the updating of capability in the program panel
 	// as they are all the same object
+	// TODO I need to add an id to everything for the hashing
 	$scope.run = function () {
 		console.log("Running the current program");	
 		//console.log($scope.program)
@@ -204,7 +242,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			//console.log(parsedInstruction);
 		})
 		
-		//console.log(programObject);
+		console.log(programObject);
 		
 		//send
 		$http({
@@ -223,6 +261,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			
 		});
 		$scope.conditionCounter = 0;
+
 	}
 
 	function parseBlock(block) {
@@ -410,7 +449,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		
 		var ret = {};
 		ret.type = "repeat";
-		ret.times = repeat.times;
+		ret.times = parseFloat(repeat.times);
 		ret.do = [];
 		
 		angular.forEach(repeat.do.sequence, function (doBlock) {
