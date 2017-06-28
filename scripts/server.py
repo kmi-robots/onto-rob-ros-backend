@@ -133,7 +133,7 @@ class OntoRobServer:
                 for c in component_obj['capabs']:
                     if c['type'] == row.capa: 
                         ix = component_obj['capabs'].index(c)
-                component_obj['capabs'][ix]['params'].append({"p" : row.param, "mode" : "write"})
+                component_obj['capabs'][ix]['params'].append({"p" : row.param, "mode" : row.parType})
             
             # TODO: if you remove this if, move_base_simple, which has a PoseStamped msg 
             # therefore evokes a Navigation capab, won't appear in the 
@@ -151,7 +151,7 @@ class OntoRobServer:
             values += "( <"+self.__ONTOROB_RES + msg + ">) "
         values += "}"
     
-        query = "SELECT ?capa ?param WHERE { " + values + " ?res <"+self.__ONTOROB_PROP.evokes+"> ?capa . ?res <"+self.__ONTOROB_PROP.hasField +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParameter +"> ?param . }";
+        query = "SELECT ?capa ?param ?parType WHERE { " + values + " ?res <"+self.__ONTOROB_PROP.evokes+"> ?capa . ?res <"+self.__ONTOROB_PROP.hasField +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParameter +"> ?param . ?res <"+self.__ONTOROB_PROP.hasParamType+"> ?parType .}";
         return query
 
     def fill_msg_and_pkg(self,instruction):
