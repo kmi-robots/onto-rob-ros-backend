@@ -415,7 +415,7 @@ def read():
             msg = q_res["msg"]
             reading = read_from_robot(topic, get_name_from_uri(pkg), get_name_from_uri(msg))
 
-        resp = app.response_class(response={"pose.pose.position.x":reading.pose.pose.position.x}, status=200,mimetype="application/json")
+        resp = app.response_class(response=json.dumps({"pose.pose.position.x":reading.pose.pose.position.x}), status=200,mimetype="application/json")
 
         return resp
     except Exception, e:

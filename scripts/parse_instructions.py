@@ -10,7 +10,7 @@ from move_base_msgs.msg import MoveBaseActionResult
 
 topic_list = collections.defaultdict(list)
 last_value = {}
-last_read = collections.defaultdict(list)
+last_read = {}
 goal_reached = False
 subscriber_list = []
 publisher_list = []
@@ -195,4 +195,4 @@ def stop_reading(uid):
 
 
 def reader(msg, topic):
-    last_read[topic].append(msg)
+    last_read[topic] = msg
