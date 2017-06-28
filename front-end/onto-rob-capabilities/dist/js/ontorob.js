@@ -299,11 +299,11 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		ret["type"] = "capability";
 
 		angular.forEach(statement.capability.params, function (parameter) {
-			
-			paramName = $scope.getNameFromURI(parameter.p);
-			ret.fields.push(paramName);
-			ret[paramName] = parameter.value;
-		
+			if(parameter.mode == "write") {
+				paramName = $scope.getNameFromURI(parameter.p);
+				ret.fields.push(paramName);
+				ret[paramName] = parameter.value;
+			}
 		});
 		
 		return ret;
@@ -853,8 +853,24 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	
 	$scope.addCapability = function (capability) {
 		
+		console.log(capability);
+
 		var copiedCapability = {};
 		angular.copy(capability, copiedCapability);
+
+		//copiedCapability.params = [];
+
+		//angular.forEach(capability.params, function (param){
+		//	console.log(param);
+
+		//	if(param.mode == "write") {
+		//		copiedCapability.params.push(param);
+		//	}
+
+		//});
+
+		console.log("copied");
+		console.log(copiedCapability);
 		$scope.selectedBlock.capability = copiedCapability;
 		
 	}

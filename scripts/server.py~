@@ -292,7 +292,7 @@ class OntoRobServer:
         
 app = Flask(__name__)
 onto_server = OntoRobServer()
-
+topic_dict = {}
 
 @app.route("/")
 def index():
@@ -400,14 +400,20 @@ def read():
     try:
         print "Received read"
         q = json.loads(request.args.getlist("question")[0])
-        topic = onto_server.get_ontorob_res_namespace().topic + q["topic"]
-        capability = q["capability"]
-        print "%s %s" % (topic, capability)
-        q_res = onto_server.get_msg_and_pkg(topic,capability)
-	print q_res["pkg"]
-        print q_res["msg"]
-        reading = read_from_robot(topic,pkg,msg)
-
+        topic = q["topic"]
+	
+        if topic in topic_dict.keys:
+                reading = read_from_topic(topic)
+        else:
+		topic_uri = onto_server.get_ontorob_res_namespace().topic + q["topic"]
+		capability = q["capability"]
+		print "%s %s" % (topic_uri, capability)
+		q_res = onto_server.get_msg_and_pkg(topic_uri, capability)
+		print q_res["pkg"]
+		print q_res["msg"]
+		pkg = q_res["pkg"]
+		msg = q_res["msg"]
+		reading = read_from_robot(topic, get_name_from_uri(pkg), get_name_from_uri(msg))
         resp = app.response_class(response=json.dumps(reading), status=200,mimetype="applicaiton/json")
 
         return resp
@@ -510,10 +516,16 @@ def update_msgs_collection(cur_node_msgs, msgs_topic_collection):
 def execute_on_robot(program):
     print "starting execution"
     parse_instructions.run_program(program)
+    
 
-def read_from_robot(topic,pkg,msg):
-    # do the robot stuff
-    return {"valA":10,"valB":22}
+def read_from_topic(topic):
+    return parse_instructions.get_value(topic)
+
+def read_from_robot(topic, pkg, msg):
+    uid = parse_instructions.read_topic(topic, pkg, msg)
+    topic_dict[topic] = {}
+    topic_dict[topic]["uid"] = uid
+    return read_from_topic(topic)
 
 if __name__ == "__main__":
   
