@@ -402,6 +402,7 @@ def read():
         q = json.loads(request.args.getlist("question")[0])
         topic = q["topic"]
         if topic in topic_dict.keys():
+            print "Topic %s is already in the dict" % topic
             reading = read_from_topic(topic)
         else:
             topic_uri = onto_server.get_ontorob_res_namespace().topic + q["topic"]
