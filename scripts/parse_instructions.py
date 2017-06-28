@@ -177,11 +177,11 @@ def init():
     rate = rospy.Rate(1)
 
 
-def read_topic(listing):
-    attr = getattr(importlib.import_module(listing['pkg'] + '.msg'), listing['message'])
+def read_topic(topic, pkg, msg):
+    attr = getattr(importlib.import_module(pkg + '.msg'), msg)
     uid = uuid.uuid4()
-    reader_dict[uid] = rospy.Subscriber(listing['topic'], attr, reader, callback_args=listing['topic'])
-    while listing['topic'] not in last_read:
+    reader_dict[uid] = rospy.Subscriber(topic, attr, reader, callback_args=topic)
+    while topic not in last_read:
         rate.sleep()
     return uid
 

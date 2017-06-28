@@ -403,12 +403,12 @@ def read():
         topic = onto_server.get_ontorob_res_namespace().topic + q["topic"]
         capability = q["capability"]
         print "%s %s" % (topic, capability)
-        q_res = onto_server.get_msg_and_pkg(topic,capability)
+        q_res = onto_server.get_msg_and_pkg(topic, capability)
         print q_res["pkg"]
         print q_res["msg"]
         pkg = q_res["pkg"]
         msg = q_res["msg"]
-        reading = read_from_robot(topic, pkg, msg)
+        reading = read_from_robot(q["topic"], get_name_from_uri(pkg), get_name_from_uri(msg))
         resp = app.response_class(response=json.dumps(reading), status=200,mimetype="applicaiton/json")
 
         return resp
@@ -511,10 +511,11 @@ def update_msgs_collection(cur_node_msgs, msgs_topic_collection):
 def execute_on_robot(program):
     print "starting execution"
     parse_instructions.run_program(program)
+    
 
-def read_from_robot(topic,pkg,msg):
-    # do the robot stuff
-    return {"valA":10,"valB":22}
+def read_from_robot(topic, pkg, msg):
+    uid = parse_instructions.read_topic(topic, pkg, msg)
+    return {"valA":10, "valB":22}
 
 if __name__ == "__main__":
   
