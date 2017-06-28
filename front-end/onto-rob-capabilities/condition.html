@@ -6,6 +6,7 @@
 			<option value="or">or</option>
 		</select>
 	</div>
+	<button type="button" class="btn pull-right" ng-click="removeInstruction(condition,$event)" >remove</button>
 	<div class="col-md-2 not">
 		<input type="checkbox" name="not" value="not" ng-click="stopPropagation($event)" ng-model="condition.not">NOT
 	</div>

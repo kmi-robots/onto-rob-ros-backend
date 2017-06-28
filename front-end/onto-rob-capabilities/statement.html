@@ -1,6 +1,7 @@
 <div class="block statement" id="statement" ng-click="select(block,$event)" ng-style="{background: block.backgroundColor}">	
 	<div class="placeholder" ng-if="block.capability == null">CAPABILITY</div>
-	<button type="button" class="btn pull-right" ng-click="removeCapability(capability)" ng-if="block.capability != null">remove</button>
+	<button type="button" class="btn pull-right" ng-click="removeInstruction(block,$event)" >remove</button>
+	<!--<button type="button" class="btn pull-right" ng-click="removeInstruction(block.capability)" ng-if="block.capability != null">remove</button>-->
 	<div ng-if="block.capability != null">
 		<p class="name">{{getNameFromURI(block.capability.type)}}</p>
 		<div ng-repeat="parameter in block.capability.params">
