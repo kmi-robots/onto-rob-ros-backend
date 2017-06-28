@@ -3,10 +3,18 @@ import rospy
 import importlib
 import collections
 import functools
+import uuid
+
+from move_base_msgs.msg import MoveBaseActionResult
 
 
 topic_list = collections.defaultdict(list)
 last_value = {}
+last_read = collections.defaultdict(list)
+goal_reached = False
+subscriber_list = []
+publisher_list = []
+reader_dict = {}
 global rate
 
 
@@ -76,6 +84,10 @@ def callback(msg, topic):
 def execute(instructions):
     print instructions
     if not instructions:
+        for p in publisher_list:
+            p.unregister()
+        for s in subscriber_list:
+            s.unregister()
         return
     for ist in instructions:
         if ist['type'] == 'if':
@@ -116,15 +128,19 @@ def activate_publisher(jp):
 
 
 def send_command(input_d):
-
     pub, attr = activate_publisher(input_d)
+    publisher_list.append(pub)
     msg = gen_message(input_d, attr)
     while not rospy.is_shutdown():
         if pub.get_num_connections() > 0:
             pub.publish(msg)
             break
         rate.sleep()
-    print "done"
+    # TODO: this is now an hack, we should work on this
+    if input_d['topic'] == '/move_base_simple/goal':
+        global goal_reached
+        goal_reached = False
+        wait_for_response()
 
 
 def run_program(listing):
@@ -136,16 +152,47 @@ def run_program(listing):
                 if 'topic' in c:
                     attr = getattr(importlib.import_module(c['pkg'] + '.msg'), c['name'])
                     if c['topic'] not in topic_list:
-                        rospy.loginfo("new subscriber on topic %s", c['topic'])
-                        rospy.Subscriber(c['topic'], attr, callback, callback_args=c['topic'])
+                        subscriber_list.append(rospy.Subscriber(c['topic'], attr, callback, callback_args=c['topic']))
                     topic_list[c['topic']].append([c['field'], c['id']])
 
     print listing
     execute(listing['instructions'])
 
 
+def wait_for_response():
+    while not goal_reached:
+        rate.sleep()
+
+
+def status_callback(msg):
+    global goal_reached
+    if msg.status.status == 3:
+        goal_reached = True
+
+
 def init():
     rospy.init_node('dynamic_node', disable_signals=True)
+    rospy.Subscriber('/move_base/result', MoveBaseActionResult, status_callback)
     global rate
     rate = rospy.Rate(1)
 
+
+def read_topic(listing):
+    attr = getattr(importlib.import_module(listing['topic'] + '.msg'), listing['message'])
+    uid = uuid.uuid4()
+    reader_dict[uid] = rospy.Subscriber(listing['topic'], attr, reader, callback_args=listing['topic'])
+    while listing['topic'] not in last_read:
+        rate.sleep()
+    return
+
+
+def get_value(topic):
+    return last_read[topic]
+
+
+def stop_reading(uid):
+    reader_dict[uid].unregister()
+
+
+def reader(msg, topic):
+    last_read[topic].append(msg)
