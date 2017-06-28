@@ -79,6 +79,9 @@ class OntoRobServer:
     def __init__(self): 
         self.read_kb()
 
+    def get_ontorob_res_namespace(self):
+	return self.__ONTOROB_RES
+
     def set_kb_file(self, input_file):
         """
         load a different file if needed
@@ -104,28 +107,15 @@ class OntoRobServer:
         TODO change name of method. 
         """
         response_array = list()
-        # print jsonString
         
         for item in json_str:
-            #print item
-            # if item["topic"] == "/move_base_simple/goal":
-#                 print "found"
-            # print "fff", item['message']
             component_obj = {'msg': item['message'], 'topic':item['topic'], 'capabs': []}
             
             query_string = self.build_query([item['message']])
             
-            # print query_string
-            
             qres = self.__G.query(query_string)
 
-            # if item["topic"] == "/move_base_simple/goal":
-#                 print len(qres)
-
             for row in qres:
-                # print row
-                # if item["topic"] == "/move_base_simple/goal":
-#                     print row
                 if len(component_obj['capabs']) == 0 or row.capa not in list(c['type'] for c in component_obj['capabs']):
                     component_obj['capabs'].append({'type': row.capa, 'params': []})
                 
@@ -139,7 +129,8 @@ class OntoRobServer:
             # therefore evokes a Navigation capab, won't appear in the 
             #if len(component_obj['capabs']) != 0:
             response_array.append(component_obj)
-              
+       
+        #response_array = []
         return response_array
         
     def build_query(self, msg_list):
@@ -153,6 +144,7 @@ class OntoRobServer:
     
         query = "SELECT ?capa ?param ?parType WHERE { " + values + " ?res <"+self.__ONTOROB_PROP.evokes+"> ?capa . ?res <"+self.__ONTOROB_PROP.hasField +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParameter +"> ?param . ?res <"+self.__ONTOROB_PROP.hasParamType+"> ?parType .}";
         return query
+	
 
     def fill_msg_and_pkg(self,instruction):
         print "Filling!"
@@ -204,10 +196,10 @@ class OntoRobServer:
 
     def get_msg_and_pkg(self, topic, capability):
         q = "SELECT ?msg ?pkg WHERE {  ?msg <"+self.__ONTOROB_PROP.evokes+"> <"+capability+"> . ?msg <"+self.__ONTOROB_PROP.publishedOn+"> <"+topic+"> . ?msg <"+self.__ONTOROB_PROP.hasPkg+"> ?pkg } "
-        print q
+        #print q
         
         qres = self.__G.query(q)
-        print qres
+        #print qres
         ix = 0
         ret = {}
         for row in qres:
@@ -392,22 +384,37 @@ def ask_capabilities():
 @crossdomain(origin='*')
 def execute():
     print "Received execute"
-    print request.data
+    #print request.data
 
     program = json.loads(request.data)["program"]
 
     onto_server.update_program_with_msg_and_pkg(program)
-    
-    print "AFTER"
-    print json.dumps(program)
-    #print program
+    #print "AFTER"
+    #print json.dumps(program)
     execute_on_robot(program)
-    #cap = request.form["cap"]
-    #topic = request.form["topic"]
-    #params = json.loads(request.data)
-    #print onto_server.get_msg_and_pkg(topic,cap)
-
     return "OK",200
+
+@app.route('/read', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def read():
+    try:
+        print "Received read"
+        q = json.loads(request.args.getlist("question")[0])
+        topic = onto_server.get_ontorob_res_namespace().topic + q["topic"]
+        capability = q["capability"]
+        print "%s %s" % (topic, capability)
+        q_res = onto_server.get_msg_and_pkg(topic,capability)
+	
+print q_res["pkg"]
+        print q_res["msg"]
+        reading = read_from_robot(topic,pkg,msg)
+
+        resp = app.response_class(response=json.dumps(reading), status=200,mimetype="applicaiton/json")
+
+        return resp
+    except Exception, e:
+        print str(e)
+        return "D'OH",500
 
 @app.route('/trigger', methods=['GET', 'POST', 'OPTIONS'])
 @crossdomain(origin='*')
@@ -505,9 +512,13 @@ def execute_on_robot(program):
     print "starting execution"
     parse_instructions.run_program(program)
 
+def read_from_robot(topic,pkg,msg):
+    # do the robot stuff
+    return {"valA":10,"valB":22}
 
 if __name__ == "__main__":
   
     print "Starting server"
     parse_instructions.init()
-    app.run(debug=True, use_reloader=True, threaded=True, host='0.0.0.0')
+    #app.run(debug=True, use_reloader=True, threaded=True, host='0.0.0.0')
+    app.run(threaded=True, host='0.0.0.0')
