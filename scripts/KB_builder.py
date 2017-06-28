@@ -58,7 +58,7 @@ def addCapabilities(l):
             result.append( ( URIRef(ontorob_res.field+"/"+cap_param), RDF.type, ontorob_class.Field) )
             if 'r' in field_type :  
                 result.append( (msg , ontorob_prop.hasParamType, Literal("read","en")) ) 
-            elif 'w' in field_type:
+            if 'w' in field_type:
                 result.append( ( msg, ontorob_prop.hasParamType, Literal("write","en")) )
                 
     return result
