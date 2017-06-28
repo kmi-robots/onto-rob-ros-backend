@@ -169,8 +169,6 @@
     ns1:hasParamType "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/geometry_msgs> .
 
-<http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/PointStamped> ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/topic/clicked_point> .
-
 <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/PolygonStamped> ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/global_costmap/footprint>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/local_costmap/footprint> .
 
@@ -185,7 +183,8 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/position.x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/position.y>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/position.z> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/geometry_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/Pose2D> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
@@ -312,8 +311,7 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/kobuki_msgs/WheelDropEvent> ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/topic/mobile_base/events/wheel_drop> .
 
-<http://data.open.ac.uk/kmi/ontoRob/resource/map_msgs/OccupancyGridUpdate> ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/topic/map_updates>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/global_costmap/costmap_updates>,
+<http://data.open.ac.uk/kmi/ontoRob/resource/map_msgs/OccupancyGridUpdate> ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/global_costmap/costmap_updates>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/local_costmap/costmap_updates> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/move_base_msgs/MoveBaseAction> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
@@ -387,7 +385,8 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/start.pose.position.x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/start.pose.position.y>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/start.pose.position.z> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/nav_msgs> ;
     ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/NavfnROS/make_plan>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/make_plan> .
@@ -442,7 +441,8 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/poses__LIST.pose.position.x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/poses__LIST.pose.position.y>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/poses__LIST.pose.position.z> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/nav_msgs> ;
     ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/DWAPlannerROS/global_plan>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/DWAPlannerROS/local_plan>,
@@ -476,8 +476,7 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/get_loggers>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/navigation_velocity_smoother/get_loggers>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/robot_state_publisher/get_loggers>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/topic/rosout/get_loggers>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/topic/rviz_1498578465587584618/get_loggers> .
+        <http://data.open.ac.uk/kmi/ontoRob/resource/topic/rosout/get_loggers> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/roscpp/SetLoggerLevel> ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/topic/amcl/set_logger_level>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/bumper2pointcloud/set_logger_level>,
@@ -492,8 +491,7 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/set_logger_level>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/navigation_velocity_smoother/set_logger_level>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/robot_state_publisher/set_logger_level>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/topic/rosout/set_logger_level>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/topic/rviz_1498578465587584618/set_logger_level> .
+        <http://data.open.ac.uk/kmi/ontoRob/resource/topic/rosout/set_logger_level> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/rosgraph_msgs/Clock> ns1:publishedOn <http://data.open.ac.uk/kmi/ontoRob/resource/topic/clock> .
 
@@ -572,7 +570,8 @@
     ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Teleoperation> ;
     ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/axes__LIST>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/buttons__LIST> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/sensor_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs/JoyFeedback> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
@@ -581,14 +580,16 @@
     ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/id>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/intensity>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/type> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/sensor_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs/JoyFeedbackArray> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "JoyFeedbackArray"@en ;
     ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Teleoperation> ;
     ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/array__LIST> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/sensor_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs/LaserEcho> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
@@ -733,8 +734,7 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/gazebo/unpause_physics>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/global_localization>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/topic/move_base/clear_costmaps>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/topic/request_nomotion_update>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/topic/rviz_1498578465587584618/reload_shaders> .
+        <http://data.open.ac.uk/kmi/ontoRob/resource/topic/request_nomotion_update> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/stereo_msgs/DisparityImage> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "DisparityImage"@en ;
@@ -876,8 +876,6 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/topic/camera/set_parameters> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
 
-<http://data.open.ac.uk/kmi/ontoRob/resource/topic/clicked_point> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
-
 <http://data.open.ac.uk/kmi/ontoRob/resource/topic/clock> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/topic/cmd_vel_mux/active> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
@@ -1013,8 +1011,6 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/topic/map_server/get_loggers> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/topic/map_server/set_logger_level> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/topic/map_updates> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/topic/mobile_base/commands/motor_power> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
 
@@ -1179,12 +1175,6 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/topic/rosout/set_logger_level> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/topic/rosout_agg> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/topic/rviz_1498578465587584618/get_loggers> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/topic/rviz_1498578465587584618/reload_shaders> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/topic/rviz_1498578465587584618/set_logger_level> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/topic/scan> a <http://data.open.ac.uk/kmi/ontoRob#Topic> .
 

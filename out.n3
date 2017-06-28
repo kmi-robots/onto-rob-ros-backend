@@ -63,7 +63,8 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/position.x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/position.y>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/position.z> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/geometry_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/Pose2D> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
@@ -235,7 +236,8 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/start.pose.position.x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/start.pose.position.y>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/start.pose.position.z> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/nav_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/nav_msgs/GridCells> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
@@ -283,7 +285,8 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/poses__LIST.pose.position.x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/poses__LIST.pose.position.y>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/poses__LIST.pose.position.z> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/nav_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/nav_msgs/SetMap> a <http://data.open.ac.uk/kmi/ontoRob#srv> ;
@@ -354,7 +357,8 @@
     ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Teleoperation> ;
     ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/axes__LIST>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/buttons__LIST> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/sensor_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs/JoyFeedback> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
@@ -363,14 +367,16 @@
     ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/id>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/intensity>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/type> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/sensor_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs/JoyFeedbackArray> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "JoyFeedbackArray"@en ;
     ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Teleoperation> ;
     ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/array__LIST> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/sensor_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs/LaserEcho> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
