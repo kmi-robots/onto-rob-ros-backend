@@ -210,9 +210,10 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 					
 			});
 			
-			if(capability.hasReadParameter) {
+			if(capability.topic == "/odom" && capability.type == "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Robot_position"
+ && capability.hasReadParameter) {
 
-				//capability.readRequestPromise = $interval($scope.requireReadings, 2000, 0, true, messageCapability.topic, capability.type);
+				capability.readRequestPromise = $interval($scope.requireReadings, 2000, 0, true, messageCapability.topic, capability.type);
 
 			}
 		});
@@ -299,11 +300,11 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		ret["type"] = "capability";
 
 		angular.forEach(statement.capability.params, function (parameter) {
-			
-			paramName = $scope.getNameFromURI(parameter.p);
-			ret.fields.push(paramName);
-			ret[paramName] = parameter.value;
-		
+			if(parameter.mode == "write") {
+				paramName = $scope.getNameFromURI(parameter.p);
+				ret.fields.push(paramName);
+				ret[paramName] = parameter.value;
+			}
 		});
 		
 		return ret;

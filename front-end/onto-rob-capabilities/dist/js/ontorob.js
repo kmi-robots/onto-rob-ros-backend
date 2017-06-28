@@ -210,9 +210,10 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 					
 			});
 			
-			if(capability.hasReadParameter) {
+			if(messageCapability.topic == "/odom" && capability.type == "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Robot_position"
+ && capability.hasReadParameter) {
 
-				//capability.readRequestPromise = $interval($scope.requireReadings, 2000, 0, true, messageCapability.topic, capability.type);
+				capability.readRequestPromise = $interval($scope.requireReadings, 2000, 0, true, messageCapability.topic, capability.type);
 
 			}
 		});

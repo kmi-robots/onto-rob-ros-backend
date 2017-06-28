@@ -402,6 +402,7 @@ def read():
         q = json.loads(request.args.getlist("question")[0])
         topic = q["topic"]
         if topic in topic_dict.keys():
+            print "Topic %s is already in the dict" % topic
             reading = read_from_topic(topic)
         else:
             topic_uri = onto_server.get_ontorob_res_namespace().topic + q["topic"]
@@ -414,7 +415,7 @@ def read():
             msg = q_res["msg"]
             reading = read_from_robot(topic, get_name_from_uri(pkg), get_name_from_uri(msg))
 
-        resp = app.response_class(response=reading, status=200,mimetype="applicaiton/json")
+        resp = app.response_class(response=str(reading), status=200,mimetype="application/json")
 
         return resp
     except Exception, e:
