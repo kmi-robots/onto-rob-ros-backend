@@ -74,7 +74,8 @@
     ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/theta>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/y> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/geometry_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/PoseStamped> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
@@ -89,7 +90,8 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.position.x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.position.y>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.position.z> ;
-    ns1:hasParamType "read"@en ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/geometry_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/PoseWithCovariance> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
