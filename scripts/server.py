@@ -404,11 +404,11 @@ def read():
         capability = q["capability"]
         print "%s %s" % (topic, capability)
         q_res = onto_server.get_msg_and_pkg(topic,capability)
-	
-print q_res["pkg"]
+        print q_res["pkg"]
         print q_res["msg"]
-        reading = read_from_robot(topic,pkg,msg)
-
+        pkg = q_res["pkg"]
+        msg = q_res["msg"]
+        reading = read_from_robot(topic, pkg, msg)
         resp = app.response_class(response=json.dumps(reading), status=200,mimetype="applicaiton/json")
 
         return resp
