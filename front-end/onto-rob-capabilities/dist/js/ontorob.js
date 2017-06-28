@@ -21,7 +21,7 @@ angular.module('ontoRobApp', ['ui.bootstrap','ui.router'])
 			}
 		)
 })
-.controller('ontorobCtrl', ['$scope', '$http','$state','$compile','Data', ontorobCtrl])
+.controller('ontorobCtrl', ['$scope', '$http','$state','$compile','$interval','Data', ontorobCtrl])
 .controller('indexCtrl', ['$scope', '$http','$timeout','$window','$state','Data', indexCtrl])
 .controller('testController', ['$scope', '$http','$timeout','$window','$state','Data', testController])
 .service("Data", dataService);
@@ -113,7 +113,7 @@ function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 	});
 }
 
-function ontorobCtrl($scope, $http, $state, $compile, Data){
+function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	
 	$scope.blockUnselectedBackgroundColor = "#C0C0C0";
 	$scope.blockSelectedBackgroundColor = "#ffb459";
@@ -177,7 +177,14 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		});
 		
 	});
+
+	$scope.requireReadings = function(gno) {
+		console.log("Requiring " + gno);
+	}
 	
+//	$interval($scope.requireReadings, 2000);
+	$interval($scope.requireReadings, 2000,0,true,20); 
+
 	// this function runs the program built so far
 	// it "parses" the sequence of instantiated blocks and 
 	// translates them into the needed json
@@ -452,7 +459,6 @@ function ontorobCtrl($scope, $http, $state, $compile, Data){
 		else if(block == "no-op") {
 			
 			console.log("Adding " + block + " statement");
-			initialiseRepeat(curBlock);
 			
 		}
 		//console.log("Current block");
