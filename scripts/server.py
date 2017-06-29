@@ -223,6 +223,7 @@ class OntoRobServer:
         print qres
         ix = 0
         ret = {}
+
         for row in qres:
             #TODO watch out
             if ix > 1 :
@@ -233,7 +234,21 @@ class OntoRobServer:
             ret["msg"] = str(row.msg)
 
         return ret 
-        
+    
+    # TODO maybe the query should be performed starting from the capability, not the msg
+    # msg is assumed to be already in its URI form
+    def get_params_from_msg(self, msg):
+        q = "SELECT ?param WHERE {  <"+ msg +"> <"+self.__ONTOROB_PROP.hasField +"> ?param } "
+	print q
+	qres = self.__G.query(q)
+
+        ret = []
+
+        for row in qres:
+             ret.append( get_name_from_uri(str(row.param)))
+
+        return ret
+
     def get_package(self, msg):
         """
         TODO remove this fct if unused
@@ -403,21 +418,30 @@ def read():
         print "Received read"
         q = json.loads(request.args.getlist("question")[0])
         topic = q["topic"]
+        capability = q["capability"]
+        topic_uri = onto_server.get_ontorob_res_namespace().topic + q["topic"]
+        
+        # this can be done in the else, by improving the query
+        # in the get_params_from_msg method (making it retrievable from the capability)
+        q_res = onto_server.get_msg_and_pkg(topic_uri, capability)
+        #print q_res["pkg"]
+        #print q_res["msg"]
+        pkg = q_res["pkg"]
+        msg = q_res["msg"]
+
+        parameters_to_read = onto_server.get_params_from_msg(msg)
+        print parameters_to_read
+
+        # reading contains the object
         if topic in topic_dict.keys():
             print "Topic %s is already in the dict" % topic
             reading = read_from_topic(topic)
         else:
-            topic_uri = onto_server.get_ontorob_res_namespace().topic + q["topic"]
-            capability = q["capability"]
             print "%s %s" % (topic_uri, capability)
-            q_res = onto_server.get_msg_and_pkg(topic_uri, capability)
-            print q_res["pkg"]
-            print q_res["msg"]
-            pkg = q_res["pkg"]
-            msg = q_res["msg"]
             reading = read_from_robot(topic, get_name_from_uri(pkg), get_name_from_uri(msg))
 
-        resp = app.response_class(response=json.dumps({"pose.pose.position.x":reading.pose.pose.position.x}), status=200,mimetype="application/json")
+        resp_object = ros_msg_2_dict(reading, parameters_to_read)
+        resp = app.response_class(response=json.dumps(resp_object), status=200,mimetype="application/json")
 
         return resp
     except Exception, e:
@@ -529,6 +553,15 @@ def read_from_robot(topic, pkg, msg):
     topic_dict[topic] = {}
     topic_dict[topic]["uid"] = uid
     return read_from_topic(topic)
+
+def ros_msg_2_dict(ros_msg_obj, parameters_to_read):
+    ret = {}
+
+    for param in parameters_to_read:
+	value = parse_instructions.rgetattr(ros_msg_obj,param)
+	ret[param] = value
+    
+    return ret
 
 if __name__ == "__main__":
   
