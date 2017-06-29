@@ -28,8 +28,8 @@ angular.module('ontoRobApp', ['ui.bootstrap','ui.router'])
 
 function dataService () {
 	this.capabilities = {};
-	this.ip = "http://137.108.114.0:5000/";
-	//this.ip = "http://localhost:5000/";
+	//this.ip = "http://137.108.114.0:5000/";
+	this.ip = "http://localhost:5000/";
 	//this.ip = "http://137.108.122.193:5000/"
 	//this.ip = "http://10.229.169.122:5000/"
 }
@@ -96,7 +96,7 @@ function testController($scope,$http,$timeout,$window,$state, Data) {
 function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 	$scope.errorUrl = "error.html";
 	$scope.successUrl = "capabilities-ui.html";
-
+	console.log(Data.ip);
 	$http({
 		method: 'GET',
 		url: Data.ip + "capabilities"

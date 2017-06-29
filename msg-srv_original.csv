@@ -23,6 +23,8 @@ msg,nav_msgs,OccupancyGrid,[Map_representation],,
 srv,nav_msgs,GetMap,[Map_representation],,
 srv,nav_msgs,SetMap,[Map_representation],,
 act,nav_msgs,GetMap,[Map_representation],,
+msg,nav_msgs,Path,[Navigation_Movement],r,[[poses__LIST.pose.position.x; poses__LIST.pose.position.y; poses__LIST.pose.position.z; poses__LIST.pose.orientation.x; poses__LIST.pose.orientation.y; poses__LIST.pose.orientation.z; poses__LIST.pose.orientation.w]]
+msg,nav_msgs,Path,[Navigation_Movement],w,[[poses__LIST.pose.position.x; poses__LIST.pose.position.y; poses__LIST.pose.position.z; poses__LIST.pose.orientation.x; poses__LIST.pose.orientation.y; poses__LIST.pose.orientation.z; poses__LIST.pose.orientation.w]]
 msg,move_base_msgs,MoveBaseResult,[Navigation_Movement],,
 msg,move_base_msgs,MoveBaseActionResult,[Navigation_Movement],,
 msg,move_base_msgs,MoveBaseFeedback,[Navigation_Movement],,
@@ -30,6 +32,8 @@ msg,move_base_msgs,MoveBaseActionFeedback,[Navigation_Movement],,
 msg,move_base_msgs,MoveBaseActionGoal,[Navigation_Movement],,
 msg,move_base_msgs,MoveBaseGoal,[Navigation_Movement],,
 msg,move_base_msgs,MoveBaseAction,[Navigation_Movement],,
+srv,nav_msgs,GetPlan,[Navigation_Movement],r,[[start.pose.position.x; start.pose.position.y; start.pose.position.z; start.pose.orientation.x; start.pose.orientation.y; start.pose.orientation.z; start.pose.orientation.w; start.header.frame_id; goal.pose.position.x; goal.pose.position.y; goal.pose.position.z; goal.pose.orientation.x; goal.pose.orientation.y; goal.pose.orientation.z; goal.pose.orientation.w; goal.header.frame_id; plan.poses__LIST.pose.position.x; plan.poses__LIST.pose.position.y; plan.poses__LIST.pose.position.z; plan.poses__LIST.pose.orientation.x; plan.poses__LIST.pose.orientation.y; plan.poses__LIST.pose.orientation.z; plan.poses__LIST.pose.orientation.w]]
+srv,nav_msgs,GetPlan,[Navigation_Movement],w,[[start.pose.position.x; start.pose.position.y; start.pose.position.z; start.pose.orientation.x; start.pose.orientation.y; start.pose.orientation.z; start.pose.orientation.w; start.header.frame_id; goal.pose.position.x; goal.pose.position.y; goal.pose.position.z; goal.pose.orientation.x; goal.pose.orientation.y; goal.pose.orientation.z; goal.pose.orientation.w; goal.header.frame_id; plan.poses__LIST.pose.position.x; plan.poses__LIST.pose.position.y; plan.poses__LIST.pose.position.z; plan.poses__LIST.pose.orientation.x; plan.poses__LIST.pose.orientation.y; plan.poses__LIST.pose.orientation.z; plan.poses__LIST.pose.orientation.w]]
 msg,sensor_msgs,BatteryState,[Self_Sensing; Battery_Sensing],r,[[charge]; [charge]]
 msg,sensor_msgs,Illuminance,[Light_Sensing],r,[[illuminance]]
 msg,sensor_msgs,RelativeHumidity,[Humidity_Sensing],r,[[relative_humidity]]
