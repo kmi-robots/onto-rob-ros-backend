@@ -123,6 +123,8 @@ class OntoRobServer:
                 for c in component_obj['capabs']:
                     if c['type'] == row.capa: 
                         ix = component_obj['capabs'].index(c)
+                        
+                component_obj['capabs'][ix]['mode'] = row.parType
                 component_obj['capabs'][ix]['params'].append({"p" : row.param, "mode" : row.parType})
             
             # TODO: if you remove this if, move_base_simple, which has a PoseStamped msg 
@@ -142,7 +144,7 @@ class OntoRobServer:
             values += "( <"+self.__ONTOROB_RES + msg + ">) "
         values += "}"
     
-        query = "SELECT ?capa ?param ?parType WHERE { " + values + " ?res <"+self.__ONTOROB_PROP.evokes+"> ?capa . ?res <"+self.__ONTOROB_PROP.hasField +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParameter +"> ?param . ?res <"+self.__ONTOROB_PROP.hasParamType+"> ?parType .}";
+        query = "SELECT ?capa ?param ?parType WHERE { " + values + " ?res <"+self.__ONTOROB_PROP.evokes+"> ?capa . ?res <"+self.__ONTOROB_PROP.hasField +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParameter +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParamType+"> ?parType .}";
         return query
 	
 
@@ -373,7 +375,7 @@ def ask_capabilities():
     # add topics dynamically
     onto_server.add_topics(parsed_json)
     
-    onto_server.save_graph()
+    #onto_server.save_graph()
     
     # get capabilitites
     response_array = onto_server.query_kb(parsed_json)

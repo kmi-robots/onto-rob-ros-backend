@@ -44,6 +44,10 @@ def addCapabilities(l):
         onto_cap = URIRef(ontorob_res.capability+"/"+cap)
         result.append( ( msg,ontorob_prop.evokes, onto_cap) )
         result.append( (onto_cap , RDF.type, ontorob_class.Capability) )
+        if 'r' in field_type :
+            result.append( (onto_cap , ontorob_prop.hasParamType, Literal("read","en")) )
+        if 'w' in field_type:
+            result.append( ( onto_cap, ontorob_prop.hasParamType, Literal("write","en")) )
         
         if len(params[i]) == 0 :
             continue
@@ -56,10 +60,7 @@ def addCapabilities(l):
             result.append( (onto_cap, URIRef(ontorob_prop.hasParameter), URIRef(ontorob_res.field+"/"+cap_param) ) ) 
             result.append( ( msg, URIRef(ontorob_prop.hasField), URIRef(ontorob_res.field+"/"+cap_param) ) )
             result.append( ( URIRef(ontorob_res.field+"/"+cap_param), RDF.type, ontorob_class.Field) )
-            if 'r' in field_type :  
-                result.append( (msg , ontorob_prop.hasParamType, Literal("read","en")) ) 
-            if 'w' in field_type:
-                result.append( ( msg, ontorob_prop.hasParamType, Literal("write","en")) )
+           
                 
     return result
 
