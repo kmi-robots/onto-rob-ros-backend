@@ -1,14 +1,25 @@
-<div class="group repeat">
-	REPEAT:
-	<div class="times">
-		<input type="input" name="times" ng-model="block.times"> TIMES
+<div class="repeat group solid rounded-15">
+	
+	<div class="keyword">REPEAT:</div>
+	
+	<div class="times program-text">
+		<input type="input" name="times" ng-model="block.times"> TIMES</input>
 	</div>
-	<div class="do block" ng-click="select(block.do,$event)" ng-style="{background: block.do.backgroundColor}">
+	
+	<div class="do block dashed rounded-15" ng-click="select(block.do,$event)" ng-style="{background: block.do.backgroundColor}">
+		
 		<div class="placeholder" ng-if="block.do.sequence.length == 0">BLOCK</div>
+		
 		<div ng-repeat="doblock in block.do.sequence">
 			<div ng-include="doblock.class+'.html'" ng-init="block = doblock">
 			</div>
 		</div>
+		
 	</div>
+	
+	<div class="overflow">
+		<button type="button" class="btn pull-right" ng-click="removeInstruction(block,$event)">remove</button>
+	</div>
+	
 </div>
 

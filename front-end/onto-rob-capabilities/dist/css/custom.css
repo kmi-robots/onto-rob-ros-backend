@@ -118,31 +118,43 @@ img#logo {
 	border-radius: 6px;
 }
 
-.capability {
-	border: 1px solid black;
-	background: #C0C0C0;
-	/*width: 350px;*/
-}
-
 p.name {
 	font-weight: bold;
 }
 
 #capability_container {
-	border: 1px solid blue;
+	background: #7fff9d;
+	margin-right:5px;
+	padding: 5px;
 }
 
 #program_container {
-	border: 1px solid green;
+	background: #fff772;
+	margin-right:5px;
+	padding: 5px;
 }
 
 #blocks_container {
-	border: 1px solid red;
+	background: #89b8ff;
+	margin-right:5px;
+	padding: 5px;
+}
+
+.padding-lr-5 {
+	padding-left:5px;
+	padding-right:5px;
+}
+
+.program {
+	border: 3px dashed gray;
+	border-radius: 15px;
+	padding:10px;
+	margin-top:5px;
 }
 
 .block {
 	background: #C0C0C0;
-	border:3px dashed gray;
+	/*border:3px dashed gray;*/
 	padding: 3px;
 	margin-top: 3px;
 	margin-bottom: 3px;
@@ -152,41 +164,73 @@ p.name {
 	/*height: 70px;*/
 }
 
+.dashed {
+	border: 3px dashed gray;
+}
+
+.solid {
+	border: 3px solid gray;
+}
+
+.rounded-7 {	
+	border-radius: 7px;
+}
+
+.rounded-15 {	
+	border-radius: 15px;
+}
+
+.overflow {
+	overflow: auto;
+}
+
 .group {
 	background: #e5e5e5;
-	border:3px solid gray;
-	padding: 2px;
+	border-radius: 15px;
+	padding: 3px;
 	margin-top: 2px;
 	margin-bottom: 2px;
 }
 
-.block .placeholder {
-	position: relative;
-	float: left;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	font-weight: bold;
-	font-size: 2em;
+.capability {
+	background: #C0C0C0;
+	margin-top:3px;
+	margin-bottom:3px;
+	padding: 3px;
+}
+
+.placeholder {
 	color: gray;
+	font-size: 2em;
+	font-weight: bold;
+	height: 50px;
+	text-align: center;
 }
 
-.if {
-	background: #e5e5e5;
+.condition_container {
+	/*background: #e5e5e5;
 	border:3px solid gray;
 	padding: 2px;
 	margin-top: 2px;
 	margin-bottom: 2px;
-	overflow: auto;
+	overflow: auto;*/
+}
+
+.if, .then, .else, .while, .do {
+	padding: 4px;
+	margin: 2px;
 }
 
 .condition {
 	overflow: auto;
+	background: #f75b5b;
+	padding: 2px;
+	margin-top: 3px;
+	margin-bottom: 3px;
 }
 
 .parameter {
 	background: #C0C0C0;
-	border:3px dashed gray;
 	padding: 3px;
 	margin-top: 2px;
 	margin-bottom: 2px;
@@ -194,11 +238,6 @@ p.name {
 }
 
 .placeholder {
-	/*position: relative;
-	float: left;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);*/
 	font-weight: bold;
 	font-size: 1.5em;
 	color: gray;
@@ -208,14 +247,43 @@ p.name {
 	width: 1500px;
 }
 
-.program {
-	border:3px dashed yellow;
+.capability-parameters {
+	padding: 2px;
 }
 
 .capability-parameter {
 	padding: 2px;
+	margin-top:2px;
+	margin-bottom:2px;
 }
 
-.parameter-name {
-	height:40px;
+.capability-parameter-text {
+	font-size: 1.0em;
+	font-weight: bold;
+}
+
+.keyword {
+	font-size: 1.6em;
+	font-weight: bold;
+}
+
+.program-text {
+	font-size: 1.0em;
+	font-weight: bold;
+}
+
+.block-item {
+	margin-top:3px;
+	margin-bottom:3px;
+	background: white;
+	padding: 3px;
+}
+
+.block-text {
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+.btn {
+	padding: 4px 8px;
 }

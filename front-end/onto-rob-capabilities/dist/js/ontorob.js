@@ -29,9 +29,9 @@ angular.module('ontoRobApp', ['ui.bootstrap','ui.router'])
 function dataService () {
 	this.capabilities = {};
 	//this.ip = "http://137.108.114.0:5000/";
-	this.ip = "http://localhost:5000/";
-	//this.ip = "http://137.108.122.193:5000/"
-	//this.ip = "http://10.229.169.122:5000/"
+	//this.ip = "http://localhost:5000/";
+	this.ip = "http://137.108.122.193:5000/";
+	//this.ip = "http://10.229.169.122:5000/";
 }
 
 function testController($scope,$http,$timeout,$window,$state, Data) {
@@ -213,7 +213,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			if(messageCapability.topic == "/odom" && capability.type == "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Robot_position"
  && capability.hasReadParameter) {
 
-				capability.readRequestPromise = $interval($scope.requireReadings, 2000, 0, true, messageCapability.topic, capability.type);
+				//capability.readRequestPromise = $interval($scope.requireReadings, 2000, 0, true, messageCapability.topic, capability.type);
 
 			}
 		});
@@ -691,7 +691,18 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		condition.class = "condition";
 		condition.not = false;
 		condition.comparator = null;
-		condition.logicOperator = true;
+		
+		if(block.conditions.length > 0) {
+			
+			condition.logicOperator = true;
+		
+		}
+		else {
+			
+			condition.logicOperator = false;
+				
+		}
+		
 		condition.value = null;
 		condition.selected = false;
 		condition.backgroundColor = $scope.blockUnselectedBackgroundColor;
@@ -764,7 +775,13 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 				
 				if(classToEnable == "capability") {
 					
-					enable(capability);
+					// TODO for now, it makes sense only to select
+					// capability where you can write
+					if(capability.mode == "write") {
+						
+						enable(capability);
+					
+					}
 					
 				}
 				else {
@@ -827,22 +844,27 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		
 		statement = {}
 		statement.class = "statement";
+		statement.name = "capability"
 		statement.disabled = false;
 		
 		ifThenElse = {}
 		ifThenElse.class = "if-then-else";
+		ifThenElse.name = "if-then-else";
 		ifThenElse.disabled = false;
 		
 		whileDo = {}
 		whileDo.class = "while-do";
+		whileDo.name = "while-do";
 		whileDo.disabled = false;
 		
 		repeat = {}
 		repeat.class = "repeat";
+		repeat.name = "repeat";
 		repeat.disabled = false;
 
 		noOp = {}
 		noOp.class = "no-op";
+		noOp.name = "no-op";
 		noOp.disabled = false;
 		
 		blockArray.push(statement);
@@ -854,24 +876,13 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	
 	$scope.addCapability = function (capability) {
 		
-		console.log(capability);
+		//console.log(capability);
 
 		var copiedCapability = {};
 		angular.copy(capability, copiedCapability);
-
-		//copiedCapability.params = [];
-
-		//angular.forEach(capability.params, function (param){
-		//	console.log(param);
-
-		//	if(param.mode == "write") {
-		//		copiedCapability.params.push(param);
-		//	}
-
-		//});
-
-		console.log("copied");
-		console.log(copiedCapability);
+		//console.log("copied");
+		//console.log(copiedCapability);
+		copiedCapability.$$hashKey = capability.$$hashKey;
 		$scope.selectedBlock.capability = copiedCapability;
 		
 	}
@@ -906,10 +917,10 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	function removeRecursively (instructionArray, instructionToRemove) {
 		
 		angular.forEach(instructionArray,function(curInstruction) {
-			console.log(instructionToRemove);
-			console.log(instructionToRemove.$$hashKey);
-			console.log(curInstruction);
-			console.log(curInstruction.$$hashKey);
+			//console.log(instructionToRemove);
+			//console.log(instructionToRemove.$$hashKey);
+			//console.log(curInstruction);
+			//console.log(curInstruction.$$hashKey);
 			
 			if(instructionToRemove.$$hashKey == curInstruction.$$hashKey) {
 				
@@ -921,21 +932,33 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			}
 			else {
 				
-				if(curInstruction.class == "if-then-else") {
+				if(curInstruction.class == "statement") { 
+
+					if(curInstruction.capability != null) {
+
+						if(instructionToRemove.$$hashKey == curInstruction.capability.$$hashKey) {
+
+							curInstruction.capability = null;
+							
+						}
+						
+					}
 					
-					console.log("YEAH, if-then-else");
+				}
+				else if(curInstruction.class == "if-then-else") {
+
 					if(removeRecursively(curInstruction.conditions,instructionToRemove)) {
 						console.log("YEAH, if-then-else conditions");
 						return true;
 						
 					}
-					console.log("Now I'm gonna do then");
+
 					if(curInstruction.then.sequence.length > 0 && removeRecursively(curInstruction.then.sequence,instructionToRemove)) {
 						console.log("YEAH, if-then-else then");
 						return true;
 						
 					}
-					console.log("Now I'm gonna do else");
+
 					if(curInstruction.else.sequence.length > 0 && removeRecursively(curInstruction.else.sequence,instructionToRemove)) {
 						
 						return true;
@@ -957,7 +980,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 					}
 				
 				}
-				else if(instructionToRemove.class == "repeat") {
+				else if(curInstruction.class == "repeat") {
 					
 					if(curInstruction.do.sequence.length > 0 && removeRecursively(curInstruction.do.sequence,instructionToRemove)) {
 						
@@ -979,6 +1002,12 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		
 		console.log(instructionArray[index]);
 		instructionArray.splice(index,1);
+		
+	}
+	
+	$scope.showDescription = function(capability) {
+		
+		console.log("Showing description for " + capability);
 		
 	}
 }

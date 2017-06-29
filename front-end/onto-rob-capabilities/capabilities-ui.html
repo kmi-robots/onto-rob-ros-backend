@@ -1,35 +1,92 @@
 <h1>HELLO Ontorob!</h1>	
-     <div class="col-lg-4" id="capability_container">
-		<h4>Capability List</h4>
-		<div ng-repeat="messageCapability in capabilities">
-			<div ng-repeat="capability in messageCapability.capabs">
-				<div class="capability" ng-if="capability.params.length > 0" ng-style="{background: capability.backgroundColor}">
-					<p class="name">{{getNameFromURI(capability.type)}} - ({{messageCapability.topic}} - {{messageCapability.msg}})<button type="button" class="btn pull-right" ng-click="addCapability(capability)" ng-if="!capability.disabled">add</button></p>
-					<div ng-repeat="parameter in capability.params">
-						<div ng-if="parameter.mode == 'write'" ng-style="{background: parameter.backgroundColor }">	
-								<div class="parameter-name">{{getNameFromURI(parameter.p)}} <button type="button" class="btn pull-right" ng-click="addParameter(parameter,capability)" ng-if="!parameter.disabled">add</button></div>
+	<div class="container-fluid">
+		
+		<div class="col-lg-4 padding-lr-5">
+			<div class="rounded-7" id="capability_container">
+				
+				<h3 class="text-center">Capability List</h3>
+				
+				<div ng-repeat="messageCapability in capabilities">
+					<div ng-repeat="capability in messageCapability.capabs">
+						
+						<div class="capability rounded-7" ng-if="capability.params.length > 0" ng-style="{background: capability.backgroundColor}">
+							<div class="overflow">
+								<div class="block-text col-md-6">
+									{{getNameFromURI(capability.type)}}
+								</div>
+								<div class="col-md-4">
+									<button type="button" class="btn btn-success" ng-click="showDescription(capability)">read description</button>
+								</div>
+								<div class="col-md-2">
+									<button type="button" class="btn btn-danger" ng-click="addCapability(capability)" ng-if="!capability.disabled">add</button>
+								</div>
+							</div>
+							
+							<div class="capability-parameters overflow">
+								<div ng-repeat="parameter in capability.params">
+									
+									<div class="capability-parameter overflow rounded-7" ng-style="{background: parameter.backgroundColor }" ng-if="!parameter.disabled"> 
+										
+											<div class="capability-parameter-text col-md-10">
+												{{getNameFromURI(parameter.p)}}
+											</div>
+											<div class="col-md-2">
+												<button type="button" class="btn btn-danger" ng-click="addParameter(parameter,capability)" >add</button>
+											</div>
+									
+									</div>
+									
+								</div>
+							</div>
+							
+							<!--<p class="name">{{getNameFromURI(capability.type)}} - ({{messageCapability.topic}} - {{messageCapability.msg}})-->
+							<!--<div ng-repeat="parameter in capability.params">
+								<div ng-if="parameter.mode == 'write'" ng-style="{background: parameter.backgroundColor }">	
+										<div class="parameter-name">{{getNameFromURI(parameter.p)}} <button type="button" class="btn pull-right" ng-click="addParameter(parameter,capability)" ng-if="!parameter.disabled">add</button></div>
+								</div>
+							</div>-->
+							
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-lg-6 padding-lr-5">
+			<div id="program_container" class="rounded-7">
+				<h3 class="text-center">Program</h3>
+			
+				<button type="button" class="btn" ng-click="run()">Run program</button>
+			
+				<div class="program" ng-click="select(program,$event)" ng-style="{background: program.backgroundColor}">
+					<div ng-if="program.sequence.length == 0" class="placeholder">PROGRAM</div>
+					<div ng-if="program.sequence.length > 0">
+						<div ng-repeat="block in program.sequence">
+							<div ng-include="block.class+'.html'" ng-init="block = block">
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-     <div class="col-lg-5" id="program_container">
-		<h4>Program</h4>
-		<button type="button" class="btn" ng-click="run()">Run program</button>
-		<div class="program" ng-click="select(program,$event)" ng-style="{background: program.backgroundColor}">
-			<div ng-if="program.sequence.length == 0">PROGRAM</div>
-			<div ng-if="program.sequence.length > 0">
-				<div ng-repeat="block in program.sequence">
-					<div ng-include="block.class+'.html'" ng-init="block = block">
+		 
+	     <div class="col-lg-2 padding-lr-5">
+			<div id="blocks_container" class="rounded-7 overflow">
+				<h3 class="text-center">Programming blocks</h3>
+				<div ng-repeat="block in program.blockTypes" >
+					
+					<div class="block-item overflow rounded-7" ng-style="{background: block.backgroundColor}">
+						<div class="col-md-4">
+							<button type="button" class="btn btn-danger" ng-click="addToProgram(block.class)" ng-if="!block.disabled">add</button>
+						</div>
+						<div class="col-md-8">
+							<div class="block-text">{{block.name}}</div>
+						</div> 
 					</div>
+					
 				</div>
 			</div>
 		</div>
-	</div> 
-     <div class="col-lg-3" id="blocks_container" >
-		<h4>Programming blocks</h4>
-		<div ng-repeat="block in program.blockTypes" ng-style="{background: block.backgroundColor}">
-			{{block.class}} <button type="button" class="btn" ng-click="addToProgram(block.class)" ng-if="!block.disabled">Add</button>
-		</div>
-	</div>  
+		
+	</div>

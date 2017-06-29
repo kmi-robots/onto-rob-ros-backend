@@ -1,30 +1,45 @@
-<div class="if-then-else group">
-	<button type="button" class="btn pull-right" ng-click="removeInstruction(block,$event)" ng-if="block.capability == null">remove</button>
-	IF: 
-	<div class="if">
-		<div id="conditions">
-			<div ng-repeat="condition in block.conditions">
-				<div ng-include="'condition.html'">
+<div class="if-then-else group solid rounded-15" ng-click="stopPropagation($event)">
+	
+	<div class="if solid rounded-15" ng-click="stopPropagation($event)">
+		<div class="keyword">IF:</div> 
+		<div class="condition_container">
+			<div id="conditions">
+				<div ng-repeat="condition in block.conditions">
+					<div ng-include="'condition.html'">
+					</div>
+				</div>
+			</div>
+			<button type="button" class="btn" ng-click="addCondition(block)">Add another condition</button>
+		</div>
+	</div>
+	
+	<div class="then solid rounded-15" ng-click="stopPropagation($event)">
+		<div class="keyword">THEN:</div> 
+		
+		<div class="then block dashed rounded-15" ng-click="select(block.then,$event)" ng-style="{background: block.then.backgroundColor}">
+			<div class="placeholder" ng-if="block.then.sequence.length == 0">BLOCK</div>
+			<div ng-repeat="thenblock in block.then.sequence">
+				<div ng-include="thenblock.class+'.html'" ng-init="block = thenblock">
 				</div>
 			</div>
 		</div>
-		<button type="button" class="btn" ng-click="addCondition(block)">Add another condition</button>
+		
 	</div>
-	THEN:
-	<div class="then block" ng-click="select(block.then,$event)" ng-style="{background: block.then.backgroundColor}">
-		<div class="placeholder" ng-if="block.then.sequence.length == 0">BLOCK</div>
-		<div ng-repeat="thenblock in block.then.sequence">
-			<div ng-include="thenblock.class+'.html'" ng-init="block = thenblock">
+	
+	<div class="else solid rounded-15" ng-click="stopPropagation($event)">
+		<div class="keyword">ELSE:</div>
+		<div class="else block dashed rounded-15" ng-click="select(block.else,$event)" ng-style="{background: block.else.backgroundColor}">
+			<div class="placeholder" ng-if="block.else.sequence.length == 0">BLOCK</div>
+			<div ng-repeat="elseblock in block.else.sequence">
+				<div ng-include="elseblock.class+'.html'" ng-init="block = elseblock">
+				</div>
 			</div>
 		</div>
 	</div>
-	ELSE:
-	<div class="else block" ng-click="select(block.else,$event)" ng-style="{background: block.else.backgroundColor}">
-		<div class="placeholder" ng-if="block.else.sequence.length == 0">BLOCK</div>
-		<div ng-repeat="elseblock in block.else.sequence">
-			<div ng-include="elseblock.class+'.html'" ng-init="block = elseblock">
-			</div>
-		</div>
+	
+	<div class="overflow">
+		<button type="button" class="btn pull-right" ng-click="removeInstruction(block,$event)">remove</button>
 	</div>
+	
 </div>
 

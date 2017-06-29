@@ -1,20 +1,31 @@
-<div class="while-do group">
-	WHILE:
-	<div class="while">
-		<div id="conditions">
-			<div ng-repeat="condition in block.conditions">
-				<div ng-include="'condition.html'">
+<div class="while-do group solid rounded-15" ng-click="stopPropagation($event)">
+	
+	<div class="while solid rounded-15">
+		<div class="keyword">WHILE:</div>
+		<div class="condition_container">
+			<div id="conditions">
+				<div ng-repeat="condition in block.conditions">
+					<div ng-include="'condition.html'">
+					</div>
+				</div>
+			</div>
+			<button type="button" class="btn" ng-click="addCondition(block)">Add another condition</button>
+		</div>
+	</div>
+	
+	<div class="do solid rounded-15">
+		<div class="keyword">DO:</div>
+		<div class="do block dashed rounded-15" ng-click="select(block.do,$event)" ng-style="{background: block.do.backgroundColor}">
+			<div class="placeholder" ng-if="block.do.sequence.length == 0">BLOCK</div>
+			<div ng-repeat="doblock in block.do.sequence">
+				<div ng-include="doblock.class+'.html'" ng-init="block = doblock">
 				</div>
 			</div>
 		</div>
-		<button type="button" class="btn" ng-click="addCondition(block)">Add another condition</button>
 	</div>
-	DO:
-	<div class="do block" ng-click="select(block.do,$event)" ng-style="{background: block.do.backgroundColor}">
-		<div class="placeholder" ng-if="block.do.sequence.length == 0">BLOCK</div>
-		<div ng-repeat="doblock in block.do.sequence">
-			<div ng-include="doblock.class+'.html'" ng-init="block = doblock">
-			</div>
-		</div>
+	
+	<div class="overflow">
+		<button type="button" class="btn pull-right" ng-click="removeInstruction(block,$event)">remove</button>
 	</div>
+	
 </div>
