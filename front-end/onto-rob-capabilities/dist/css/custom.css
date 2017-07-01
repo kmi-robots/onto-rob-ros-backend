@@ -216,14 +216,27 @@ p.name {
 	overflow: auto;*/
 }
 
-.if, .then, .else, .while, .do {
+.if, .then, .else {
 	padding: 4px;
 	margin: 2px;
+	background: #fc7171;
+}
+
+.while {
+	padding: 4px;
+	margin: 2px;
+	background:#b086f4;
+}
+
+.do {
+	padding: 4px;
+	margin: 2px;
+	background:#b086f4;
 }
 
 .condition {
 	overflow: auto;
-	background: #f75b5b;
+	background: #548da8;
 	padding: 2px;
 	margin-top: 3px;
 	margin-bottom: 3px;
@@ -241,6 +254,10 @@ p.name {
 	font-weight: bold;
 	font-size: 1.5em;
 	color: gray;
+}
+
+.statement {
+	background: #82ff9d;
 }
 
 .container {
@@ -286,4 +303,24 @@ p.name {
 
 .btn {
 	padding: 4px 8px;
+}
+
+.capability-block {
+	padding: 4px;
+}
+
+.condition-text {
+	font-size: 1.0em;
+	font-weight: bold;
+	color: white;
+}
+
+.noop {
+	background:#d4cdd6;
+}
+
+.map-container {
+	overflow: scroll;
+	width:450px;
+	height:200px;
 }

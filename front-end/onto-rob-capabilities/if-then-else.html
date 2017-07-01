@@ -1,4 +1,4 @@
-<div class="if-then-else group solid rounded-15" ng-click="stopPropagation($event)">
+<div class="if-then-else group solid rounded-15" ng-click="stopPropagation($event)" ng-style="{background: block.backgroundColor}">
 	
 	<div class="if solid rounded-15" ng-click="stopPropagation($event)">
 		<div class="keyword">IF:</div> 
@@ -9,7 +9,7 @@
 					</div>
 				</div>
 			</div>
-			<button type="button" class="btn" ng-click="addCondition(block)">Add another condition</button>
+			<button type="button" class="btn btn-primary btn-sm" ng-click="addCondition(block)">add another condition</button>
 		</div>
 	</div>
 	
@@ -38,7 +38,7 @@
 	</div>
 	
 	<div class="overflow">
-		<button type="button" class="btn pull-right" ng-click="removeInstruction(block,$event)">remove</button>
+		<button type="button" class="btn pull-right btn-primary" ng-click="removeInstruction(block,$event)">remove</button>
 	</div>
 	
 </div>

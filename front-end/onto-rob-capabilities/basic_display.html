@@ -1,0 +1,30 @@
+<div class="overflow">
+	<div class="block-text col-md-6">
+		{{getNameFromURI(capability.type)}}
+	</div>
+	<div class="col-md-4">
+		<button type="button" class="btn btn-success" ng-click="showDescription(capability)">read description</button>
+	</div>
+	<div class="col-md-2">
+	
+	</div>
+</div>
+
+<div class="capability-parameters overflow">
+	<div ng-repeat="parameter in capability.params">
+	
+		<div class="capability-parameter overflow rounded-7" ng-style="{background: parameter.backgroundColor}"> 
+		
+				<div class="capability-parameter-text col-md-5">
+					{{getNameFromURI(parameter.p)}}
+				</div>
+				<div class="col-md-5 param-value">
+					{{parameter.value}}
+				</div>
+				<div class="col-md-2">
+					<button type="button" class="btn btn-danger" ng-click="addParameter(parameter,capability)" ng-if="!parameter.disabled">add</button>
+				</div>			
+		</div>
+	
+	</div>
+</div>

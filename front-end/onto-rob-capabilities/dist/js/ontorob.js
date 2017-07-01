@@ -23,7 +23,6 @@ angular.module('ontoRobApp', ['ui.bootstrap','ui.router'])
 })
 .controller('ontorobCtrl', ['$scope', '$http','$state','$compile','$interval','Data', ontorobCtrl])
 .controller('indexCtrl', ['$scope', '$http','$timeout','$window','$state','Data', indexCtrl])
-.controller('testController', ['$scope', '$http','$timeout','$window','$state','Data', testController])
 .service("Data", dataService);
 
 function dataService () {
@@ -32,65 +31,6 @@ function dataService () {
 	//this.ip = "http://localhost:5000/";
 	this.ip = "http://137.108.122.193:5000/";
 	//this.ip = "http://10.229.169.122:5000/";
-}
-
-function testController($scope,$http,$timeout,$window,$state, Data) {
-	$scope.blocks = []
-	
-	block1 = {
-		"type":"block",
-		"id":1,
-		"innerblocks":[],
-		"html":"block1.html"
-	}
-	
-	block21 = {
-		"type":"block",
-		"id":21,
-		"innerblocks":[],
-		"html":"block2.html"
-	}
-	block22 = {
-		"type":"block",
-		"id":22,
-		"innerblocks":[],
-		"html":"block2.html"
-	}
-	
-	block31 = {
-		"type":"block",
-		"id":31,
-		"innerblocks":[],
-		"html":"block3.html"
-	}
-
-	block32 = {
-		"type":"block",
-		"id":32,
-		"innerblocks":[],
-		"html":"block3.html"
-	}
-	
-	block1.innerblocks.push(block21);
-	block1.innerblocks.push(block22);
-	
-	block21.innerblocks.push(block31);
-	block22.innerblocks.push(block32);
-	
-	console.log(block1)
-	
-	$scope.showFromBlock1 = function () {
-		$scope.blocks = [];
-		$scope.blocks.push(block1);
-		console.log($scope.blocks);
-	}
-
-	$scope.showFromBlock2 = function () {
-		$scope.blocks = [];
-		$scope.blocks.push(block21);
-		$scope.blocks.push(block22);
-		console.log($scope.blocks);
-	}
 }
 
 function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
@@ -143,12 +83,41 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		"program":"block"
 	}
 	
+	$scope.blockBackgroundsHash = {
+		"statement":"#82ff9d",
+		"if-then-else":"#ff9f82",
+		"program":"#C0C0C0",
+		"while-do":"#c1a0ff",
+		"repeat":"#f7a5c7",
+		"no-op":"#C4C4C4",
+		"then":"#ff5e5e",
+		"else":"#ff5e5e",
+		"if":"#ff5e5e",
+		"while":"#bc70e0",
+		"condition":"#345ead",
+		"do":"#e698f9"
+	}
+	
+	$scope.visualiserHash = {
+		"Map_representation":"map_display.html",
+		"Vision":"camera_display.html",
+		"Robot_position":"basic_display.html",
+		"Robot_speed":"basic_display.html",
+		"Depth_Sensing":"basic_display.html"
+	}
+	
+	$scope.visualisersSettings = {}
+	
+	$scope.getVisualiser = function (capability) {
+		$scope.visualiserHash[capability];
+	}
+	
 	$scope.requireReadings = function(topic, capability) {
 
-		console.log("Requiring " + topic + " " + capability);
+		console.log("Requiring " + topic + " " + capability.type);
 		toRequest = {
 			"topic":topic,
-			"capability":capability
+			"capability":capability.type
 		}
 
 		$http({
@@ -161,7 +130,46 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			
 			console.log("Response "+ response.status);	
 			console.log(response.data);
-
+			var capType = $scope.getNameFromURI(capability.type)
+			
+			if($scope.visualiserHash[capType] == "basic_display.html") {
+				
+				angular.forEach(capability.params, function(param) {
+				
+					paramName = $scope.getNameFromURI(param.p);
+					param.value = response.data[paramName];
+				
+				});
+		
+			}
+			else if($scope.visualiserHash[capType] == "map_display.html") {
+				var key = capType+topic;
+				$scope.visualisersSettings[key] = {
+						"info.origin.position.x":response.data["info.origin.position.x"],
+						"info.origin.position.y":response.data["info.origin.position.y"],
+						"info.origin.position.z":response.data["info.origin.position.z"],
+						"info.origin.orientation.w":response.data["info.origin.orientation.w"],
+						"info.origin.orientation.x":response.data["info.origin.orientation.x"],
+						"info.origin.orientation.y":response.data["info.origin.orientation.y"],
+						"info.origin.orientation.z":response.data["info.origin.orientation.z"],
+						"info.resolution":response.data["info.resolution"],
+						"info.height":response.data["info.height"],
+						"info.width":response.data["info.width"],
+						"mouse.x":0,
+						"mouse.y":0
+					}
+				
+				var c = document.getElementById("map"+$scope.slashesToHyphens(topic));
+				var ctx = c.getContext("2d");
+				ctx.canvas.width  = response.data["info.width"];
+				ctx.canvas.height = response.data["info.height"];
+				//ctx.scale(2,2);
+				var img = $scope.buildBmp(response.data['data'], response.data["info.width"], response.data["info.height"], ctx);
+				ctx.putImageData(img, 0, 0);
+				
+			}
+			
+	
 		}, function errorCallback(response) {
 			
 			console.log("Problems while contacting the KB server " + response.status);
@@ -210,11 +218,11 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 					
 			});
 			
-			if(messageCapability.topic == "/odom" && capability.type == "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Robot_position"
- && capability.hasReadParameter) {
-
-				//capability.readRequestPromise = $interval($scope.requireReadings, 2000, 0, true, messageCapability.topic, capability.type);
-
+			//if(messageCapability.topic == "/map" && capability.type == "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Map_representation" && capability.hasReadParameter) {
+			if(capability.hasReadParameter) {
+				//console.log("Requesting for capability");
+				//capability.readRequestPromise = $interval($scope.requireReadings, 5000, 0, true, messageCapability.topic, capability);
+				capability.readRequestPromise = $scope.requireReadings(messageCapability.topic, capability);
 			}
 		});
 		
@@ -230,6 +238,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	// as they are all the same object
 	// TODO I need to add an id to everything for the hashing
 	$scope.run = function () {
+		
 		console.log("Running the current program");	
 		//console.log($scope.program)
 		
@@ -238,9 +247,14 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 
 		// TODO: I need to run some consistency checking before
 		angular.forEach($scope.program.sequence,function (block) {
+			
 			parsedInstruction = parseBlock(block);
-			programObject.instructions.push(parsedInstruction);
-			//console.log(parsedInstruction);
+			
+			if(parsedInstruction != null) {
+			
+				programObject.instructions.push(parsedInstruction);
+			
+			}
 		})
 		
 		console.log(programObject);
@@ -261,6 +275,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			console.log("Problems while contacting the KB server " + response.status);
 			
 		});
+		
 		$scope.conditionCounter = 0;
 
 	}
@@ -285,6 +300,11 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		else if(block.class == "repeat") {
 			
 			return parseRepeat(block);
+			
+		}
+		else if(block.class = "no-op") {
+			
+			return null;
 			
 		}
 	}
@@ -344,15 +364,25 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		angular.forEach(ifThenElse.then.sequence, function (thenBlock) {
 		
 			parsedInstruction = parseBlock(thenBlock);
-			ret.then.push(parsedInstruction);
+			
+			if(parsedInstruction!= null) {
+			
+				ret.then.push(parsedInstruction);
+
+			}
 		
 		});
 		
 		angular.forEach(ifThenElse.else.sequence, function (elseBlock) {
 		
 			parsedInstruction = parseBlock(elseBlock);
-			ret.else.push(parsedInstruction);
-		
+			
+			if(parsedInstruction!= null) {
+				
+				ret.else.push(parsedInstruction);
+				
+			}
+			
 		});		
 		
 		return ret;
@@ -390,7 +420,12 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		angular.forEach(whileDo.do.sequence, function (doBlock) {
 		
 			parsedInstruction = parseBlock(doBlock);
-			ret.do.push(parsedInstruction);
+			
+			if(parsedInstruction != null) {
+			
+				ret.do.push(parsedInstruction);
+			
+			}
 		
 		});
 		
@@ -456,7 +491,12 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		angular.forEach(repeat.do.sequence, function (doBlock) {
 		
 			parsedInstruction = parseBlock(doBlock);
-			ret.do.push(parsedInstruction);
+			
+			if(parsedInstruction != null) {
+			
+				ret.do.push(parsedInstruction);
+			
+			}
 		
 		});
 		
@@ -470,7 +510,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		curBlock.id = ++$scope.blockCounter;
 		curBlock.class = block;
 		curBlock.selected = false;
-		curBlock.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		curBlock.backgroundColor = $scope.blockBackgroundsHash[block];
 		
 		if(block == "statement") {
 			
@@ -501,14 +541,9 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			console.log("Adding " + block + " statement");
 			
 		}
-		//console.log("Current block");
-		//console.log(curBlock);
-		//console.log("Adding to sequnce of");
-		//console.log($scope.selectedBlock);
 		
 		$scope.selectedBlock.sequence.push(curBlock);
 		
-		//console.log($scope.program);
 	}
 	
 	
@@ -518,24 +553,28 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		block.then.class = "then";
 		block.then.sequence = [];
 		block.then.selected = false;
-		block.then.backgroundColor = $scope.blockUnselectedBackgroundColor;
-		
+		//block.then.backgroundColor = $scope.blockUnselectedBackgroundColor; 
+		block.then.backgroundColor = $scope.blockBackgroundsHash[block.then.class];
+
 		block.else = {};
 		block.else.class = "else";
 		block.else.sequence = [];
 		block.else.selected = false;
-		block.else.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		//block.else.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		block.else.backgroundColor = $scope.blockBackgroundsHash[block.else.class];
 		
 		block.conditions = [];
 		
 		firstCondition = {}
 		firstCondition.class = "condition";
 		firstCondition.not = false;
-		firstCondition.comparator = null;
+		firstCondition.comparator = "==";
 		firstCondition.logicOperator = false;
 		firstCondition.value = null;
 		firstCondition.selected = false;
-		firstCondition.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		//firstCondition.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		// TODO condition background
+		firstCondition.backgroundColor = $scope.blockBackgroundsHash[firstCondition.class];
 		
 		firstCondition.parameter = null;
 		
@@ -548,7 +587,8 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		block.do.class = "do";
 		block.do.sequence = [];
 		block.do.selected = false;
-		block.do.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		//block.do.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		block.do.backgroundColor = $scope.blockBackgroundsHash[block.do.class];
 		
 		block.conditions = [];
 		
@@ -559,7 +599,9 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		firstCondition.logicOperator = false;
 		firstCondition.value = null;
 		firstCondition.selected = false;
-		firstCondition.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		//firstCondition.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		// TODO condition background
+		firstCondition.backgroundColor = $scope.blockBackgroundsHash["condition"];
 		
 		firstCondition.parameter = null;
 		
@@ -575,7 +617,8 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		block.do.class = "do";
 		block.do.sequence = [];
 		block.do.selected = false;
-		block.do.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		//block.do.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		block.do.backgroundColor = $scope.blockBackgroundsHash[block.do.class];
 		
 	}
 	
@@ -591,7 +634,9 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		// control the selection of the area
 		if(clickedBlock.class != "program") {
 			
-			deactivateUnselected($scope.program);
+			//deactivateUnselected($scope.program);
+			$scope.program.backgroundColor = $scope.blockBackgroundsHash["program"];
+			$scope.program.selected = false;
 			
 		}
 		
@@ -613,19 +658,22 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		}
 		else if(currentBlock.class == "statement") {
 			
-			currentBlock.backgroundColor = $scope.blockUnselectedBackgroundColor;
+			//currentBlock.backgroundColor = $scope.blockUnselectedBackgroundColor;
+			currentBlock.backgroundColor = $scope.blockBackgroundsHash[currentBlock.class];
 			currentBlock.selected = false;
 			
 		}
 		else if(currentBlock.class == "then" || currentBlock.class == "else" || currentBlock.class == "do" || currentBlock.class == "program") {
 			
-			currentBlock.backgroundColor = $scope.blockUnselectedBackgroundColor;
+			//currentBlock.backgroundColor = $scope.blockUnselectedBackgroundColor;
+			currentBlock.backgroundColor = $scope.blockBackgroundsHash[currentBlock.class];
 			currentBlock.selected = false;
 			
 		}
 		else if(currentBlock.class == "condition"){
 			
-			currentBlock.backgroundColor = $scope.blockUnselectedBackgroundColor;
+			//currentBlock.backgroundColor = $scope.blockUnselectedBackgroundColor;
+			currentBlock.backgroundColor = $scope.blockBackgroundsHash[currentBlock.class];
 			currentBlock.selected = false;
 			
 		}
@@ -690,11 +738,11 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		condition = {}
 		condition.class = "condition";
 		condition.not = false;
-		condition.comparator = null;
+		condition.comparator = "==";
 		
 		if(block.conditions.length > 0) {
 			
-			condition.logicOperator = true;
+			condition.logicOperator = "and";
 		
 		}
 		else {
@@ -705,7 +753,8 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		
 		condition.value = null;
 		condition.selected = false;
-		condition.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		//condition.backgroundColor = $scope.blockUnselectedBackgroundColor;
+		condition.backgroundColor = $scope.blockBackgroundsHash[condition.class];
 		
 		condition.parameter = null;
 		
@@ -864,7 +913,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 
 		noOp = {}
 		noOp.class = "no-op";
-		noOp.name = "no-op";
+		noOp.name = "no-action";
 		noOp.disabled = false;
 		
 		blockArray.push(statement);
@@ -1010,6 +1059,98 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		console.log("Showing description for " + capability);
 		
 	}
+	
+	$scope.buildBmp = function (matrix, width, height, context) {
+		
+		var bpmMatrix = [];
+		var gray = [168,168,168];
+		var black = [0,0,0];
+		var white = [255,255,255]
+		var imgData = context.createImageData(width,height);
+		
+		var pixelIndex = 0;
+		for(var p = 0; p < matrix.length; ++p) {
+			
+			var color = null;
+			
+			/*if(matrix[p] == 100) {
+				color = black;
+			}
+			else if(matrix[p] == -1) {
+				color = gray;
+			}
+			else if(matrix[p] == 0) { 
+				color = white;
+			}*/
+				
+			if(matrix[p] == -1) {
+				color = gray;
+			}
+			else {
+				evaluatedColor = -(matrix[p]*2.55 - 255);
+				color = [evaluatedColor,evaluatedColor,evaluatedColor];
+			}
+			
+			// red
+			imgData.data[pixelIndex] = color[0];
+			pixelIndex++;
+			//green
+			imgData.data[pixelIndex] = color[1];
+			pixelIndex++;
+			//blue
+			imgData.data[pixelIndex] = color[2];
+			pixelIndex++;
+			//alpha
+			imgData.data[pixelIndex] = 255;
+			pixelIndex++;
+		}
+		
+		return imgData;
+	}
+
+	$scope.getMousePos = function ($event,cap,topic) {
+		//console.log($event.offsetX + " " + $event.offsetY);
+		//console.log($event.target.parentNode.offset().top);
+		key = cap+topic;
+		curSettings = $scope.visualisersSettings[key];
+		
+		if(curSettings != null) {
+			
+	  	  	let rect = $event.target.getBoundingClientRect(),
+	        x = $event.clientX - rect.left,
+	        y = $event.clientY - rect.top;
+    	
+			finalx = (x - curSettings["info.width"]/2)*curSettings["info.resolution"];
+			finaly = (y - curSettings["info.height"]/2)*curSettings["info.resolution"];
+		
+			curSettings["mouse.x"] = finalx;
+			curSettings["mouse.y"] = finaly;
+			console.log(curSettings["mouse.x"] + " " + curSettings["mouse.y"]);
+			
+		}
+		/*var totalOffsetX = 0;
+		var totalOffsetY = 0;
+		var canvasX = 0;
+		var canvasY = 0;
+		var currentElement = document.getElementById("map");
+
+		do{
+		    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
+		    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
+		}
+		while(currentElement = currentElement.offsetParent)
+
+		canvasX = event.pageX - totalOffsetX;
+		canvasY = event.pageY - totalOffsetY;
+		console.log(canvasX + " " + canvasY);*/
+
+	}
+
+	$scope.slashesToHyphens = function (string) {
+		return string.replace(/\//g , "-");
+	}
+
 }
+
 
 

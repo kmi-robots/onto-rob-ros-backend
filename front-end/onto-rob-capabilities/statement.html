@@ -1,11 +1,16 @@
-<div class="block rounded-15" ng-class="{dashed : block.capability == null, solid : block.capability != null}" id="statement" ng-click="select(block,$event)" ng-style="{background: block.backgroundColor}">	
+<div class="block rounded-15 statement" ng-class="{dashed : block.capability == null, solid : block.capability != null}" id="statement" ng-click="select(block,$event)" ng-style="{background: block.backgroundColor}">	
 	<div class="placeholder" ng-if="block.capability == null">CAPABILITY</div>
 
-	<div ng-if="block.capability != null">
-		<p class="name">{{getNameFromURI(block.capability.type)}}</p>
+	<div ng-if="block.capability != null" class="capability-block overflow">
+		<p class="block-text ">{{getNameFromURI(block.capability.type)}}</p>
 		<div ng-repeat="parameter in block.capability.params">
-			<div ng-if="parameter.mode == 'write'" ng-style="{background: parameter.backgroundColor }">		
-					{{getNameFromURI(parameter.p)}} <input type="text" ng-model="parameter.value" ng-click="stopPropagation($event)"/>
+			<div ng-if="parameter.mode == 'write'" ng-style="{background: auto }">	
+				<div class="capability-parameter-text col-md-4">	
+					{{getNameFromURI(parameter.p)}} 
+				</div>
+				<div class="capability-parameter-text col-md-8">
+					<input type="text" ng-model="parameter.value" ng-click="stopPropagation($event)"/>
+				</div>
 			</div>
 		</div>
 	</div>

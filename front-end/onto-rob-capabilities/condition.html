@@ -1,34 +1,52 @@
 <div class="">
 	<div class="logic-operator" ng-if="condition.logicOperator">
-		<select ng-click="stopPropagation($event)" ng-model="condition.logicOperator">
-			<option value="and">and</option>
+		<select ng-click="stopPropagation($event)"  ng-model="condition.logicOperator">
+			<option value="and" selected>and</option>
 			<option value="or">or</option>
 		</select>
 	</div>
-	<div class="condition rounded-15">
-		<div class="col-md-2 not">
-			<input type="checkbox" name="not" value="not" ng-click="stopPropagation($event)" ng-model="condition.not">NOT
-		</div>
-		<div class="col-md-6 parameter text-center rounded-15" ng-class="{dashed: condition.parameter == null, solid: condition.parameter != null}" ng-click="select(condition,$event)" ng-style="{background: condition.backgroundColor}">
-			<div class="placeholder" ng-if="condition.parameter == null">PARAMETER</div>
-			<div ng-if="condition.parameter != null" class="program-text">
-				{{getNameFromURI(condition.parameter.capability.type)}}/{{getNameFromURI(condition.parameter.parameter.p)}}
+	
+	<div class="row-fluid condition rounded-15">
+		<div class="span12 text-center">
+
+			<!-- Changed from `hidden` to `auto`. -->
+			<div style="overflow:auto;width:100%;">
+
+				<!-- This is the div that does the trick: -->
+				<div style="width:auto;">
+
+					<div style="display:inline-block;width:10%;" class="not checkbox block-text">
+						<input type="checkbox" name="not" value="not" ng-click="stopPropagation($event)" ng-model="condition.not">NOT</input>
+					</div>
+					
+					<div style="display:inline-block;width:55%;" class="parameter rounded-15" ng-class="{dashed: condition.parameter == null, solid: condition.parameter != null}" ng-click="select(condition,$event)" ng-style="{background: condition.backgroundColor}">
+						<div class="placeholder" ng-if="condition.parameter == null">PARAMETER</div>
+						<div ng-if="condition.parameter != null" class="condition-text">
+							{{getNameFromURI(condition.parameter.capability.type)}}/{{getNameFromURI(condition.parameter.parameter.p)}}
+						</div>
+					</div>
+					
+					<div style="display:inline-block;width:8%;">
+						<select ng-click="stopPropagation($event)" ng-model="condition.comparator">
+							<option value="==">==</option>
+							<option value="!=">!=</option>
+							<option value="&gt;">&gt;</option>
+							<option value="&gt;=">&gt;=</option>
+							<option value="&lt;">&lt;</option>
+							<option value="&lt;=">&lt;=</option>
+						</select>
+					</div>
+					<div style="display:inline-block;width:12%;">
+						<input type="text" size="8" ng-click="stopPropagation($event)" ng-model="condition.value">
+					</div>
+					<div style="display:inline-block;width:10%;">
+						<button type="button" class="btn btn-primary btn-sm" ng-click="removeInstruction(condition,$event)" >remove</button>
+					</div>
+
+				</div>
+
 			</div>
 		</div>
-		<div class="col-md-1 text-center">
-			<select ng-click="stopPropagation($event)" ng-model="condition.comparator">
-				<option value=""></option>
-				<option value="==">==</option>
-				<option value="!=">!=</option>
-				<option value="&gt;">&gt;</option>
-				<option value="&gt;=">&gt;=</option>
-				<option value="&lt;">&lt;</option>
-				<option value="&lt;=">&lt;=</option>
-			</select>
-		</div>
-		<div class="col-md-1 text-center">
-			<input type="text" size="7" ng-click="stopPropagation($event)" ng-model="condition.value">
-		</div>
-		<div class="col-md-2"><button type="button" class="btn" ng-click="removeInstruction(condition,$event)" >remove</button></div>
 	</div>
+	
 </div>

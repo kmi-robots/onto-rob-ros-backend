@@ -1,0 +1,21 @@
+<div class="overflow">
+	<div class="block-text col-md-6">
+		{{getNameFromURI(capability.type)}} - {{messageCapability.topic}}
+	</div>
+	<div class="col-md-4">
+		<button type="button" class="btn btn-success" ng-click="showDescription(capability)">read description</button>
+	</div>
+	<div class="col-md-2">
+	
+	</div>
+</div>
+
+<div class="capability-parameters overflow">
+	<div class="" style="overflow: scroll; width:450px; height:200px;">
+		<canvas id="map{{slashesToHyphens(messageCapability.topic)}}" ng-mousemove="getMousePos($event,getNameFromURI(capability.type),messageCapability.topic)">
+		</canvas>
+	</div>
+	<div ng-if="visualisersSettings[getNameFromURI(capability.type)+messageCapability.topic] != null" ng-model="visualisersSettings[getNameFromURI(capability.type)+messageCapability.topic]">
+		<div class="col-md-6">X: {{visualisersSettings[getNameFromURI(capability.type)+messageCapability.topic]["mouse.x"]}}</div><div class="col-md-6">Y: {{visualisersSettings[getNameFromURI(capability.type)+messageCapability.topic]["mouse.y"]}}</div>
+	</div>
+</div>
