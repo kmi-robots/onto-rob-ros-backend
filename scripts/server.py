@@ -198,10 +198,8 @@ class OntoRobServer:
 
     def get_msg_and_pkg(self, topic, capability):
         q = "SELECT ?msg ?pkg WHERE {  ?msg <"+self.__ONTOROB_PROP.evokes+"> <"+capability+"> . ?msg <"+self.__ONTOROB_PROP.publishedOn+"> <"+topic+"> . ?msg <"+self.__ONTOROB_PROP.hasPkg+"> ?pkg } "
-        #print q
         
         qres = self.__G.query(q)
-        #print qres
         ix = 0
         ret = {}
         for row in qres:
@@ -217,10 +215,8 @@ class OntoRobServer:
     
     def get_msg_and_pkg_from_topic(self, topic):
         q = "SELECT ?msg ?pkg WHERE {  ?msg <"+self.__ONTOROB_PROP.publishedOn+"> <"+topic+"> . ?msg <"+self.__ONTOROB_PROP.hasPkg+"> ?pkg } "
-        print q
         
         qres = self.__G.query(q)
-        print qres
         ix = 0
         ret = {}
 
@@ -239,7 +235,6 @@ class OntoRobServer:
     # msg is assumed to be already in its URI form
     def get_params_from_msg(self, msg):
         q = "SELECT ?param WHERE {  <"+ msg +"> <"+self.__ONTOROB_PROP.hasField +"> ?param } "
-	print q
 	qres = self.__G.query(q)
 
         ret = []
@@ -385,13 +380,9 @@ def ask_capability(capa):
 def ask_capabilities():
     print "Received capabilities request"
     parsed_json = get_nodes()
-    
-    # print parsed_json
     # add topics dynamically
     onto_server.add_topics(parsed_json)
-    
-    #onto_server.save_graph()
-    
+   
     # get capabilitites
     response_array = onto_server.query_kb(parsed_json)
     print json.dumps(response_array)
@@ -401,13 +392,9 @@ def ask_capabilities():
 @crossdomain(origin='*')
 def execute():
     print "Received execute"
-    #print request.data
-
     program = json.loads(request.data)["program"]
 
     onto_server.update_program_with_msg_and_pkg(program)
-    #print "AFTER"
-    #print json.dumps(program)
     execute_on_robot(program)
     return "OK",200
 
@@ -424,23 +411,20 @@ def read():
         # this can be done in the else, by improving the query
         # in the get_params_from_msg method (making it retrievable from the capability)
         q_res = onto_server.get_msg_and_pkg(topic_uri, capability)
-        #print q_res["pkg"]
-        #print q_res["msg"]
         pkg = q_res["pkg"]
         msg = q_res["msg"]
 
         parameters_to_read = onto_server.get_params_from_msg(msg)
-        print parameters_to_read
+        #print parameters_to_read
 
         # reading contains the object
         if topic in topic_dict.keys():
-            print "Topic %s is already in the dict" % topic
             reading = read_from_topic(topic)
         else:
-            print "%s %s" % (topic_uri, capability)
             reading = read_from_robot(topic, get_name_from_uri(pkg), get_name_from_uri(msg))
 
         resp_object = ros_msg_2_dict(reading, parameters_to_read)
+	#print resp_object
         resp = app.response_class(response=json.dumps(resp_object), status=200,mimetype="application/json")
 
         return resp
@@ -497,23 +481,13 @@ def get_nodes():
     for nodename in nodelist:
         # initialise RosNode object
         node = RosNode(nodename)
-        #print node.get_capability_msg()
         msgs_topic_collection = update_msgs_collection(node.get_capability_msg(), msgs_topic_collection)
         #msgs_topic_collection.extend(node.get_capability_msg())
-    
-        """if nodename == "/move_base":
-            print "MOVE_BASE"
-            for a in node.get_capability_msg():
-                if a["topic"] == "/move_base_simple/goal":
-                    print "AAAAA: %s" % a["topic"]
-                else:
-                    print a"""
 
     # this transform every set in a list in the field 'nodes'
     for item in msgs_topic_collection:
         item["nodes"] = list(item["nodes"])
 
-    #print msgs_topic_collection
     return msgs_topic_collection
 
 
@@ -558,6 +532,9 @@ def ros_msg_2_dict(ros_msg_obj, parameters_to_read):
     ret = {}
 
     for param in parameters_to_read:
+        if "__LIST" in param:
+            param = param.replace("__LIST","")
+
 	value = parse_instructions.rgetattr(ros_msg_obj,param)
 	ret[param] = value
     

@@ -36,7 +36,7 @@ def addCapabilities(l):
     msg = URIRef(ontorob_res+l[1]+"/"+l[2]) # msg name
     
     field_type = l[4]
-    params = l[5][1:-1].split("]; ") # capability_params [[]]  
+    params = l[5][1:-1].split("]; ") # capability_params [[]]
     result = list()
     
     for i in range(0,len(caps)):
