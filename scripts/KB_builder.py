@@ -38,7 +38,7 @@ def addCapabilities(l):
     field_type = l[4]
     params = l[5][1:-1].split("]; ") # capability_params [[]]
     result = list()
-    
+
     for i in range(0,len(caps)):
         cap =  caps[i]
         onto_cap = URIRef(ontorob_res.capability+"/"+cap)

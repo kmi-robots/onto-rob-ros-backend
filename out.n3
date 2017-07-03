@@ -72,9 +72,9 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/PoseStamped> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "PoseStamped"@en ;
-    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation_Movement>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Robot_position> ;
-    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.orientation.w>,
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation_Movement> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/header.frame_id>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.orientation.w>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.orientation.x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.orientation.y>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.orientation.z>,
@@ -93,18 +93,6 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.position.x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.position.y>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.position.z> ;
-    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/geometry_msgs> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/PoseWithCovarianceStamped> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
-    rdfs:label "PoseWithCovarianceStamped"@en ;
-    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Robot_position> ;
-    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.w>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.x>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.y>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.z>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.x>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.y>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.z> ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/geometry_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/Twist> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
@@ -546,6 +534,8 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/echoes__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/header.frame_id> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/id> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/illuminance> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
@@ -599,6 +589,20 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/name__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/points__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.w> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.x> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.y> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.z> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.x> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.y> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.z> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/range> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
@@ -679,20 +683,6 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/linear.z> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/points> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.w> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.x> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.y> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.orientation.z> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.x> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.y> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/field/pose.pose.position.z> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/position.x> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
@@ -791,32 +781,6 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/info.resolution>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/info.width> .
 
-<http://data.open.ac.uk/kmi/ontoRob/resource/field/data__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/capability/Body_part_Movement> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
-    ns1:hasParamType "read"@en,
-        "write"@en ;
-    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/acceleration__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/effort__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/joint_names>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/joint_names__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/name__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/points>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/position__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/transform__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/twist__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/velocities__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/velocity__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/wrench__LIST> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/capability/Depth_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
-    ns1:hasParamType "read"@en ;
-    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/echoes__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/points__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/range>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/ranges__LIST>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/field/ranges__LIST.echoes__LIST> .
-
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Robot_position> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
     ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/orientation.w>,
@@ -843,6 +807,32 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/theta>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/y> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/data__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/capability/Body_part_Movement> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
+    ns1:hasParamType "read"@en,
+        "write"@en ;
+    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/acceleration__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/effort__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/joint_names>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/joint_names__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/name__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/points>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/position__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/transform__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/twist__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/velocities__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/velocity__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/wrench__LIST> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/capability/Depth_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
+    ns1:hasParamType "read"@en ;
+    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/echoes__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/points__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/range>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/ranges__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/ranges__LIST.echoes__LIST> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Directional_Movement> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "write"@en ;
@@ -879,7 +869,8 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation_Movement> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "write"@en ;
-    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/orientation.w>,
+    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/header.frame_id>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/orientation.w>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/orientation.x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/orientation.y>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/orientation.z>,
