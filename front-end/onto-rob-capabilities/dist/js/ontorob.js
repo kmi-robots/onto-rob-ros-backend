@@ -29,14 +29,17 @@ function dataService () {
 	this.capabilities = {};
 	//this.ip = "http://137.108.114.0:5000/";
 	//this.ip = "http://localhost:5000/";
-	this.ip = "http://137.108.122.193:5000/";
+	//this.ip = "http://137.108.122.193:5000/";
+	this.ip = "http://192.168.0.5:5000/";
 	//this.ip = "http://10.229.169.122:5000/";
+	this.text = "cacca";
 }
 
 function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 	$scope.errorUrl = "error.html";
 	$scope.successUrl = "capabilities-ui.html";
 	console.log(Data.ip);
+
 	$http({
 		method: 'GET',
 		url: Data.ip + "capabilities"
@@ -99,75 +102,113 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	}
 	
 	$scope.visualiserHash = {
-		"Map_representation":"map_display.html",
-		"Vision":"camera_display.html",
-		"Robot_position":"basic_display.html",
-		"Robot_speed":"basic_display.html",
-		"Depth_Sensing":"basic_display.html"
+		"Map_representation":{
+			"display":"map_display.html",
+			"refresh":180000
+		},
+		"Vision":{
+			"display":"camera_display.html",
+			"refresh":2000
+		},
+		"Robot_position":{
+			"display":"basic_display.html",
+			"refresh":3000
+		},
+		"Robot_speed":{
+			"display":"basic_display.html",
+			"refresh":3000
+		},
+		"Depth_Sensing":{
+			"display":"basic_display.html",
+			"refresh":3000
+		}
 	}
 	
 	$scope.visualisersSettings = {}
 	
 	$scope.getVisualiser = function (capability) {
-		$scope.visualiserHash[capability];
+		$scope.visualiserHash[capability]["display"];
 	}
 	
-	$scope.requireReadings = function(topic, capability) {
+	// this function is annoying. Not sure it will make the things betters
+	$scope.requireReadings = function(capabilities) {
+		
+		toRequest = [];
 
-		console.log("Requiring " + topic + " " + capability.type);
-		toRequest = {
-			"topic":topic,
-			"capability":capability.type
-		}
+		angular.forEach(capabilities, function (capabilityToRequest) {
+			toRequest.push({"topic":capabilityToRequest.topic,"capability":capabilityToRequest.capability.type});
+			
+		});
 
 		$http({
 			
 			method: 'GET',
 			url: Data.ip + "read",
-			params: {"question": toRequest}
+			params: {"question": angular.toJson(toRequest,false)}
 			
 		}).then(function successCallback(response) {
+			//console.log(response.data);
 			
-			console.log("Response "+ response.status);	
-			console.log(response.data);
-			var capType = $scope.getNameFromURI(capability.type)
-			
-			if($scope.visualiserHash[capType] == "basic_display.html") {
+			angular.forEach(capabilities, function(requestedCapability) {
 				
-				angular.forEach(capability.params, function(param) {
+				var key = requestedCapability.capability.type + "/" + requestedCapability.topic;
 				
-					paramName = $scope.getNameFromURI(param.p);
-					param.value = response.data[paramName];
+				if(response.data.hasOwnProperty(key)) {
+					
+					var readParams = response.data[key];
+					var curCapability = requestedCapability.capability;
+					var curTopic = requestedCapability.topic;
+					var curCapType = $scope.getNameFromURI(curCapability.type);
+
+					if($scope.visualiserHash[curCapType]["display"] == "basic_display.html") {
 				
-				});
+						console.log("Response for basic "+ response.status);
+				
+						angular.forEach(curCapability.params, function(param) {
+				
+							paramName = $scope.getNameFromURI(param.p);
+							param.value = readParams[paramName];
+				
+						});
 		
-			}
-			else if($scope.visualiserHash[capType] == "map_display.html") {
-				var key = capType+topic;
-				$scope.visualisersSettings[key] = {
-						"info.origin.position.x":response.data["info.origin.position.x"],
-						"info.origin.position.y":response.data["info.origin.position.y"],
-						"info.origin.position.z":response.data["info.origin.position.z"],
-						"info.origin.orientation.w":response.data["info.origin.orientation.w"],
-						"info.origin.orientation.x":response.data["info.origin.orientation.x"],
-						"info.origin.orientation.y":response.data["info.origin.orientation.y"],
-						"info.origin.orientation.z":response.data["info.origin.orientation.z"],
-						"info.resolution":response.data["info.resolution"],
-						"info.height":response.data["info.height"],
-						"info.width":response.data["info.width"],
-						"mouse.x":0,
-						"mouse.y":0
 					}
+					// TODO this is a littble bit tailored on convetional maps
+					else if($scope.visualiserHash[curCapType]["display"] == "map_display.html") {
+						
+						console.log("Response for map "+ response.status);
+						
+						$scope.visualisersSettings[key] = {
+								"info.origin.position.x":readParams["info.origin.position.x"],
+								"info.origin.position.y":readParams["info.origin.position.y"],
+								"info.origin.position.z":readParams["info.origin.position.z"],
+								"info.origin.orientation.w":readParams["info.origin.orientation.w"],
+								"info.origin.orientation.x":readParams["info.origin.orientation.x"],
+								"info.origin.orientation.y":readParams["info.origin.orientation.y"],
+								"info.origin.orientation.z":readParams["info.origin.orientation.z"],
+								"info.resolution":readParams["info.resolution"],
+								"info.height":readParams["info.height"],
+								"info.width":readParams["info.width"],
+								"mouse.x":0,
+								"mouse.y":0
+							}
 				
-				var c = document.getElementById("map"+$scope.slashesToHyphens(topic));
-				var ctx = c.getContext("2d");
-				ctx.canvas.width  = response.data["info.width"];
-				ctx.canvas.height = response.data["info.height"];
-				//ctx.scale(2,2);
-				var img = $scope.buildBmp(response.data['data'], response.data["info.width"], response.data["info.height"], ctx);
-				ctx.putImageData(img, 0, 0);
+						var c = document.getElementById("map"+$scope.slashesToHyphens(curTopic));
+						var ctx = c.getContext("2d");
+						ctx.canvas.width  = readParams["info.width"];
+						ctx.canvas.height = readParams["info.height"];
+						//ctx.scale(2,2);
+						var img = $scope.buildBmp(readParams['data'], readParams["info.width"], readParams["info.height"], ctx);
+						ctx.putImageData(img, 0, 0);
 				
-			}
+					}
+					else if($scope.visualiserHash[curCapType]["display"] == "camera_display.html") {
+				
+						console.log("Requesting camera data");
+				
+					}
+					
+				}
+			});
 			
 	
 		}, function errorCallback(response) {
@@ -186,6 +227,25 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	$scope.capabilities = Data.capabilities;
 	console.log($scope.capabilities);
 	
+	// this dictionary is used to sort capabilities to be read
+	// at different time interval (e.g. a map will be read every 1 or 2 minutes)
+	// while the robot position will be read every 5 seconds
+	// entries are 2secs, 3secs, 5secs, 3 mins.
+	$scope.readTimingHash = {
+		2000:[],
+		3000:[],
+		5000:[],
+		180000:[]
+	}
+	
+	$scope.modal =  {"text":"","header":""};
+	
+	$scope.getNameFromURI = function (uri) {
+		
+		return uri.substring(uri.lastIndexOf("/")+1,uri.length);
+		
+	}
+	
 	angular.forEach($scope.capabilities,function(messageCapability) {
 		
 		capabilities = messageCapability["capabs"];
@@ -194,8 +254,9 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			
 			capability.class = "capability";
 			capability.topic = messageCapability.topic;
+			capability.msg = messageCapability.msg;
 			disable(capability);
-			
+		
 			capability.hasReadParameter = false;
 			
 			capability["params"].sort(function(a, b) {
@@ -210,26 +271,22 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 				parameter.value = null;
 				disable(parameter);
 				
-				if(parameter.mode == "read") {
-
-					capability.hasReadParameter = true;
-		
-				}
-					
 			});
 			
-			//if(messageCapability.topic == "/map" && capability.type == "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Map_representation" && capability.hasReadParameter) {
-			if(capability.hasReadParameter) {
-				//console.log("Requesting for capability");
-				//capability.readRequestPromise = $interval($scope.requireReadings, 5000, 0, true, messageCapability.topic, capability);
-				capability.readRequestPromise = $scope.requireReadings(messageCapability.topic, capability);
+			if(capability.mode == "read") {
+				
+				capName = $scope.getNameFromURI(capability.type);
+				refreshTime = $scope.visualiserHash[capName]["refresh"];
+				$scope.readTimingHash[refreshTime].push({"topic":messageCapability.topic,"capability":capability});
 			}
+			
 		});
 		
 	});
-
-//	$interval($scope.requireReadings, 2000);
-	//$interval($scope.requireReadings, 2000,0,true,20); 
+	
+	
+	$scope.requireReadings($scope.readTimingHash[180000]);
+	$interval($scope.requireReadings, 3000, 0, true, $scope.readTimingHash[3000]);
 
 	// this function runs the program built so far
 	// it "parses" the sequence of instantiated blocks and 
@@ -808,12 +865,6 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		});
 	}
 	
-	$scope.getNameFromURI = function (uri) {
-		
-		return uri.substring(uri.lastIndexOf("/")+1,uri.length);
-		
-	}
-	
 	function disableAllBut (classToEnable) {
 		
 		angular.forEach($scope.capabilities,function(messageCapability) {
@@ -1055,8 +1106,10 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	}
 	
 	$scope.showDescription = function(capability) {
-		
-		console.log("Showing description for " + capability);
+		$scope.modal.header = $scope.getNameFromURI(capability.type);
+		$scope.modal.text = "";
+		// $scope.modalText = capability.description;
+		//console.log("Showing description for " + capability.type);
 		
 	}
 	
@@ -1072,16 +1125,6 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		for(var p = 0; p < matrix.length; ++p) {
 			
 			var color = null;
-			
-			/*if(matrix[p] == 100) {
-				color = black;
-			}
-			else if(matrix[p] == -1) {
-				color = gray;
-			}
-			else if(matrix[p] == 0) { 
-				color = white;
-			}*/
 				
 			if(matrix[p] == -1) {
 				color = gray;
@@ -1109,9 +1152,9 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	}
 
 	$scope.getMousePos = function ($event,cap,topic) {
-		//console.log($event.offsetX + " " + $event.offsetY);
-		//console.log($event.target.parentNode.offset().top);
-		key = cap+topic;
+
+		key = cap+"/"+topic;
+		
 		curSettings = $scope.visualisersSettings[key];
 		
 		if(curSettings != null) {
@@ -1125,25 +1168,8 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		
 			curSettings["mouse.x"] = finalx;
 			curSettings["mouse.y"] = finaly;
-			console.log(curSettings["mouse.x"] + " " + curSettings["mouse.y"]);
-			
 		}
-		/*var totalOffsetX = 0;
-		var totalOffsetY = 0;
-		var canvasX = 0;
-		var canvasY = 0;
-		var currentElement = document.getElementById("map");
-
-		do{
-		    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
-		    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-		}
-		while(currentElement = currentElement.offsetParent)
-
-		canvasX = event.pageX - totalOffsetX;
-		canvasY = event.pageY - totalOffsetY;
-		console.log(canvasX + " " + canvasY);*/
-
+		
 	}
 
 	$scope.slashesToHyphens = function (string) {

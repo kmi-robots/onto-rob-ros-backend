@@ -1,4 +1,23 @@
 <h1>HELLO Ontorob!</h1>	
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">{{modal.header}}</h4>
+        </div>
+        <div class="modal-body" >
+          <p>{{modal.text}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
 	<div class="container-fluid">
 		
 		<div class="col-lg-4 padding-lr-5">
@@ -13,10 +32,10 @@
 							<div class="capability rounded-7" ng-if="capability.params.length > 0" ng-style="{background: capability.backgroundColor}">
 								<div class="overflow">
 									<div class="block-text col-md-6">
-										{{getNameFromURI(capability.type)}}
+										{{getNameFromURI(capability.type)}} - {{capability.topic}}, {{capability.msg}}
 									</div>
 									<div class="col-md-4">
-										<button type="button" class="btn btn-success" ng-click="showDescription(capability)">read description</button>
+										<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" ng-click="showDescription(capability)">read description</button>
 									</div>
 									<div class="col-md-2">
 										<button type="button" class="btn btn-danger" ng-click="addCapability(capability)" ng-if="!capability.disabled">add</button>
@@ -43,7 +62,7 @@
 						
 						<div ng-if="capability.mode == 'read'">
 							<div class="capability rounded-7" ng-if="capability.params.length > 0" ng-style="{background: capability.backgroundColor}">
-								<div ng-include="visualiserHash[getNameFromURI(capability.type)]" ng-init="capability = capability">
+								<div ng-include="visualiserHash[getNameFromURI(capability.type)]['display']" ng-init="capability = capability">
 								</div>
 							</div>
 						</div>
