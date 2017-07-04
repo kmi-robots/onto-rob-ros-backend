@@ -30,15 +30,16 @@ function dataService () {
 	//this.ip = "http://137.108.114.0:5000/";
 	//this.ip = "http://localhost:5000/";
 	//this.ip = "http://137.108.122.193:5000/";
-	this.ip = "http://192.168.0.5:5000/";
+	this.serverPort = 5000;
+	this.streamPort = 8080;
+	this.ip = "http://192.168.0.5:"+this.serverPort+"/";
+	this.streamIp = "http://192.168.0.5:"+this.streamPort+"/";
 	//this.ip = "http://10.229.169.122:5000/";
-	this.text = "cacca";
 }
 
 function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 	$scope.errorUrl = "error.html";
 	$scope.successUrl = "capabilities-ui.html";
-	console.log(Data.ip);
 
 	$http({
 		method: 'GET',
@@ -71,7 +72,9 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	
 	$scope.blockCounter = 0;
 	$scope.conditionCounter = 0;
-
+	$scope.ip = Data.ip;
+	$scope.streamIp = Data.streamIp;
+	
 	$scope.program.blockTypes = []
 	initialiseBlockTypes($scope.program.blockTypes);
 	
@@ -143,7 +146,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		$http({
 			
 			method: 'GET',
-			url: Data.ip + "read",
+			url: $scope.ip + "read",
 			params: {"question": angular.toJson(toRequest,false)}
 			
 		}).then(function successCallback(response) {
@@ -320,7 +323,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		$http({
 			
 			method: 'POST',
-			url: Data.ip + "execute",
+			url: $scope.ip + "execute",
 			data: {"program": programObject}
 			
 		}).then(function successCallback(response) {
@@ -851,7 +854,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		$http({
 			
 			method: 'POST',
-			url: Data.ip + "trigger",
+			url: $scope.ip + "trigger",
 			data: {"capability": toSend}
 			
 		}).then(function successCallback(response) {
