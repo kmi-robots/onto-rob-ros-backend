@@ -2,6 +2,7 @@ from flask import Flask, make_response, request, current_app, jsonify
 import json
 from rdflib import URIRef, Graph, RDF, Namespace
 import codecs
+import math
 
 from datetime import timedelta
 from functools import update_wrapper
@@ -382,9 +383,14 @@ def ask_capabilities():
     parsed_json = get_nodes()
     # add topics dynamically
     onto_server.add_topics(parsed_json)
-   
+
     # get capabilitites
     response_array = onto_server.query_kb(parsed_json)
+
+    for i in reversed(range(0,len(response_array))):
+        if len(response_array[i]['capabs']) == 0:
+            del response_array[i]
+
     print json.dumps(response_array)
     return json.dumps(response_array)
 
@@ -428,7 +434,7 @@ def read():
             ros_msg_dict = ros_msg_2_dict(reading, parameters_to_read)
             key = capability + "/" + topic
             ret[key] = ros_msg_dict
-            
+
         resp = app.response_class(response=json.dumps(ret), status=200,mimetype="application/json")
  
         return resp
@@ -542,8 +548,13 @@ def ros_msg_2_dict(ros_msg_obj, parameters_to_read):
             param = param.replace("__LIST", "")
 
         value = parse_instructions.rgetattr(ros_msg_obj, param)
-        if param == "ranges":
-            print value
+        if type(value) == list or type(value) == tuple:
+            value = list(value)
+            if type(value[0]) == float:
+                for i in range(0, len(value)):
+                    if math.isnan(value[i]):
+                        value[i] = None
+
         ret[param] = value
 
     return ret
