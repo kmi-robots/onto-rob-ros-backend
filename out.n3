@@ -7,7 +7,8 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/ar_tag_counter_msgs/ArTagCounter> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "ArTagCounter"@en ;
     ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/ARTag_counting> ;
-    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/total;tags__LIST> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/tags__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/total> ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/ar_tag_counter_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/Accel> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
@@ -462,7 +463,8 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/ARTag_counting> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
-    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/total;tags__LIST> .
+    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/tags__LIST>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/total> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Battery_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
@@ -624,11 +626,13 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/status.status> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/tags__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/temperature> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/time_ref> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
-<http://data.open.ac.uk/kmi/ontoRob/resource/field/total;tags__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/total> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/twist__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 

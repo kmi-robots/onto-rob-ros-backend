@@ -61,4 +61,4 @@ msg,shape_msgs,Mesh,[Internal_Representation_Shape],,
 msg,shape_msgs,MeshTriangle,[Internal_Representation_Shape],,
 msg,shape_msgs,Plane,[Internal_Representation_Shape],,
 msg,shape_msgs,SolidPrimitive,[Internal_Representation_Shape],,
-msg,ar_tag_counter_msgs,ArTagCounter,[ARTag_counting],r,[[total;tags__LIST]]
+msg,ar_tag_counter_msgs,ArTagCounter,[ARTag_counting],r,[[total; tags__LIST]]
