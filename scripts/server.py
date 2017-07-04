@@ -80,7 +80,7 @@ class OntoRobServer:
         self.read_kb()
 
     def get_ontorob_res_namespace(self):
-	return self.__ONTOROB_RES
+        return self.__ONTOROB_RES
 
     def set_kb_file(self, input_file):
         """
@@ -146,9 +146,9 @@ class OntoRobServer:
     
         query = "SELECT ?capa ?param ?parType WHERE { " + values + " ?res <"+self.__ONTOROB_PROP.evokes+"> ?capa . ?res <"+self.__ONTOROB_PROP.hasField +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParameter +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParamType+"> ?parType .}";
         return query
-	
 
-    def fill_msg_and_pkg(self,instruction):
+
+    def fill_msg_and_pkg(self, instruction):
         print "Filling!"
 
         if instruction["type"] == "capability":
@@ -402,35 +402,33 @@ def execute():
 @crossdomain(origin='*')
 def read():
     try:
-	print "Read received"
+        print "Read received"
         qs = json.loads(request.args["question"])
+        ret = {}
 
-	ret = {}
+        for q in qs:
+            topic = q["topic"]
+            capability = q["capability"]
+            topic_uri = onto_server.get_ontorob_res_namespace().topic + q["topic"]
+            # this can be done in the else, by improving the query
+            # in the get_params_from_msg method (making it retrievable from the capability)
+            q_res = onto_server.get_msg_and_pkg(topic_uri, capability)
+            pkg = q_res["pkg"]
+            msg = q_res["msg"]
 
-	for q in qs:
-		topic = q["topic"]
-        	capability = q["capability"]
-        	topic_uri = onto_server.get_ontorob_res_namespace().topic + q["topic"]
-        	# this can be done in the else, by improving the query
-        	# in the get_params_from_msg method (making it retrievable from the capability)
-        	q_res = onto_server.get_msg_and_pkg(topic_uri, capability)
-        	pkg = q_res["pkg"]
-        	msg = q_res["msg"]
+            parameters_to_read = onto_server.get_params_from_msg(msg)
+            #print parameters_to_read
 
-        	parameters_to_read = onto_server.get_params_from_msg(msg)
-        	#print parameters_to_read
+            # reading contains the object
+            if topic in topic_dict.keys():
+                reading = read_from_topic(topic)
+            else:
+                reading = read_from_robot(topic, get_name_from_uri(pkg), get_name_from_uri(msg))
 
-        	# reading contains the object
-        	if topic in topic_dict.keys():
-            		reading = read_from_topic(topic)
-        	else:
-            		reading = read_from_robot(topic, get_name_from_uri(pkg), get_name_from_uri(msg))
-
-        	ros_msg_dict = ros_msg_2_dict(reading, parameters_to_read)
-
-		key = capability + "/" + topic
-		ret[key] = ros_msg_dict
-
+            ros_msg_dict = ros_msg_2_dict(reading, parameters_to_read)
+            key = capability + "/" + topic
+            ret[key] = ros_msg_dict
+            
         resp = app.response_class(response=json.dumps(ret), status=200,mimetype="application/json")
  
         return resp
@@ -528,22 +526,26 @@ def execute_on_robot(program):
 def read_from_topic(topic):
     return parse_instructions.get_value(topic)
 
+
 def read_from_robot(topic, pkg, msg):
     uid = parse_instructions.read_topic(topic, pkg, msg)
     topic_dict[topic] = {}
     topic_dict[topic]["uid"] = uid
     return read_from_topic(topic)
 
+
 def ros_msg_2_dict(ros_msg_obj, parameters_to_read):
     ret = {}
 
     for param in parameters_to_read:
         if "__LIST" in param:
-            param = param.replace("__LIST","")
+            param = param.replace("__LIST", "")
 
-	value = parse_instructions.rgetattr(ros_msg_obj,param)
-	ret[param] = value
-    
+        value = parse_instructions.rgetattr(ros_msg_obj, param)
+        if param == "ranges":
+            print value
+        ret[param] = value
+
     return ret
 
 if __name__ == "__main__":
