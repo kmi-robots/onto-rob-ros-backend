@@ -26,13 +26,14 @@
 				<h3 class="text-center">Capability List</h3>
 				
 				<div ng-repeat="messageCapability in capabilities">
+					{{messageCapability.topic}}
 					<div ng-repeat="capability in messageCapability.capabs">
 						
 						<div ng-if="capability.mode == 'write'">
 							<div class="capability rounded-7" ng-if="capability.params.length > 0" ng-style="{background: capability.backgroundColor}">
 								<div class="overflow">
 									<div class="block-text col-md-6">
-										{{getNameFromURI(capability.type)}} - {{capability.topic}}, {{capability.msg}}
+										{{getNameFromURI(capability.type)}} <!-- {{capability.topic}}, {{capability.msg}} -->
 									</div>
 									<div class="col-md-4">
 										<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" ng-click="showDescription(capability)">read description</button>

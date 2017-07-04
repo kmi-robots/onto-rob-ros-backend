@@ -1,6 +1,6 @@
 <div class="overflow">
 	<div class="block-text col-md-6">
-		{{getNameFromURI(capability.type)}}
+		{{getNameFromURI(capability.type)}} <!-- {{messageCapability.topic}} -->
 	</div>
 	<div class="col-md-4">
 		<button type="button" class="btn btn-success" ng-click="showDescription(capability)" data-toggle="modal" data-target="#myModal">read description</button>
@@ -12,8 +12,9 @@
 </div>
 
 <div class="capability-parameters overflow">
-
-	<video src="{{streamIp+'stream?topic='+capability.topic}}" autoplay="true" preload="none"></video>
+	<div ng-if="capability.topic == '/camera/rgb/image_raw' && capability.display == true">
+		<img style="-webkit-user-select: none;" src="{{streamIp}}stream?topic={{capability.topic}}">
+	</div>
 
 </div>
 								

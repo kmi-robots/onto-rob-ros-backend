@@ -26,14 +26,23 @@ angular.module('ontoRobApp', ['ui.bootstrap','ui.router'])
 .service("Data", dataService);
 
 function dataService () {
-	this.capabilities = {};
-	//this.ip = "http://137.108.114.0:5000/";
-	//this.ip = "http://localhost:5000/";
-	//this.ip = "http://137.108.122.193:5000/";
+	this.capabilities = [];
 	this.serverPort = 5000;
 	this.streamPort = 8080;
-	this.ip = "http://192.168.0.5:"+this.serverPort+"/";
-	this.streamIp = "http://192.168.0.5:"+this.streamPort+"/";
+	
+	// gianluca's laptop on eduroam
+	this.ip = "http://137.108.114.0:"+this.serverPort+"/";
+	this.streamIp = "http://137.108.114.0:"+this.streamPort+"/";
+
+	//this.ip = "http://localhost:5000/";
+	
+	// manu's laptop on eduroam
+	//this.ip = "http://137.108.122.193:"+this.serverPort+"/";
+	//this.streamIp = "http://137.108.122.193:"+this.streamPort+"/";
+	
+	//this.ip = "http://192.168.0.5:"+this.serverPort+"/";
+	//this.streamIp = "http://192.168.0.5:"+this.streamPort+"/";
+	
 	//this.ip = "http://10.229.169.122:5000/";
 }
 
@@ -41,12 +50,50 @@ function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 	$scope.errorUrl = "error.html";
 	$scope.successUrl = "capabilities-ui.html";
 
+	$scope.topicToFilter = [
+		"/move_base/global_costmap/obstacle_layer/clearing_endpoints",
+		"/move_base/local_costmap/obstacle_layer/clearing_endpoints",
+		"/move_base/current_goal",
+		"/cmd_vel_mux/input/safety_controller",
+		"/cmd_vel_mux/input/navi",
+		"/cmd_vel_mux/input/switch",
+		"/navigation_velocity_smoother/raw_cmd_vel",
+		"/cmd_vel_mux/input/teleop",
+		"/move_base/current_goal",
+		"/camera/depth/image_raw",
+		"/camera/rgb/image_raw/compressed",
+		"/move_base/local_costmap/costmap",
+		"/move_base/global_costmap/costmap",
+		"/camera/rgb/image_raw/compressedDepth",
+		"/joint_states"
+	]
+
 	$http({
+		
 		method: 'GET',
 		url: Data.ip + "capabilities"
+		
 	}).then(function successCallback(response) {
-		//$scope.capabilities = response.data;
-		Data.capabilities = response.data; 
+		
+		var capabilities = response.data;
+		
+		angular.forEach(capabilities, function (messageCapability) {
+			
+			if($scope.topicToFilter.indexOf(messageCapability.topic) != -1) {
+				
+				console.log("Skipping " + messageCapability.topic)
+				
+			}
+			else {
+				
+				Data.capabilities.push(messageCapability);		
+				//Data.capabilities = capabilities.splice(capabilities.indexOf(messageCapability),1);
+				
+			}
+			
+		});
+				
+		//Data.capabilities = response.data; 
 		//console.log("I should redirect now");
 		//console.log(Data.capabilities);
 		$state.go("capabilities-ui");	
@@ -55,6 +102,7 @@ function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 		console.log("Problems while contacting the robot" + response.status);
 	
 	});
+
 }
 
 function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
@@ -80,6 +128,8 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	
 	// this hashmap is used to understand which class needs to be
 	// disabled when an item in the interface is pressed
+	
+	
 	$scope.disablingHash = {
 		"condition":"parameter",
 		"statement":"capability",
@@ -124,7 +174,11 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		"Depth_Sensing":{
 			"display":"basic_display.html",
 			"refresh":3000
-		}
+		},
+		"Body_part_Movement":{
+			"display":"basic_display.html",
+			"refresh":3000
+		}		
 	}
 	
 	$scope.visualisersSettings = {}
@@ -133,15 +187,36 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		$scope.visualiserHash[capability]["display"];
 	}
 	
+	// this dictionary is used to sort capabilities to be read
+	// at different time interval (e.g. a map will be read every 1 or 2 minutes)
+	// while the robot position will be read every 5 seconds
+	// entries are 2secs, 3secs, 5secs, 3 mins.
+	$scope.readTimingHash = {
+		2000:[],
+		3000:[],
+		5000:[],
+		180000:[]
+	}
+	
 	// this function is annoying. Not sure it will make the things betters
 	$scope.requireReadings = function(capabilities) {
 		
 		toRequest = [];
 
 		angular.forEach(capabilities, function (capabilityToRequest) {
-			toRequest.push({"topic":capabilityToRequest.topic,"capability":capabilityToRequest.capability.type});
+			//console.log(capabilityToRequest.topic);
+			// TODO filtering topic/capability, as their messages contain objects which need to be parsed
+			if(capabilityToRequest.topic == "/move_base/global_costmap/obstacle_layer/clearing_endpoints" || capabilityToRequest.topic == "/move_base/local_costmap/obstacle_layer/clearing_endpoints") {
+				//console.log("");
+			}
+			else {
+				toRequest.push({"topic":capabilityToRequest.topic,"capability":capabilityToRequest.capability.type});
+			}
 			
 		});
+
+		//console.log("toRequest");
+		//console.log(toRequest);
 
 		$http({
 			
@@ -165,8 +240,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 
 					if($scope.visualiserHash[curCapType]["display"] == "basic_display.html") {
 				
-						console.log("Response for basic "+ response.status);
-				
+						//console.log("Response for basic "+ response.status);					
 						angular.forEach(curCapability.params, function(param) {
 				
 							paramName = $scope.getNameFromURI(param.p);
@@ -202,6 +276,15 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 						//ctx.scale(2,2);
 						var img = $scope.buildBmp(readParams['data'], readParams["info.width"], readParams["info.height"], ctx);
 						ctx.putImageData(img, 0, 0);
+						
+						// TODO this is to make things sharper, to load the maps before starting streaming
+						// can be done better
+						angular.forEach($scope.readTimingHash[2000], function (cap) {
+								
+								console.log(cap.capability.type);
+								cap.capability.display = true;
+							
+						});
 				
 					}
 					else if($scope.visualiserHash[curCapType]["display"] == "camera_display.html") {
@@ -230,17 +313,6 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	$scope.capabilities = Data.capabilities;
 	console.log($scope.capabilities);
 	
-	// this dictionary is used to sort capabilities to be read
-	// at different time interval (e.g. a map will be read every 1 or 2 minutes)
-	// while the robot position will be read every 5 seconds
-	// entries are 2secs, 3secs, 5secs, 3 mins.
-	$scope.readTimingHash = {
-		2000:[],
-		3000:[],
-		5000:[],
-		180000:[]
-	}
-	
 	$scope.modal =  {"text":"","header":""};
 	
 	$scope.getNameFromURI = function (uri) {
@@ -249,40 +321,49 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		
 	}
 	
+	var counter = 0;
+	
 	angular.forEach($scope.capabilities,function(messageCapability) {
 		
 		capabilities = messageCapability["capabs"];
 		
 		angular.forEach(capabilities,function(capability) {
-			
+		
 			capability.class = "capability";
 			capability.topic = messageCapability.topic;
 			capability.msg = messageCapability.msg;
 			disable(capability);
-		
+	
 			capability.hasReadParameter = false;
-			
+		
 			capability["params"].sort(function(a, b) {
 
 				return a["p"].localeCompare(b["p"]);
-			
+		
 			});
 
 			angular.forEach(capability["params"],function(parameter) {
-				
+			
 				parameter.class = "parameter";
 				parameter.value = null;
 				disable(parameter);
-				
+			
 			});
-			
+		
 			if(capability.mode == "read") {
-				
-				capName = $scope.getNameFromURI(capability.type);
-				refreshTime = $scope.visualiserHash[capName]["refresh"];
-				$scope.readTimingHash[refreshTime].push({"topic":messageCapability.topic,"capability":capability});
-			}
 			
+				capName = $scope.getNameFromURI(capability.type);
+			
+				if($scope.visualiserHash[capName] != null) {
+				
+			
+					refreshTime = $scope.visualiserHash[capName]["refresh"];
+					$scope.readTimingHash[refreshTime].push({"topic":messageCapability.topic,"capability":capability});
+			
+				}
+		
+			}
+		
 		});
 		
 	});
@@ -380,11 +461,15 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		ret["type"] = "capability";
 
 		angular.forEach(statement.capability.params, function (parameter) {
+			
 			if(parameter.mode == "write") {
+				
 				paramName = $scope.getNameFromURI(parameter.p);
 				ret.fields.push(paramName);
 				ret[paramName] = parameter.value;
+			
 			}
+		
 		});
 		
 		return ret;
