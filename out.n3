@@ -1,7 +1,14 @@
+@prefix ns1: <http://data.open.ac.uk/kmi/ontoRob/property/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/ar_tag_counter_msgs/ArTagCounter> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    rdfs:label "ArTagCounter"@en ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/ARTag_counting> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/total;tags__LIST> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/ar_tag_counter_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/geometry_msgs/Accel> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "Accel"@en ;
@@ -453,6 +460,10 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/velocities__LIST> ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/trajectory_msgs> .
 
+<http://data.open.ac.uk/kmi/ontoRob/resource/capability/ARTag_counting> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
+    ns1:hasParamType "read"@en ;
+    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/total;tags__LIST> .
+
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Battery_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
     ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/charge> .
@@ -616,6 +627,8 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/temperature> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/time_ref> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/total;tags__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/twist__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
@@ -886,3 +899,4 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/theta>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/x>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/y> .
+
