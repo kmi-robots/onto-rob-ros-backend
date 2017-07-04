@@ -402,31 +402,36 @@ def execute():
 @crossdomain(origin='*')
 def read():
     try:
-        print "Received read"
-        q = json.loads(request.args.getlist("question")[0])
-        topic = q["topic"]
-        capability = q["capability"]
-        topic_uri = onto_server.get_ontorob_res_namespace().topic + q["topic"]
-        
-        # this can be done in the else, by improving the query
-        # in the get_params_from_msg method (making it retrievable from the capability)
-        q_res = onto_server.get_msg_and_pkg(topic_uri, capability)
-        pkg = q_res["pkg"]
-        msg = q_res["msg"]
+        qs = json.loads(request.args["question"])
 
-        parameters_to_read = onto_server.get_params_from_msg(msg)
-        print parameters_to_read
+	ret = {}
 
-        # reading contains the object
-        if topic in topic_dict.keys():
-            reading = read_from_topic(topic)
-        else:
-            reading = read_from_robot(topic, get_name_from_uri(pkg), get_name_from_uri(msg))
+	for q in qs:
+		topic = q["topic"]
+        	capability = q["capability"]
+        	topic_uri = onto_server.get_ontorob_res_namespace().topic + q["topic"]
+        	# this can be done in the else, by improving the query
+        	# in the get_params_from_msg method (making it retrievable from the capability)
+        	q_res = onto_server.get_msg_and_pkg(topic_uri, capability)
+        	pkg = q_res["pkg"]
+        	msg = q_res["msg"]
 
-        resp_object = ros_msg_2_dict(reading, parameters_to_read)
-	#print resp_object
-        resp = app.response_class(response=json.dumps(resp_object), status=200,mimetype="application/json")
+        	parameters_to_read = onto_server.get_params_from_msg(msg)
+        	#print parameters_to_read
 
+        	# reading contains the object
+        	if topic in topic_dict.keys():
+            		reading = read_from_topic(topic)
+        	else:
+            		reading = read_from_robot(topic, get_name_from_uri(pkg), get_name_from_uri(msg))
+
+        	ros_msg_dict = ros_msg_2_dict(reading, parameters_to_read)
+
+		key = capability + "/" + topic
+		ret[key] = ros_msg_dict
+
+        resp = app.response_class(response=json.dumps(ret), status=200,mimetype="application/json")
+ 
         return resp
     except Exception, e:
         print str(e)
