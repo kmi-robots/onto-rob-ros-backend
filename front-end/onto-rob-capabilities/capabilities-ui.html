@@ -26,7 +26,6 @@
 				<h3 class="text-center">Capability List</h3>
 				
 				<div ng-repeat="messageCapability in capabilities">
-					{{messageCapability.topic}}
 					<div ng-repeat="capability in messageCapability.capabs">
 						
 						<div ng-if="capability.mode == 'write'">
@@ -49,7 +48,7 @@
 										<div class="capability-parameter overflow rounded-7" ng-style="{background: parameter.backgroundColor}" ng-if="!parameter.disabled"> 
 										
 												<div class="capability-parameter-text col-md-10">
-													{{getNameFromURI(parameter.p)}}
+													{{getNameFromURI(parameter.p).replace("__LIST","")}}
 												</div>
 												<div class="col-md-2">
 													<button type="button" class="btn btn-danger" ng-click="addParameter(parameter,capability)" >add</button>

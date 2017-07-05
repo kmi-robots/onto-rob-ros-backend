@@ -1,4 +1,4 @@
-(msg|srv|act),package,(msg|srv|act)_name,[listOfCapabilities],(w|r|wr),[fields]
+(msg|srv|act),package,(msg|srv|act)_name,[listOfCapabilities],(w|r|wr),[fields],[description]
 msg,geometry_msgs,Accel,[Directional_Movement],w,[[linear.x; linear.y; linear.z; angular.x; angular.y; angular.z]]
 msg,geometry_msgs,AccelStamped,[Directional_Movement],w,[[accel.linear.x; accel.linear.y; accel.linear.z; accel.angular.x; accel.angular.y; accel.angular.z]]
 msg,geometry_msgs,AccelWithCovariance,[Directional_Movement],w,[[accel.linear.x; accel.linear.y; accel.linear.z; accel.angular.x; accel.angular.y; accel.angular.z]]
@@ -9,25 +9,25 @@ msg,geometry_msgs,TwistWithCovariance,[Directional_Movement],w,[[twist.linear.x;
 msg,geometry_msgs,TwistWithCovarianceStamped,[Directional_Movement],w,[[twist.twist.linear.x; twist.twist.linear.y; twist.twist.linear.z; twist.twist.angular.x; twist.twist.angular.y; twist.twist.angular.z]]
 msg,geometry_msgs,Pose,[Robot_position],r,[[position.x; position.y; position.z; orientation.x; orientation.y; orientation.z; orientation.w]; [position.x; position.y; position.z; orientation.x; orientation.y; orientation.z; orientation.w]]
 msg,geometry_msgs,Pose2D,[Robot_position],r,[[x; y; theta]; [x; y; theta]]
-msg,geometry_msgs,Pose,[Navigation_Movement],w,[[position.x; position.y; position.z; orientation.x; orientation.y; orientation.z; orientation.w]]
-msg,geometry_msgs,Pose2D,[Navigation_Movement],w,[[x; y; theta]]
-msg,geometry_msgs,PoseStamped,[Navigation_Movement],w,[[pose.position.x; pose.position.y; pose.position.z; pose.orientation.x; pose.orientation.y; pose.orientation.z; pose.orientation.w; header.frame_id]]
+msg,geometry_msgs,Pose,[Navigation],w,[[position.x; position.y; position.z; orientation.x; orientation.y; orientation.z; orientation.w]]
+msg,geometry_msgs,Pose2D,[Navigation],w,[[x; y; theta]]
+msg,geometry_msgs,PoseStamped,[Navigation],w,[[pose.position.x; pose.position.y; pose.position.z; pose.orientation.x; pose.orientation.y; pose.orientation.z; pose.orientation.w; header.frame_id]]
 msg,geometry_msgs,PoseWithCovariance,[Robot_position],r,[[pose.position.x; pose.position.y; pose.position.z; pose.orientation.x; pose.orientation.y; pose.orientation.z; pose.orientation.w]]
-msg,nav_msgs,Odometry,[Robot_position; Robot_speed],r,[[pose.pose.position.x; pose.pose.position.y; pose.pose.position.z; pose.pose.orientation.x; pose.pose.orientation.y; pose.pose.orientation.z; pose.pose.orientation.w]; [twist.twist.linear.x; twist.twist.linear.y; twist.twist.linear.z; twist.twist.angular.x; twist.twist.angular.y; twist.twist.angular.z]]
-msg,sensor_msgs,Imu,[Robot_position; Robot_speed],r,[[orientation.x; orientation.y; orientation.z; orientation.w]; [angular_velocity.x; angular_velocity.y; angular_velocity.z; linear_acceleration.x; linear_acceleration.y; linear_acceleration.z]]
+msg,nav_msgs,Odometry,[Odometry_based_Robot_position; Odometry_based_Robot_speed],r,[[pose.pose.position.x; pose.pose.position.y; pose.pose.position.z; pose.pose.orientation.x; pose.pose.orientation.y; pose.pose.orientation.z; pose.pose.orientation.w]; [twist.twist.linear.x; twist.twist.linear.y; twist.twist.linear.z; twist.twist.angular.x; twist.twist.angular.y; twist.twist.angular.z]]
+msg,sensor_msgs,Imu,[Imu_based_Robot_position; Imu_based_Robot_speed],r,[[orientation.x; orientation.y; orientation.z; orientation.w]; [angular_velocity.x; angular_velocity.y; angular_velocity.z; linear_acceleration.x; linear_acceleration.y; linear_acceleration.z]]
 msg,nav_msgs,GridCells,[Map_representation],,
 msg,nav_msgs,MapMetaData,[Map_representation],,
 msg,nav_msgs,OccupancyGrid,[Map_representation],r,[[data__LIST; info.resolution; info.width; info.height; info.origin.position.x; info.origin.position.y; info.origin.position.z; info.origin.orientation.x; info.origin.orientation.y; info.origin.orientation.z; info.origin.orientation.w]]
 srv,nav_msgs,GetMap,[Map_representation],,
 srv,nav_msgs,SetMap,[Map_representation],,
 act,nav_msgs,GetMap,[Map_representation],,
-msg,move_base_msgs,MoveBaseResult,[Navigation_Movement],,
-msg,move_base_msgs,MoveBaseActionResult,[Navigation_Movement],,
-msg,move_base_msgs,MoveBaseFeedback,[Navigation_Movement],,
-msg,move_base_msgs,MoveBaseActionFeedback,[Navigation_Movement],,
-msg,move_base_msgs,MoveBaseActionGoal,[Navigation_Movement],,
-msg,move_base_msgs,MoveBaseGoal,[Navigation_Movement],,
-msg,move_base_msgs,MoveBaseAction,[Navigation_Movement],,
+msg,move_base_msgs,MoveBaseResult,[Navigation],,
+msg,move_base_msgs,MoveBaseActionResult,[Navigation],,
+msg,move_base_msgs,MoveBaseFeedback,[Navigation],,
+msg,move_base_msgs,MoveBaseActionFeedback,[Navigation],,
+msg,move_base_msgs,MoveBaseActionGoal,[Navigation],,
+msg,move_base_msgs,MoveBaseGoal,[Navigation],,
+msg,move_base_msgs,MoveBaseAction,[Navigation],,
 msg,sensor_msgs,BatteryState,[Self_Sensing; Battery_Sensing],r,[[charge]; [charge]]
 msg,sensor_msgs,Illuminance,[Light_Sensing],r,[[illuminance]]
 msg,sensor_msgs,RelativeHumidity,[Humidity_Sensing],r,[[relative_humidity]]

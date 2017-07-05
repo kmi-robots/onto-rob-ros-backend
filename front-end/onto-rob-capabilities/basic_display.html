@@ -16,7 +16,7 @@
 		<div class="capability-parameter overflow rounded-7" ng-style="{background: parameter.backgroundColor}"> 
 		
 				<div class="capability-parameter-text col-md-5">
-					{{getNameFromURI(parameter.p)}}
+					{{getNameFromURI(parameter.p).replace("__LIST","")}}
 				</div>
 				<div class="col-md-5 param-value">
 					{{parameter.value}}

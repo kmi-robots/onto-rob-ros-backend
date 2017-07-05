@@ -178,7 +178,41 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		"Body_part_Movement":{
 			"display":"basic_display.html",
 			"refresh":3000
-		}		
+		},
+		"ARTag_counting":{
+			"display":"basic_display.html",
+			"refresh":3000
+		},
+		"Imu_based_Robot_speed":{
+			"display":"basic_display.html",
+			"refresh":3000
+		},
+		"Imu_based_Robot_speed":{
+			"display":"basic_display.html",
+			"refresh":3000
+		},
+		"Odometry_based_Robot_position":{
+			"display":"basic_display.html",
+			"refresh":3000
+		},
+		"Odometry_based_Robot_speed":{
+			"display":"basic_display.html",
+			"refresh":3000
+		},
+		"Vision"="",
+		
+	}
+	
+	$scope.capabilityDescriptions = {
+		"Navigation"="Can be used to give to the robot a point to reach in a three-dimensional space. It expects the position as a three coordinates point (position.x, position.y, position.z) and the orientation as a quaternion (orientation.x, orientation.y, orientation.z, orientation.w). It also requires to specify the reference frame (frame_id=map).",
+		"Odometry_based_Robot_speed":"It gives the current velocity of the robot. Provided as three linear velocities (linear.x, linear.y, linear.z) and three angular velocities (angular.x, angular.y, angular.z) with respect to the three main axes.",
+		"Odometry_based_Robot_position"="It gives information on where the robot is located in a three-dimensional space. It uses a three coordinates point (position.x, position.y, position.z) to specify the position and a quaternion (orientation.x, orientation.y, orientation.z, orientation.w) for the orientation. It is derived from the wheel movement of the robot.",
+		"Imu_based_Robot_position"="It gives information on the robot orientation in a three-dimensional space, specified as a quaternion (orientation.x, orientation.y, orientation.z, orientation.w). It is estimated from the Inertial Measurement Unit (IMU) measurements.",
+		"Imu_based_Robot_speed"="It gives the current angular velocity (angular.x, angular.y, angular.z) and linear acceleration (linear.x, linear.y, linear.z) of the robot. Both are provided with respect to the three main axes.",
+		"ARTag_counting"="It gives the current list of all the detected AR Tags (tags) and the total number of detetected tags (total).",
+		"Map_representation"="A representation of the current map used by the robot. It is defined as a discrete grid where each cell can be empty (white), occupied (black) or unknown (grey).",
+		"Depth_Sensing"="It provides the current mesaurement of the laser scanner, given as an array of distances detected by each ray (ranges).",
+		"Directional_Movement"="Can be used to set a specific velocity to the robot. Provided as three linear velocities (linear.x, linear.y, linear.z) and three angular velocities (angular.x, angular.y, angular.z) with respect to the three main axes, x, y, z."
 	}
 	
 	$scope.visualisersSettings = {}
@@ -335,7 +369,8 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			disable(capability);
 	
 			capability.hasReadParameter = false;
-		
+			capability.description = $scope.capabilityDescriptions[$scope.getNameFromURI(capability.type)];
+			
 			capability["params"].sort(function(a, b) {
 
 				return a["p"].localeCompare(b["p"]);
@@ -1195,7 +1230,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	
 	$scope.showDescription = function(capability) {
 		$scope.modal.header = $scope.getNameFromURI(capability.type);
-		$scope.modal.text = "";
+		$scope.modal.text = capability.description;
 		// $scope.modalText = capability.description;
 		//console.log("Showing description for " + capability.type);
 		
