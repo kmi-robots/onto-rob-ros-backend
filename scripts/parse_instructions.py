@@ -5,6 +5,8 @@ import collections
 import functools
 import uuid
 
+import json
+
 from move_base_msgs.msg import MoveBaseActionResult
 
 
@@ -18,9 +20,20 @@ reader_dict = {}
 global rate
 
 
+def extract_conditions(l, ret_list=[]):
+    for el in l:
+        if isinstance(el, dict):
+            for de in el:
+                if de == 'conditions':
+                    ret_list += el['conditions']
+                else:
+                    extract_conditions(el[de], ret_list)
+            return ret_list
+
+
 def filterd_flatten(l, flt):
     for el in l:
-        if isinstance(el, list) and not isinstance(el, basestring):
+        if (isinstance(el, list) or isinstance(el, dict)) and not isinstance(el, basestring):
             for sub in filterd_flatten(el, flt):
                 yield sub
         else:
@@ -82,7 +95,6 @@ def callback(msg, topic):
 
 
 def execute(instructions):
-    print instructions
     if not instructions:
         for p in publisher_list:
             p.unregister()
@@ -144,18 +156,13 @@ def send_command(input_d):
 
 
 def run_program(listing):
-    condition_flat_list = filterd_flatten(listing['instructions'], 'conditions')
-
+    condition_flat_list = extract_conditions(listing['instructions'])
     for i in condition_flat_list:
-        if i['type'] == 'if' or i['type'] == 'while':
-            for c in i['conditions']:
-                if 'topic' in c:
-                    attr = getattr(importlib.import_module(c['pkg'] + '.msg'), c['name'])
-                    if c['topic'] not in topic_list:
-                        subscriber_list.append(rospy.Subscriber(c['topic'], attr, callback, callback_args=c['topic']))
-                    topic_list[c['topic']].append([c['field'], c['id']])
-
-    print listing
+        if i['type'] == 'condition':
+            attr = getattr(importlib.import_module(i['pkg'] + '.msg'), i['name'])
+            if i['topic'] not in topic_list:
+                subscriber_list.append(rospy.Subscriber(i['topic'], attr, callback, callback_args=i['topic']))
+            topic_list[i['topic']].append([i['field'], i['id']])
     execute(listing['instructions'])
 
 
@@ -196,3 +203,10 @@ def stop_reading(uid):
 
 def reader(msg, topic):
     last_read[topic] = msg
+
+
+if __name__ == "__main__":
+    init()
+    # program = json.loads('{"instructions": [{"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 1}], "type": "while", "do": [{"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 2}, {"type": "logicOperator", "id": 3, "value": "and"}, {"name": "ArTagCounter", "val": "1", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "<", "type": "condition", "id": 4}], "else": [], "type": "if", "then": [{"capability": "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Directional_Movement", "angular.y": "0", "name": "Twist", "linear.z": "0", "fields": ["angular.x", "angular.y", "angular.z", "linear.x", "linear.y", "linear.z"], "topic": "/mobile_base/commands/velocity", "angular.x": "0", "angular.z": "0.5", "pkg": "geometry_msgs", "linear.y": "0", "type": "capability", "linear.x": "0"}]}]}]}')
+    program = json.loads('{"instructions": [{"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 1}], "type": "while", "do": [{"conditions": [{"name": "ArTagCounter", "val": "1", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "!=", "type": "condition", "id": 2}], "else": [], "type": "if", "then": [{"capability": "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation", "pose.orientation.w": "1", "name": "PoseStamped", "pose.position.x": "1.5", "fields": ["header.frame_id", "pose.orientation.w", "pose.orientation.x", "pose.orientation.y", "pose.orientation.z", "pose.position.x", "pose.position.y", "pose.position.z"], "pose.orientation.y": "0", "pose.orientation.x": "0", "topic": "/move_base_simple/goal", "header.frame_id": "map", "pkg": "geometry_msgs", "pose.position.y": "-11", "pose.orientation.z": "0", "type": "capability", "pose.position.z": "0"}]}]}]}')
+    run_program(program)
