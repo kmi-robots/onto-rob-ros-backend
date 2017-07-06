@@ -130,10 +130,10 @@ class OntoRobServer:
             
             # TODO: if you remove this if, move_base_simple, which has a PoseStamped msg 
             # therefore evokes a Navigation capab, won't appear in the 
-            #if len(component_obj['capabs']) != 0:
+            # if len(component_obj['capabs']) != 0:
             response_array.append(component_obj)
        
-        #response_array = []
+        # response_array = []
         return response_array
         
     def build_query(self, msg_list):
@@ -147,7 +147,6 @@ class OntoRobServer:
     
         query = "SELECT ?capa ?param ?parType WHERE { " + values + " ?res <"+self.__ONTOROB_PROP.evokes+"> ?capa . ?res <"+self.__ONTOROB_PROP.hasField +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParameter +"> ?param . ?capa <"+self.__ONTOROB_PROP.hasParamType+"> ?parType .}";
         return query
-
 
     def fill_msg_and_pkg(self, instruction):
         print "Filling!"
@@ -307,6 +306,7 @@ app = Flask(__name__)
 onto_server = OntoRobServer()
 topic_dict = {}
 
+
 @app.route("/")
 def index():
     return "OntoRobServer ready for listening"
@@ -328,8 +328,7 @@ def ask_nodes(msg):
     for row in qres:
         result += "%s <br/>" % row
     return result, 200
-    
-    
+
 
 @app.route("/capability_temp", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
@@ -394,21 +393,23 @@ def ask_capabilities():
     print json.dumps(response_array)
     return json.dumps(response_array)
 
+
 @app.route('/execute', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def execute():
     print "Received execute"
     program = json.loads(request.data)["program"]
-
     onto_server.update_program_with_msg_and_pkg(program)
+
+    print json.dumps(program)
     execute_on_robot(program)
-    return "OK",200
+    return "OK", 200
+
 
 @app.route('/read', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def read():
     try:
-        print "Read received"
         qs = json.loads(request.args["question"])
         ret = {}
 
@@ -423,7 +424,7 @@ def read():
             msg = q_res["msg"]
 
             parameters_to_read = onto_server.get_params_from_msg(msg)
-            #print parameters_to_read
+            # print parameters_to_read
 
             # reading contains the object
             if topic in topic_dict.keys():
@@ -440,7 +441,8 @@ def read():
         return resp
     except Exception, e:
         print str(e)
-        return "D'OH",500
+        return "D'OH", 500
+
 
 @app.route('/trigger', methods=['GET', 'POST', 'OPTIONS'])
 @crossdomain(origin='*')
@@ -464,7 +466,7 @@ def trigger_capability():
     robot_input['fields'] = fields
     
     # get message name from capability+parameters
-    #msg = onto_server.get_message_name(req_capability['type'], req_capability['parameters'])
+    # msg = onto_server.get_message_name(req_capability['type'], req_capability['parameters'])
 
     # bypassing the KB. All the infos come from the application. We'll see later
     # ROS msgs and pkgs system is alwats pkg/msgName, so 0 a 1 are ok indexes for all the cases
@@ -472,11 +474,11 @@ def trigger_capability():
     robot_input['name'] = msg.split("/")[1]
     
     # get pkg
-    #pkg = onto_server.get_package(msg)
+    # pkg = onto_server.get_package(msg)
     robot_input['pkg'] = msg.split("/")[0]
     
     # get topic from Msg
-    #topic = onto_server.get_topic_from_msg(msg)
+    # topic = onto_server.get_topic_from_msg(msg)
     topic = req_capability["topic"]
 
     robot_input['topic'] = topic
@@ -492,7 +494,7 @@ def get_nodes():
         # initialise RosNode object
         node = RosNode(nodename)
         msgs_topic_collection = update_msgs_collection(node.get_capability_msg(), msgs_topic_collection)
-        #msgs_topic_collection.extend(node.get_capability_msg())
+        # msgs_topic_collection.extend(node.get_capability_msg())
 
     # this transform every set in a list in the field 'nodes'
     for item in msgs_topic_collection:
@@ -560,8 +562,7 @@ def ros_msg_2_dict(ros_msg_obj, parameters_to_read):
     return ret
 
 if __name__ == "__main__":
-  
     print "Starting server"
     parse_instructions.init()
-    #app.run(debug=True, use_reloader=True, threaded=True, host='0.0.0.0')
+    # app.run(debug=True, use_reloader=True, threaded=True, host='0.0.0.0')
     app.run(threaded=True, host='0.0.0.0')
