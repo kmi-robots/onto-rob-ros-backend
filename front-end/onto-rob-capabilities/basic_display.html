@@ -1,17 +1,19 @@
 <div class="overflow">
-	<div class="block-text col-md-6">
+	<div class="block-text col-md-7">
 		{{getNameFromURI(capability.type)}} <!-- {{messageCapability.topic}} -->
+	</div>
+	<div class="col-md-1">
+			<i class="fa fa-arrow-down" aria-hidden="true" ng-click="showParameters(capability)" ng-if="!capability.showParameters"></i>
+			<i class="fa fa-arrow-up" aria-hidden="true" ng-click="hideParameters(capability)" ng-if="capability.showParameters"></i>
 	</div>
 	<div class="col-md-4">
 		<button type="button" class="btn btn-success" ng-click="showDescription(capability)" data-toggle="modal" data-target="#myModal">read description</button>
 	</div>
-	<div class="col-md-2">
-	
-	</div>
+
 </div>
 
 <div class="capability-parameters overflow">
-	<div ng-repeat="parameter in capability.params">
+	<div ng-repeat="parameter in capability.params" ng-if="capability.showParameters">
 	
 		<div class="capability-parameter overflow rounded-7" ng-style="{background: parameter.backgroundColor}"> 
 		
@@ -23,7 +25,8 @@
 				</div>
 				<div class="col-md-2">
 					<button type="button" class="btn btn-danger" ng-click="addParameter(parameter,capability)" ng-if="!parameter.disabled">add</button>
-				</div>			
+				</div>	
+						
 		</div>
 	
 	</div>

@@ -34,29 +34,14 @@
 									<div class="block-text col-md-6">
 										{{getNameFromURI(capability.type)}} <!-- {{capability.topic}}, {{capability.msg}} -->
 									</div>
-									<div class="col-md-4">
-										<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" ng-click="showDescription(capability)">read description</button>
-									</div>
 									<div class="col-md-2">
 										<button type="button" class="btn btn-danger" ng-click="addCapability(capability)" ng-if="!capability.disabled">add</button>
 									</div>
-								</div>
-							
-								<div class="capability-parameters overflow">
-									<div ng-repeat="parameter in capability.params">
-									
-										<div class="capability-parameter overflow rounded-7" ng-style="{background: parameter.backgroundColor}" ng-if="!parameter.disabled"> 
-										
-												<div class="capability-parameter-text col-md-10">
-													{{getNameFromURI(parameter.p).replace("__LIST","")}}
-												</div>
-												<div class="col-md-2">
-													<button type="button" class="btn btn-danger" ng-click="addParameter(parameter,capability)" >add</button>
-												</div>			
-										</div>
-									
+									<div class="col-md-4">
+										<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" ng-click="showDescription(capability)">read description</button>
 									</div>
 								</div>
+							
 							</div>
 						</div>
 						

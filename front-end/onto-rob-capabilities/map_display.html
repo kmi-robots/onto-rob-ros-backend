@@ -1,17 +1,18 @@
 <div class="overflow">
-	<div class="block-text col-md-6">
+	<div class="block-text col-md-7">
 		{{getNameFromURI(capability.type)}} <!-- {{messageCapability.topic}} -->
+	</div>
+	<div class="col-md-1">
+			<i class="fa fa-arrow-down" aria-hidden="true" ng-click="showParameters(capability)" ng-if="!capability.showParameters"></i>
+			<i class="fa fa-arrow-up" aria-hidden="true" ng-click="hideParameters(capability)" ng-if="capability.showParameters"></i>
 	</div>
 	<div class="col-md-4">
 		<button type="button" class="btn btn-success" ng-click="showDescription(capability)" data-toggle="modal" data-target="#myModal">read description</button>
 	</div>
-	<div class="col-md-2">
-	
-	</div>
 </div>
 
 <div class="capability-parameters overflow">
-	<div class="" style="overflow: scroll; width:450px; height:200px;">
+	<div class="" style="overflow: scroll; width:450px; height:200px;" >
 		<canvas id="map{{slashesToHyphens(messageCapability.topic)}}" ng-mousemove="getMousePos($event,capability.type,messageCapability.topic)">
 		</canvas>
 	</div>
