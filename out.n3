@@ -418,6 +418,12 @@
     ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Internal_Representation_Shape> ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/shape_msgs> .
 
+<http://data.open.ac.uk/kmi/ontoRob/resource/std_msgs/Empty> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    rdfs:label "Empty"@en ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Trigger> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/std_msgs> .
+
 <http://data.open.ac.uk/kmi/ontoRob/resource/stereo_msgs/DisparityImage> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "DisparityImage"@en ;
     ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Vision> ;
@@ -537,6 +543,12 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Time_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
     ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/time_ref> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/capability/Trigger> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
+    ns1:hasParamType "write"@en ;
+    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/accel.accel.angular.x> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 

@@ -126,7 +126,10 @@ class OntoRobServer:
                         ix = component_obj['capabs'].index(c)
                         
                 component_obj['capabs'][ix]['mode'] = row.parType
-                component_obj['capabs'][ix]['params'].append({"p" : row.param, "mode" : row.parType})
+
+                # TODO manage empty messages
+                if not row.param.endswith("/"):
+                    component_obj['capabs'][ix]['params'].append({"p" : row.param, "mode" : row.parType})
             
             # TODO: if you remove this if, move_base_simple, which has a PoseStamped msg 
             # therefore evokes a Navigation capab, won't appear in the 
