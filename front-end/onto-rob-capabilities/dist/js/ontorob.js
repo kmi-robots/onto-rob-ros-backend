@@ -50,6 +50,8 @@ function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 	$scope.errorUrl = "error.html";
 	$scope.successUrl = "capabilities-ui.html";
 
+	// TODO automatically filtered topics
+	// this should be done better automatically
 	$scope.topicToFilter = [
 		"/move_base/global_costmap/obstacle_layer/clearing_endpoints",
 		"/move_base/local_costmap/obstacle_layer/clearing_endpoints",
@@ -86,16 +88,12 @@ function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 			}
 			else {
 				
-				Data.capabilities.push(messageCapability);		
-				//Data.capabilities = capabilities.splice(capabilities.indexOf(messageCapability),1);
+				Data.capabilities.push(messageCapability);
 				
 			}
 			
 		});
 				
-		//Data.capabilities = response.data; 
-		//console.log("I should redirect now");
-		//console.log(Data.capabilities);
 		$state.go("capabilities-ui");	
 	
 	}, function errorCallback(response) {
@@ -154,6 +152,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		"do":"#e698f9"
 	}
 	
+	// TODO the type of visualiser might be in the KB as well
 	$scope.visualiserHash = {
 		"Map_representation":{
 			"display":"map_display.html",
@@ -183,7 +182,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			"display":"basic_display.html",
 			"refresh":3000
 		},
-		"Imu_based_Robot_speed":{
+		"Imu_based_Robot_position":{
 			"display":"basic_display.html",
 			"refresh":3000
 		},
@@ -199,20 +198,22 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			"display":"basic_display.html",
 			"refresh":3000
 		},
-		"Vision"="",
 		
 	}
 	
+	// TODO hardcoded capability descriptions
+	// this should be in the KB
 	$scope.capabilityDescriptions = {
-		"Navigation"="Can be used to give to the robot a point to reach in a three-dimensional space. It expects the position as a three coordinates point (position.x, position.y, position.z) and the orientation as a quaternion (orientation.x, orientation.y, orientation.z, orientation.w). It also requires to specify the reference frame (frame_id=map).",
+		"Navigation":"Can be used to give to the robot a point to reach in a three-dimensional space. It expects the position as a three coordinates point (position.x, position.y, position.z) and the orientation as a quaternion (orientation.x, orientation.y, orientation.z, orientation.w). It also requires to specify the reference frame (frame_id:map).",
 		"Odometry_based_Robot_speed":"It gives the current velocity of the robot. Provided as three linear velocities (linear.x, linear.y, linear.z) and three angular velocities (angular.x, angular.y, angular.z) with respect to the three main axes.",
-		"Odometry_based_Robot_position"="It gives information on where the robot is located in a three-dimensional space. It uses a three coordinates point (position.x, position.y, position.z) to specify the position and a quaternion (orientation.x, orientation.y, orientation.z, orientation.w) for the orientation. It is derived from the wheel movement of the robot.",
-		"Imu_based_Robot_position"="It gives information on the robot orientation in a three-dimensional space, specified as a quaternion (orientation.x, orientation.y, orientation.z, orientation.w). It is estimated from the Inertial Measurement Unit (IMU) measurements.",
-		"Imu_based_Robot_speed"="It gives the current angular velocity (angular.x, angular.y, angular.z) and linear acceleration (linear.x, linear.y, linear.z) of the robot. Both are provided with respect to the three main axes.",
-		"ARTag_counting"="It gives the current list of all the detected AR Tags (tags) and the total number of detetected tags (total).",
-		"Map_representation"="A representation of the current map used by the robot. It is defined as a discrete grid where each cell can be empty (white), occupied (black) or unknown (grey).",
-		"Depth_Sensing"="It provides the current mesaurement of the laser scanner, given as an array of distances detected by each ray (ranges).",
-		"Directional_Movement"="Can be used to set a specific velocity to the robot. Provided as three linear velocities (linear.x, linear.y, linear.z) and three angular velocities (angular.x, angular.y, angular.z) with respect to the three main axes, x, y, z."
+		"Odometry_based_Robot_position":"It gives information on where the robot is located in a three-dimensional space. It uses a three coordinates point (position.x, position.y, position.z) to specify the position and a quaternion (orientation.x, orientation.y, orientation.z, orientation.w) for the orientation. It is derived from the wheel movement of the robot.",
+		"Imu_based_Robot_position":"It gives information on the robot orientation in a three-dimensional space, specified as a quaternion (orientation.x, orientation.y, orientation.z, orientation.w). It is estimated from the Inertial Measurement Unit (IMU) measurements.",
+		"Imu_based_Robot_speed":"It gives the current angular velocity (angular.x, angular.y, angular.z) and linear acceleration (linear.x, linear.y, linear.z) of the robot. Both are provided with respect to the three main axes.",
+		"ARTag_counting":"It gives the current list of all the detected AR Tags (tags) and the total number of detetected tags (total).",
+		"Map_representation":"A representation of the current map used by the robot. It is defined as a discrete grid where each cell can be empty (white), occupied (black) or unknown (grey).",
+		"Depth_Sensing":"It provides the current mesaurement of the laser scanner, given as an array of distances detected by each ray (ranges).",
+		"Directional_Movement":"Can be used to set a specific velocity to the robot. Provided as three linear velocities (linear.x, linear.y, linear.z) and three angular velocities (angular.x, angular.y, angular.z) with respect to the three main axes, x, y, z.",
+		"Vision":"Video stream of the robot camera."
 	}
 	
 	$scope.visualisersSettings = {}
@@ -225,6 +226,8 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	// at different time interval (e.g. a map will be read every 1 or 2 minutes)
 	// while the robot position will be read every 5 seconds
 	// entries are 2secs, 3secs, 5secs, 3 mins.
+	// TODO I might remove this mechanism. Not sure I'll have
+	// to update the map, for example (180000)
 	$scope.readTimingHash = {
 		2000:[],
 		3000:[],
@@ -248,9 +251,6 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			}
 			
 		});
-
-		//console.log("toRequest");
-		//console.log(toRequest);
 
 		$http({
 			
@@ -369,7 +369,10 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			disable(capability);
 	
 			capability.hasReadParameter = false;
+			
+			// TODO part of the hardcoding of the descriptions
 			capability.description = $scope.capabilityDescriptions[$scope.getNameFromURI(capability.type)];
+			capability.showParameters = false;
 			
 			capability["params"].sort(function(a, b) {
 
@@ -826,6 +829,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			
 		});
 		
+		console.log(clickedBlock.class);
 		disableAllBut($scope.disablingHash[clickedBlock.class]);
 	}
 	
@@ -1229,10 +1233,9 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	}
 	
 	$scope.showDescription = function(capability) {
+		
 		$scope.modal.header = $scope.getNameFromURI(capability.type);
 		$scope.modal.text = capability.description;
-		// $scope.modalText = capability.description;
-		//console.log("Showing description for " + capability.type);
 		
 	}
 	
@@ -1297,6 +1300,18 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 
 	$scope.slashesToHyphens = function (string) {
 		return string.replace(/\//g , "-");
+	}
+
+	$scope.showParameters = function (capability) {
+		
+		capability.showParameters = true;
+		
+	}
+	
+	$scope.hideParameters = function (capability) {
+		
+		capability.showParameters = false;
+		
 	}
 
 }
