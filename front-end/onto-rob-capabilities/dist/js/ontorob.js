@@ -40,6 +40,10 @@ function dataService () {
 	//this.ip = "http://137.108.122.193:"+this.serverPort+"/";
 	//this.streamIp = "http://137.108.122.193:"+this.streamPort+"/";
 	
+	// ardrone laptop on eduroam
+	//this.ip = "http://192.168.1.3:"+this.serverPort+"/";
+	//this.streamIp = "http://192.168.1.3:"+this.streamPort+"/";
+	
 	//this.ip = "http://192.168.0.5:"+this.serverPort+"/";
 	//this.streamIp = "http://192.168.0.5:"+this.streamPort+"/";
 	
@@ -67,7 +71,19 @@ function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 		"/move_base/local_costmap/costmap",
 		"/move_base/global_costmap/costmap",
 		"/camera/rgb/image_raw/compressedDepth",
-		"/joint_states"
+		"/joint_states",
+		"/ardrone/front/image_raw/compressed",
+		"/ardrone/image_raw/compressedDepth",
+		"/ardrone/front/image_raw/compressedDepth",
+		"/ardrone/bottom/image_raw/compressedDepth",
+		"/ardrone/image_raw/compressed",
+		"/ardrone/bottom/image_raw",
+		"/ardrone/bottom/image_raw/compressed",
+		"/ardrone/front/image_raw",
+		"/kobuki_safety_controller/reset",
+		"/kobuki_safety_controller/disable",
+		"/kobuki_safety_controller/enable",
+		"/mobile_base/commands/reset_odometry"
 	]
 
 	$http({
@@ -198,6 +214,10 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			"display":"basic_display.html",
 			"refresh":3000
 		},
+		"Trigger":{
+			"display":"basic_display.html",
+			"refresh":3000
+		}
 		
 	}
 	
@@ -1277,7 +1297,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		return imgData;
 	}
 
-	$scope.getMousePos = function ($event,cap,topic) {
+	$scope.getMousePos = function ($event, cap, topic) {
 
 		key = cap+"/"+topic;
 		
@@ -1288,9 +1308,10 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	  	  	let rect = $event.target.getBoundingClientRect(),
 	        x = $event.clientX - rect.left,
 	        y = $event.clientY - rect.top;
-    	
-			finalx = (x - curSettings["info.width"]/2)*curSettings["info.resolution"];
-			finaly = (y - curSettings["info.height"]/2)*curSettings["info.resolution"];
+    		console.log(curSettings["info.origin.position.x"]);
+			console.log(curSettings["info.origin.position.y"]);
+			finalx = (x - curSettings["info.width"]/2+curSettings["info.origin.position.x"])*curSettings["info.resolution"];
+			finaly = (y - curSettings["info.height"]/2+curSettings["info.origin.position.y"])*curSettings["info.resolution"];
 		
 			curSettings["mouse.x"] = finalx;
 			curSettings["mouse.y"] = finaly;
