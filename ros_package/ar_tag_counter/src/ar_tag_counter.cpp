@@ -14,7 +14,7 @@ private:
     ros::Publisher countPub;
     ros::Timer resetTimer;
     ros::ServiceServer resetService;
-    int arTagNumber, totalTags;
+    int arTagNumber, totalTags, lastTag;
     bool withTimer;
     double resetTime;
     std::vector<int> spottedTags;
@@ -29,9 +29,10 @@ public:
 bool ROSnode::Prepare() {
     Handle.param("/ar_tag_number", arTagNumber, 9);
     Handle.param("/use_timer", withTimer, true);
-    Handle.param("/reset_time", resetTime, 120.0);
+    Handle.param("/reset_time", resetTime, 15.0);
     spottedTags = std::vector<int>(arTagNumber, 0);
     totalTags = 0;
+    lastTag = -1;
     tagSub = Handle.subscribe("ar_pose_marker", 10, &ROSnode::tagCallback, this);
     countPub = Handle.advertise<ar_tag_counter_msgs::ArTagCounter>("/tag_count", 10);
     resetService = Handle.advertiseService("/reset", &ROSnode::resetServiceCallback, this);
@@ -43,11 +44,13 @@ bool ROSnode::Prepare() {
 void ROSnode::resetTimerCallback(const ros::TimerEvent&) {
     ROS_INFO("Resetting tag count via timer");
     spottedTags.assign(arTagNumber, 0);
+    totalTags = std::accumulate(spottedTags.begin(), spottedTags.end(), 0);
 }
 
 bool ROSnode::resetServiceCallback(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res) {
     ROS_INFO("Resetting tag count via service");
     spottedTags.assign(arTagNumber, 0);
+    totalTags = std::accumulate(spottedTags.begin(), spottedTags.end(), 0);
     return true;
 }
 
@@ -58,6 +61,7 @@ void ROSnode::tagCallback(const ar_track_alvar_msgs::AlvarMarkers::ConstPtr& msg
             spottedTags[mk.id] = 1;
         }
         totalTags = std::accumulate(spottedTags.begin(), spottedTags.end(), 0);
+        lastTag = msg->markers.begin()->id;
     }
     
 }
@@ -70,6 +74,7 @@ void ROSnode::RunPeriodically() {
         ar_tag_counter_msgs::ArTagCounter msg;
         msg.tags = spottedTags;
         msg.total = totalTags;
+        msg.last = lastTag;
         countPub.publish(msg);
         ros::spinOnce();
         r.sleep();
