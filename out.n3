@@ -7,7 +7,8 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/ar_tag_counter_msgs/ArTagCounter> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "ArTagCounter"@en ;
     ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/ARTag_counting> ;
-    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/tags__LIST>,
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/last>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/tags__LIST>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/total> ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/ar_tag_counter_msgs> .
 
@@ -469,7 +470,8 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/ARTag_counting> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
-    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/tags__LIST>,
+    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/last>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/tags__LIST>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/total> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Battery_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
@@ -613,6 +615,8 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/intensity> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/joint_names__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/last> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/latitude> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 

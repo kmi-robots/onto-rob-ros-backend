@@ -20,15 +20,34 @@ reader_dict = {}
 global rate
 
 
-def extract_conditions(l, ret_list=[]):
-    for el in l:
-        if isinstance(el, dict):
-            for de in el:
-                if de == 'conditions':
-                    ret_list += el['conditions']
-                else:
-                    extract_conditions(el[de], ret_list)
-            return ret_list
+def extract_conditions(l):
+    ret_list = []
+    if isinstance(l, dict) or isinstance(l, list):
+        for el in l:
+            if isinstance(el, dict):
+                for de in el:
+                    if de == 'conditions':
+                        ret_list = ret_list + el['conditions']
+                    else:
+                        ret_list = ret_list + extract_conditions(el[de])
+                return ret_list
+    else:
+        return ret_list
+
+
+def get_conditions(instructions, conditions):
+    if isinstance(instructions, dict):
+        for t in instructions.keys():
+            if t == "conditions":
+                conditions.extend(instructions["conditions"])
+            else:
+                get_conditions(instructions[t], conditions)
+
+    elif isinstance(instructions, list):
+        for ins in instructions:
+            get_conditions(ins, conditions)
+    else:
+        return
 
 
 def filterd_flatten(l, flt):
@@ -51,7 +70,9 @@ def manage_while(ist):
             cond_to_test += not_str + str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
         elif cond['type'] == 'logicOperator':
             cond_to_test += str(cond['value']) + ' '
+    print cond_to_test
     result = eval(cond_to_test)
+    print result
 
     while result:
         execute(ist['do'])
@@ -62,7 +83,9 @@ def manage_while(ist):
                 cond_to_test += not_str + str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
             elif cond['type'] == 'logicOperator':
                 cond_to_test += str(cond['value']) + ' '
+        print cond_to_test
         result = eval(cond_to_test)
+        print result
 
 
 def manage_if(ist):
@@ -156,7 +179,10 @@ def send_command(input_d):
 
 
 def run_program(listing):
-    condition_flat_list = extract_conditions(listing['instructions'])
+    # condition_flat_list = extract_conditions(listing['instructions'])
+    condition_flat_list = []
+    get_conditions(listing['instructions'], condition_flat_list)
+    print condition_flat_list
     for i in condition_flat_list:
         if i['type'] == 'condition':
             attr = getattr(importlib.import_module(i['pkg'] + '.msg'), i['name'])
@@ -205,8 +231,9 @@ def reader(msg, topic):
     last_read[topic] = msg
 
 
-if __name__ == "__main__":
-    init()
-    # program = json.loads('{"instructions": [{"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 1}], "type": "while", "do": [{"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 2}, {"type": "logicOperator", "id": 3, "value": "and"}, {"name": "ArTagCounter", "val": "1", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "<", "type": "condition", "id": 4}], "else": [], "type": "if", "then": [{"capability": "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Directional_Movement", "angular.y": "0", "name": "Twist", "linear.z": "0", "fields": ["angular.x", "angular.y", "angular.z", "linear.x", "linear.y", "linear.z"], "topic": "/mobile_base/commands/velocity", "angular.x": "0", "angular.z": "0.5", "pkg": "geometry_msgs", "linear.y": "0", "type": "capability", "linear.x": "0"}]}]}]}')
-    program = json.loads('{"instructions": [{"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 1}], "type": "while", "do": [{"conditions": [{"name": "ArTagCounter", "val": "1", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "!=", "type": "condition", "id": 2}], "else": [], "type": "if", "then": [{"capability": "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation", "pose.orientation.w": "1", "name": "PoseStamped", "pose.position.x": "1.5", "fields": ["header.frame_id", "pose.orientation.w", "pose.orientation.x", "pose.orientation.y", "pose.orientation.z", "pose.position.x", "pose.position.y", "pose.position.z"], "pose.orientation.y": "0", "pose.orientation.x": "0", "topic": "/move_base_simple/goal", "header.frame_id": "map", "pkg": "geometry_msgs", "pose.position.y": "-11", "pose.orientation.z": "0", "type": "capability", "pose.position.z": "0"}]}]}]}')
-    run_program(program)
+# if __name__ == "__main__":
+#     init()
+#     program = json.loads('{"instructions": [{"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 1}], "type": "while", "do": [{"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 2}, {"type": "logicOperator", "id": 3, "value": "and"}, {"name": "ArTagCounter", "val": "1", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "<", "type": "condition", "id": 4}], "else": [], "type": "if", "then": [{"capability": "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Directional_Movement", "angular.y": "0", "name": "Twist", "linear.z": "0", "fields": ["angular.x", "angular.y", "angular.z", "linear.x", "linear.y", "linear.z"], "topic": "/mobile_base/commands/velocity", "angular.x": "0", "angular.z": "0.5", "pkg": "geometry_msgs", "linear.y": "0", "type": "capability", "linear.x": "0"}]}]}]}')
+#     # program = json.loads('{"instructions": [{"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 1}], "type": "while", "do": [{"conditions": [{"name": "ArTagCounter", "val": "1", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "!=", "type": "condition", "id": 2}], "else": [], "type": "if", "then": [{"capability": "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation", "pose.orientation.w": "1", "name": "PoseStamped", "pose.position.x": "1.5", "fields": ["header.frame_id", "pose.orientation.w", "pose.orientation.x", "pose.orientation.y", "pose.orientation.z", "pose.position.x", "pose.position.y", "pose.position.z"], "pose.orientation.y": "0", "pose.orientation.x": "0", "topic": "/move_base_simple/goal", "header.frame_id": "map", "pkg": "geometry_msgs", "pose.position.y": "-11", "pose.orientation.z": "0", "type": "capability", "pose.position.z": "0"}]}]}]}')
+#     # program = json.loads('{"instructions": [{"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 1}], "else": [], "type": "if", "then": [{"capability": "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation", "pose.orientation.w": "1", "name": "PoseStamped", "pose.position.x": "13.8", "fields": ["header.frame_id", "pose.orientation.w", "pose.orientation.x", "pose.orientation.y", "pose.orientation.z", "pose.position.x", "pose.position.y", "pose.position.z"], "pose.orientation.y": "0", "pose.orientation.x": "0", "topic": "/move_base_simple/goal", "header.frame_id": "map", "pkg": "geometry_msgs", "pose.position.y": "5.5", "pose.orientation.z": "0", "type": "capability", "pose.position.z": "0"}, {"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 2}], "else": [], "type": "if", "then": [{"capability": "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation", "pose.orientation.w": "1", "name": "PoseStamped", "pose.position.x": "14.2", "fields": ["header.frame_id", "pose.orientation.w", "pose.orientation.x", "pose.orientation.y", "pose.orientation.z", "pose.position.x", "pose.position.y", "pose.position.z"], "pose.orientation.y": "0", "pose.orientation.x": "0", "topic": "/move_base_simple/goal", "header.frame_id": "map", "pkg": "geometry_msgs", "pose.position.y": "1.78", "pose.orientation.z": "0", "type": "capability", "pose.position.z": "0"}, {"conditions": [{"name": "ArTagCounter", "val": "0", "not": false, "topic": "/tag_count", "field": "total", "pkg": "ar_tag_counter_msgs", "operator": "==", "type": "condition", "id": 3}], "else": [], "type": "if", "then": [{"capability": "http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation", "pose.orientation.w": "1", "name": "PoseStamped", "pose.position.x": "13.4", "fields": ["header.frame_id", "pose.orientation.w", "pose.orientation.x", "pose.orientation.y", "pose.orientation.z", "pose.position.x", "pose.position.y", "pose.position.z"], "pose.orientation.y": "0", "pose.orientation.x": "0", "topic": "/move_base_simple/goal", "header.frame_id": "map", "pkg": "geometry_msgs", "pose.position.y": "-2.31", "pose.orientation.z": "0", "type": "capability", "pose.position.z": "0"}]}]}]}]}')
+#     run_program(program)

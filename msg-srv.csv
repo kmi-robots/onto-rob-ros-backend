@@ -1,4 +1,4 @@
-(msg|srv|act),package,(msg|srv|act)_name,[listOfCapabilities],(w|r|wr),[fields],[description]
+(msg|srv|act),package,(msg|srv|act)_name,[listOfCapabilities],(w|r|wr),[fields]
 msg,geometry_msgs,Accel,[Directional_Movement],w,[[linear.x; linear.y; linear.z; angular.x; angular.y; angular.z]]
 msg,geometry_msgs,AccelStamped,[Directional_Movement],w,[[accel.linear.x; accel.linear.y; accel.linear.z; accel.angular.x; accel.angular.y; accel.angular.z]]
 msg,geometry_msgs,AccelWithCovariance,[Directional_Movement],w,[[accel.linear.x; accel.linear.y; accel.linear.z; accel.angular.x; accel.angular.y; accel.angular.z]]
@@ -61,5 +61,5 @@ msg,shape_msgs,Mesh,[Internal_Representation_Shape],,
 msg,shape_msgs,MeshTriangle,[Internal_Representation_Shape],,
 msg,shape_msgs,Plane,[Internal_Representation_Shape],,
 msg,shape_msgs,SolidPrimitive,[Internal_Representation_Shape],,
-msg,ar_tag_counter_msgs,ArTagCounter,[ARTag_counting],r,[[total; tags__LIST]]
+msg,ar_tag_counter_msgs,ArTagCounter,[ARTag_counting],r,[[total; tags__LIST; last]]
 msg,std_msgs,Empty,[Trigger],w,[[]]
