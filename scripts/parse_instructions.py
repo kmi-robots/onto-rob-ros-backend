@@ -70,9 +70,7 @@ def manage_while(ist):
             cond_to_test += not_str + str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
         elif cond['type'] == 'logicOperator':
             cond_to_test += str(cond['value']) + ' '
-    print cond_to_test
     result = eval(cond_to_test)
-    print result
 
     while result:
         execute(ist['do'])
@@ -83,9 +81,7 @@ def manage_while(ist):
                 cond_to_test += not_str + str(last_value[cond['id']]) + str(cond['operator']) + str(cond['val']) + ' '
             elif cond['type'] == 'logicOperator':
                 cond_to_test += str(cond['value']) + ' '
-        print cond_to_test
         result = eval(cond_to_test)
-        print result
 
 
 def manage_if(ist):
@@ -113,6 +109,7 @@ def manage_repeat(ist):
 
 
 def callback(msg, topic):
+    print msg
     for t in topic_list[topic]:
         last_value[t[1]] = rgetattr(msg, t[0])
 
@@ -133,6 +130,8 @@ def execute(instructions):
             manage_repeat(ist)
         if ist['type'] == 'capability':
             send_command(ist)
+        if ist['type'] == "noop":
+            rate.sleep()
 
 
 def rsetattr(obj, attr, val):
