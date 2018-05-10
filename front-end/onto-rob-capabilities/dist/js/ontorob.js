@@ -31,8 +31,8 @@ function dataService () {
 	this.streamPort = 8080;
 	
 	// gianluca's laptop on eduroam
-	this.ip = "http://137.108.114.0:"+this.serverPort+"/";
-	this.streamIp = "http://137.108.114.0:"+this.streamPort+"/";
+	// this.ip = "http://137.108.114.0:"+this.serverPort+"/";
+	// this.streamIp = "http://137.108.114.0:"+this.streamPort+"/";
 
 	//this.ip = "http://localhost:5000/";
 	
@@ -40,9 +40,9 @@ function dataService () {
 	//this.ip = "http://137.108.122.193:"+this.serverPort+"/";
 	//this.streamIp = "http://137.108.122.193:"+this.streamPort+"/";
 	
-	// ardrone laptop on eduroam
-	//this.ip = "http://192.168.1.3:"+this.serverPort+"/";
-	//this.streamIp = "http://192.168.1.3:"+this.streamPort+"/";
+	// ardrone wifi
+	this.ip = "http://192.168.1.3:"+this.serverPort+"/";
+	this.streamIp = "http://192.168.1.3:"+this.streamPort+"/";
 	
 	//this.ip = "http://192.168.0.5:"+this.serverPort+"/";
 	//this.streamIp = "http://192.168.0.5:"+this.streamPort+"/";
@@ -503,7 +503,10 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		}
 		else if(block.class = "no-op") {
 			
-			return null;
+			// TODO this is horrible
+			ret = {}
+			ret["type"] = "noop";
+			return ret;
 			
 		}
 	}
