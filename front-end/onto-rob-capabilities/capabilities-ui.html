@@ -1,4 +1,4 @@
-<h1>HELLO Ontorob!</h1>	
+<h1>HELLO Ontorob BO!</h1>	
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
 
@@ -32,6 +32,7 @@
 							<div class="capability rounded-7"  ng-style="{background: capability.backgroundColor}"> <!-- ng-if="capability.params.length > 0" -->
 								<div class="overflow">
 									<div class="block-text col-md-6">
+										
 										{{getNameFromURI(capability.type)}} <span ng-if="getNameFromURI(capability.type) == 'Trigger'">{{capability.topic}}</span><!-- {{capability.topic}} , {{capability.msg}} -->
 									</div>
 									<div class="col-md-2">
@@ -44,10 +45,12 @@
 							
 							</div>
 						</div>
-						
-						<div ng-if="capability.mode == 'read'">
-							<div class="capability rounded-7" ng-if="capability.params.length > 0" ng-style="{background: capability.backgroundColor}">
-								<div ng-include="visualiserHash[getNameFromURI(capability.type)]['display']" ng-init="capability = capability">
+						<div ng-hide="getNameFromURI(capability.type) == 'Vision' && capability.topic != '/camera/rgb/image'">
+							<div ng-if="capability.mode == 'read' && capability.params.length > 0 ">
+							
+								<div class="capability rounded-7"  ng-style="{background: capability.backgroundColor}">
+									<div ng-include="visualiserHash[getNameFromURI(capability.type)]['display']" ng-init="capability = capability">
+									</div>
 								</div>
 							</div>
 						</div>

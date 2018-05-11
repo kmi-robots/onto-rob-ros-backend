@@ -31,8 +31,8 @@ function dataService () {
 	this.streamPort = 8080;
 	
 	// gianluca's laptop on eduroam
-	// this.ip = "http://137.108.114.0:"+this.serverPort+"/";
-	// this.streamIp = "http://137.108.114.0:"+this.streamPort+"/";
+	this.ip = "http://137.108.118.237:"+this.serverPort+"/";
+	this.streamIp = "http://137.108.118.237:"+this.streamPort+"/";
 
 	//this.ip = "http://localhost:5000/";
 	
@@ -41,8 +41,8 @@ function dataService () {
 	//this.streamIp = "http://137.108.122.193:"+this.streamPort+"/";
 	
 	// ardrone wifi
-	this.ip = "http://192.168.1.3:"+this.serverPort+"/";
-	this.streamIp = "http://192.168.1.3:"+this.streamPort+"/";
+	// this.ip = "http://192.168.1.3:"+this.serverPort+"/";
+// 	this.streamIp = "http://192.168.1.3:"+this.streamPort+"/";
 	
 	//this.ip = "http://192.168.0.5:"+this.serverPort+"/";
 	//this.streamIp = "http://192.168.0.5:"+this.streamPort+"/";
@@ -93,6 +93,7 @@ function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 		
 	}).then(function successCallback(response) {
 		
+		console.log("HELLO");
 		var capabilities = response.data;
 		
 		angular.forEach(capabilities, function (messageCapability) {
@@ -113,6 +114,7 @@ function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
 		$state.go("capabilities-ui");	
 	
 	}, function errorCallback(response) {
+		
 		console.log("Problems while contacting the robot" + response.status);
 	
 	});
@@ -279,12 +281,12 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			params: {"question": angular.toJson(toRequest,false)}
 			
 		}).then(function successCallback(response) {
-			//console.log(response.data);
+			
+			// console.log(response.data);
 			
 			angular.forEach(capabilities, function(requestedCapability) {
 				
-				var key = requestedCapability.capability.type + "/" + requestedCapability.topic;
-				
+				var key = requestedCapability.capability.type + "/" + requestedCapability.topic;				
 				if(response.data.hasOwnProperty(key)) {
 					
 					var readParams = response.data[key];
@@ -352,7 +354,8 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			
 	
 		}, function errorCallback(response) {
-			
+			console.log("Error", toRequest);
+			console.log(response);	
 			console.log("Problems while contacting the KB server " + response.status);
 			
 		});
