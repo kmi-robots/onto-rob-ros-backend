@@ -427,7 +427,6 @@ def read():
             msg = q_res["msg"]
 
             parameters_to_read = onto_server.get_params_from_msg(msg)
-            # print parameters_to_read
 
             # reading contains the object
             if topic in topic_dict.keys():
@@ -436,7 +435,7 @@ def read():
                 reading = read_from_robot(topic, get_name_from_uri(pkg), get_name_from_uri(msg))
 
             ros_msg_dict = ros_msg_2_dict(reading, parameters_to_read)
-            key = capability + "/" + topic
+            key = capability + '/' + topic
             ret[key] = ros_msg_dict
 
         resp = app.response_class(response=json.dumps(ret), status=200,mimetype="application/json")
@@ -559,6 +558,8 @@ def ros_msg_2_dict(ros_msg_obj, parameters_to_read):
                 for i in range(0, len(value)):
                     if math.isnan(value[i]):
                         value[i] = None
+                    if value[i] == float('inf'):
+                        value[i] = 9999999
 
         ret[param] = value
 
