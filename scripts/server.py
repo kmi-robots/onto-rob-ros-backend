@@ -304,7 +304,8 @@ class OntoRobServer:
         fw.write(s)
         fw.close()
         return
-        
+
+
 app = Flask(__name__)
 onto_server = OntoRobServer()
 topic_dict = {}
@@ -400,6 +401,10 @@ def ask_capabilities():
 @app.route('/execute', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def execute():
+    """
+    receive program from UI in json format
+    execute it directly
+    """
     print "Received execute"
     program = json.loads(request.data)["program"]
     onto_server.update_program_with_msg_and_pkg(program)
@@ -412,6 +417,10 @@ def execute():
 @app.route('/read', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def read():
+    """
+    receive a list of topic in json format
+    provides the newest messesage from those topics
+    """
     try:
         qs = json.loads(request.args["question"])
         ret = {}
@@ -428,7 +437,9 @@ def read():
 
             parameters_to_read = onto_server.get_params_from_msg(msg)
 
-            # reading contains the object
+            # performs topic subscription only once, otherwise read from an existing dictionary
+            # (maybe this should be performed at a lower level?)
+            # TODO
             if topic in topic_dict.keys():
                 reading = read_from_topic(topic)
             else:
@@ -438,7 +449,7 @@ def read():
             key = capability + '/' + topic
             ret[key] = ros_msg_dict
 
-        resp = app.response_class(response=json.dumps(ret), status=200,mimetype="application/json")
+        resp = app.response_class(response=json.dumps(ret), status=200, mimetype="application/json")
  
         return resp
     except Exception, e:
@@ -457,7 +468,7 @@ def trigger_capability():
         req_capability = json.loads(request.data)['capability']
     elif request.method == 'GET':
         req_capability = json.loads(str(request.args['capability']))
-    else :
+    else:
         return "Method not allowed", 403
 
     robot_input = dict()
@@ -564,6 +575,7 @@ def ros_msg_2_dict(ros_msg_obj, parameters_to_read):
         ret[param] = value
 
     return ret
+
 
 if __name__ == "__main__":
     print "Starting server"
