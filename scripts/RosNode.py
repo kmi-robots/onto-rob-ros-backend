@@ -11,9 +11,7 @@ class RosNode(object):
         self.subscribed_topics = []
         self.services = []
         self.name = name
-        self.initialise_node()
 
-    def initialise_node(self):
         nodeinfo = rosnode.get_node_info_description(self.name)
         lines = nodeinfo.split("\n")
 
@@ -29,12 +27,10 @@ class RosNode(object):
 
         while line.strip().startswith("*") and count < len(lines):
             # new published topic
-            topic = self.get_topic(line.rstrip())
-            msg = self.get_topic_type(topic)
-            # msg = self.get_msg(line.rstrip())
+            topic = line.rstrip().split(" ")[2]
+            msg = rostopic.get_topic_type(topic)[0]
             pub_topic = {'topic': topic, 'msg': msg}
             self.published_topics.append(pub_topic)
-            # print "This is a published topic: %s with msg:%s" % (topic,msg)
             count += 1
             line = lines[count]
 
@@ -47,16 +43,13 @@ class RosNode(object):
 
         while line.strip().startswith("*") and count < len(lines):
             # new subscribed topic
-            topic = self.get_topic(line.rstrip())
-            # info_text = rostopic.get_info_text(topic)
-            msg = self.get_topic_type(topic)
-            # msg = self.get_msg(line.rstrip())
-            if topic == "/move_base_simple/goal":
-		print "RosNode has found %s" % topic
+            # topic name
+            topic = line.rstrip().split(" ")[2]
+            # topic type
+            msg = rostopic.get_topic_type(topic)[0]
 
-            sub_topic = {"topic":topic,"msg":msg}
+            sub_topic = {"topic": topic, "msg": msg}
             self.subscribed_topics.append(sub_topic)
-            # print "This is a subscribed topic: %s with msg:%s" % (topic,msg)
             count += 1
             line = lines[count]
 
@@ -68,34 +61,13 @@ class RosNode(object):
         line = lines[count]
 
         while line.strip().startswith("*") and count < len(lines):
-            # new subscribed topic
-            srv = self.get_service(line)
-            srv_type = self.get_service_type(srv)
-            service = {"name":srv,"msg":srv_type}
+            # get service name
+            srv = line.split(" ")[2]
+            srv_type = rosservice.get_service_type(srv)
+            service = {"name": srv, "msg": srv_type}
             self.services.append(service)
-            # print "This is service: %s with type:%s" % (srv, srv_type)
             count += 1
             line = lines[count]
-
-    def get_topic(self, line):
-        return line.split(" ")[2]
-
-    def get_service(self, line):
-        return line.split(" ")[2]
-
-    def get_msg(self, line):
-        s = line.split(" ")
-        return s[3][1:len(s[3])-1]
-
-    def explode_topics(self):
-        # recursively adding all the submessages of a message
-        return
-
-    def get_topic_type(self, topic):
-        return rostopic.get_topic_type(topic)[0]
-
-    def get_service_type(self, srv):
-        return rosservice.get_service_type(srv)
 
     def get_capability_msg(self):
         ret = []
