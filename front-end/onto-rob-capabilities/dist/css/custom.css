@@ -124,17 +124,23 @@ p.name {
 
 #capability_container {
 	background: #7fff9d;
+	/*border-color: #7fff9d;
+	border-style: solid ;*/
 	margin-right:5px;
 	padding: 5px;
 }
 
 #program_container {
+/*	border-color: #fff772;
+	border-style: solid ;*/
 	background: #fff772;
 	margin-right:5px;
 	padding: 5px;
 }
 
 #blocks_container {
+/*	border-color: #89b8ff;
+	border-style: solid ;*/
 	background: #89b8ff;
 	margin-right:5px;
 	padding: 5px;

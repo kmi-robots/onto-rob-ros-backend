@@ -1,4 +1,4 @@
-<h1>HELLO Ontorob BO!</h1>	
+<h1>Hello Onto-rob!</h1>	
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
 
@@ -20,10 +20,10 @@
   </div>
 	<div class="container-fluid">
 		
-		<div class="col-lg-4 padding-lr-5">
+		<div class="col-lg-4 col-md-4 col-sm-4 padding-lr-5">
 			<div class="rounded-7" id="capability_container">
 				
-				<h3 class="text-center">Capability List</h3>
+				<h3 class="text-center">Capabilities</h3>
 				
 				<div ng-repeat="messageCapability in capabilities">
 					<div ng-repeat="capability in messageCapability.capabs">
@@ -38,6 +38,8 @@
 									<div class="col-md-2">
 										<button type="button" class="btn btn-danger" ng-click="addCapability(capability)" ng-if="!capability.disabled">add</button>
 									</div>
+									<!-- <i class="fa fa-2x fa-question-circle" data-toggle="modal" data-target="#myModal" ng-click="showDescription(capability)"> </i> -->
+									
 									<div class="col-md-4">
 										<button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" ng-click="showDescription(capability)">read description</button>
 									</div>
@@ -60,11 +62,10 @@
 			</div>
 		</div>
 		
-		<div class="col-lg-6 padding-lr-5">
+		<div class="col-lg-6 col-md-6 col-sm-6 padding-lr-5">
 			<div id="program_container" class="rounded-7">
 				<h3 class="text-center">Program</h3>
 			
-				<button type="button" class="btn btn-info" ng-click="run()">Run program</button>
 			
 				<div class="program" ng-click="select(program,$event)" ng-style="{background: program.backgroundColor}">
 					<div ng-if="program.sequence.length == 0" class="placeholder">PROGRAM</div>
@@ -75,12 +76,15 @@
 						</div>
 					</div>
 				</div>
+				<br/><br/>
+				<button type="button" class="btn btn-lg btn-info btn-block" ng-click="run()">Run</button>
+				
 			</div>
 		</div>
 		 
-	     <div class="col-lg-2 padding-lr-5">
+	     <div class="col-lg-2 col-md-2 col-sm-2 padding-lr-5">
 			<div id="blocks_container" class="rounded-7 overflow">
-				<h3 class="text-center">Programming blocks</h3>
+				<h3 class="text-center">Constructs</h3>
 				<div ng-repeat="block in program.blockTypes" >
 					
 					<div class="block-item overflow rounded-7" ng-style="{background: block.backgroundColor}">

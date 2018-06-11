@@ -13,7 +13,7 @@
 
 <div class="capability-parameters overflow">
 	<div class="" style="overflow: scroll; width:450px; height:200px;" >
-		<canvas id="map{{slashesToHyphens(messageCapability.topic)}}" ng-mousemove="getMousePos($event,capability.type,messageCapability.topic)">
+		<canvas id="map{{slashesToHyphens(messageCapability.topic)}}" ng-mousemove="getMousePos($event,capability.type,messageCapability.topic)"  ng-mousedown="zoomOut()" ng-mouseup="zoomIn()">
 		</canvas>
 	</div>
 	<div ng-if="visualisersSettings[capability.type+'/'+messageCapability.topic] != null" ng-model="visualisersSettings[apability.type+'/'+messageCapability.topic]">

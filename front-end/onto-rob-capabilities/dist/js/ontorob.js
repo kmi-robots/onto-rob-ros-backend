@@ -31,23 +31,17 @@ function dataService () {
 	this.streamPort = 8080;
 	
 	// gianluca's laptop on eduroam
-	this.ip = "http://137.108.118.237:"+this.serverPort+"/";
-	this.streamIp = "http://137.108.118.237:"+this.streamPort+"/";
-
-	//this.ip = "http://localhost:5000/";
+	// this.ip = "http://137.108.118.237:"+this.serverPort+"/";
+	// this.streamIp = "http://137.108.118.237:"+this.streamPort+"/";
 	
-	// manu's laptop on eduroam
-	//this.ip = "http://137.108.122.193:"+this.serverPort+"/";
-	//this.streamIp = "http://137.108.122.193:"+this.streamPort+"/";
+	// bender on eduroam
+	this.ip = "http://137.108.125.182:"+this.serverPort+"/";
+	this.streamIp = "http://137.108.125.182:"+this.streamPort+"/";
 	
 	// ardrone wifi
 	// this.ip = "http://192.168.1.3:"+this.serverPort+"/";
 // 	this.streamIp = "http://192.168.1.3:"+this.streamPort+"/";
-	
-	//this.ip = "http://192.168.0.5:"+this.serverPort+"/";
-	//this.streamIp = "http://192.168.0.5:"+this.streamPort+"/";
-	
-	//this.ip = "http://10.229.169.122:5000/";
+
 }
 
 function indexCtrl($scope,$http,$timeout,$window,$state, Data) {
@@ -1303,6 +1297,14 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		return imgData;
 	}
 
+	$scope.zoomOut = function(){
+		console.log("Halli");
+	}
+	$scope.zoomIn = function(){
+		console.log("Hallo");
+	}
+	
+	
 	$scope.getMousePos = function ($event, cap, topic) {
 
 		key = cap+"/"+topic;
@@ -1314,8 +1316,8 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 	  	  	let rect = $event.target.getBoundingClientRect(),
 	        x = $event.clientX - rect.left,
 	        y = $event.clientY - rect.top;
-    		console.log(curSettings["info.origin.position.x"]);
-			console.log(curSettings["info.origin.position.y"]);
+    		// console.log(curSettings["info.origin.position.x"]);
+			// console.log(curSettings["info.origin.position.y"]);
 			finalx = (x - curSettings["info.width"]/2+curSettings["info.origin.position.x"])*curSettings["info.resolution"];
 			finaly = (y - curSettings["info.height"]/2+curSettings["info.origin.position.y"])*curSettings["info.resolution"];
 		
