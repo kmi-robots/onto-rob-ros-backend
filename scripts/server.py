@@ -7,6 +7,7 @@ from functools import update_wrapper
 import rosnode
 from RosNode import RosNode
 from OntoRobServer import OntoRobServer
+from dynamic_node import DynamicNode
 
 import parse_instructions
 
@@ -67,7 +68,7 @@ def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_t
 
 app = Flask(__name__)
 onto_server = OntoRobServer()
-topic_dict = {}
+dynamic_node = DynamicNode("dynamic_node")
 
 
 @app.route("/")
@@ -118,9 +119,10 @@ def ask_capabilities():
     print "Received capabilities request"
     parsed_json = get_nodes()
     # add topics dynamically
+    # TODO why do we need two of these?
+    # can we make query_kb independent from parsed_json?
+    # inizialization should be before everything and not triggered from outside
     onto_server.add_topics(parsed_json)
-
-    # get capabilitites
     response_array = onto_server.query_kb(parsed_json)
 
     for i in reversed(range(0, len(response_array))):
@@ -144,6 +146,16 @@ def execute():
 
     execute_on_robot(program)
     return "OK", 200
+
+
+@app.route('/run', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def run():
+    # TODO I'm working here
+    print "Execute single command"
+    dynamic_node.send_command(json.loads(request.data))
+
+    return 'OK', 200
 
 
 @app.route('/read', methods=['GET', 'OPTIONS'])
@@ -170,13 +182,7 @@ def read():
             parameters_to_read = onto_server.get_params_from_msg(msg)
 
             # performs topic subscription only once, otherwise read from an existing dictionary
-            # (maybe this should be performed at a lower level?)
-            # TODO
-            if topic in topic_dict.keys():
-                reading = read_from_topic(topic)
-            else:
-                reading = read_from_robot(topic, OntoRobServer.get_name_from_uri(pkg), OntoRobServer.get_name_from_uri(msg))
-
+            reading = dynamic_node.read_topic(topic, OntoRobServer.get_name_from_uri(pkg), OntoRobServer.get_name_from_uri(msg))
             ros_msg_dict = ros_msg_2_dict(reading, parameters_to_read)
             key = capability + '/' + topic
             ret[key] = ros_msg_dict
@@ -274,17 +280,6 @@ def update_msgs_collection(cur_node_msgs, msgs_topic_collection):
 def execute_on_robot(program):
     print "starting execution"
     parse_instructions.run_program(program)
-    
-
-def read_from_topic(topic):
-    return parse_instructions.get_value(topic)
-
-
-def read_from_robot(topic, pkg, msg):
-    uid = parse_instructions.read_topic(topic, pkg, msg)
-    topic_dict[topic] = {}
-    topic_dict[topic]["uid"] = uid
-    return read_from_topic(topic)
 
 
 def ros_msg_2_dict(ros_msg_obj, parameters_to_read):
@@ -294,7 +289,7 @@ def ros_msg_2_dict(ros_msg_obj, parameters_to_read):
         if "__LIST" in param:
             param = param.replace("__LIST", "")
 
-        value = parse_instructions.rgetattr(ros_msg_obj, param)
+        value = dynamic_node.rgetattr(ros_msg_obj, param)
         if type(value) == list or type(value) == tuple:
             value = list(value)
             if type(value[0]) == float:
@@ -314,3 +309,4 @@ if __name__ == "__main__":
     parse_instructions.init()
     # app.run(debug=True, use_reloader=True, threaded=True, host='0.0.0.0')
     app.run(threaded=True, host='0.0.0.0')
+

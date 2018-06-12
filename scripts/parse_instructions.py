@@ -128,7 +128,7 @@ def execute(instructions):
             manage_repeat(ist)
         if ist['type'] == 'capability':
             send_command(ist)
-        if ist['type'] == "noop":
+        if ist['type'] == 'noop':
             rate.sleep()
 
 
