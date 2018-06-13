@@ -151,9 +151,10 @@ def execute():
 @app.route('/run', methods=['POST', 'OPTIONS'])
 @crossdomain(origin='*')
 def run():
-    # TODO I'm working here
     print "Execute single command"
-    dynamic_node.send_command(json.loads(request.data))
+    j = json.loads(request.data)
+
+    dynamic_node.send_command(j['topic'], j['pkg'], j['name'], DynamicNode.flat_to_nested_dict(j['message']))
 
     return 'OK', 200
 
@@ -237,6 +238,19 @@ def trigger_capability():
     return jsonify(robot_input), 200
 
 
+def check_command_consistency(msgj):
+    g = onto_server.get_graph()
+    qres = g.query('ASK {'
+                   '<http://data.open.ac.uk/kmi/ontoRob/resource/'+msgj['pkg']+'/'+msgj['name']+'>'
+                   '<http://data.open.ac.uk/kmi/ontoRob/property/evokes>'
+                   '<'+msgj['capability']+'> }')
+    qres1 = g.query('ASK {'
+                    '<http://data.open.ac.uk/kmi/ontoRob/resource/' + msgj['pkg'] + '/' + msgj['name'] + '>'
+                    '<http://data.open.ac.uk/kmi/ontoRob/property/publishedOn>'
+                    '<http://data.open.ac.uk/kmi/ontoRob/resource/topic/' + msgj['topic'] + '> }')
+    return qres.askAnswer and qres1.askAnswer
+
+
 def get_nodes():
     nodelist = rosnode.get_node_names()
     msgs_topic_collection = []
@@ -306,7 +320,6 @@ def ros_msg_2_dict(ros_msg_obj, parameters_to_read):
 
 if __name__ == "__main__":
     print "Starting server"
-    parse_instructions.init()
+    # parse_instructions.init()
     # app.run(debug=True, use_reloader=True, threaded=True, host='0.0.0.0')
     app.run(threaded=True, host='0.0.0.0')
-

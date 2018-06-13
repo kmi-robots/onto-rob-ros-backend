@@ -8,7 +8,6 @@ class DynamicNode:
 
     def __init__(self, name):
         rospy.init_node(name, disable_signals=True)
-        self.command = dict()
         self.subscribers = dict()
         self.publishers = dict()
         self.last_msg = dict()
@@ -28,48 +27,72 @@ class DynamicNode:
             v = val
         return setattr(functools.reduce(getattr, [obj] + pre.split('.')) if pre else obj, post, v)
 
-    def gen_message(self, attr):
-        fields = self.command['fields']
-        tmsg = attr()
-        for f in fields:
-            DynamicNode.rsetattr(tmsg, f, self.command[f])
-        return tmsg
+    @staticmethod
+    def flat_to_nested_dict(flat_dict):
+        nested_dict = dict()
+        for k in flat_dict.keys():
+            DynamicNode.filldictionary(nested_dict, k, flat_dict[k])
+        return nested_dict
 
-    def activate_publisher(self):
+    @staticmethod
+    def filldictionary(dictionary, key, value):
+        pre, _, post = key.partition('.')
+        if post:
+            if pre in dictionary:
+                dictionary[pre].update(DynamicNode.filldictionary(dictionary[pre], post, value))
+            else:
+                dictionary[pre] = DynamicNode.filldictionary({}, post, value)
+            return dictionary
+        else:
+            try:
+                v = float(value)
+            except ValueError:
+                v = str(value)
+            return {pre: v}
+
+    # def gen_message(self, attr):
+    #     fields = self.command['fields']
+    #     tmsg = attr()
+    #     for f in fields:
+    #         DynamicNode.rsetattr(tmsg, f, self.command[f])
+    #     return tmsg
+
+    @staticmethod
+    def activate_publisher(topic, pkg, name, latched):
         # create a message of the 'pkg'/'name' type
-        attr = getattr(importlib.import_module(self.command['pkg'] + '.msg'), self.command['name'])
-        pub = rospy.Publisher(self.command['topic'], attr, queue_size=1)
+        attr = getattr(importlib.import_module(pkg + '.msg'), name)
+        pub = rospy.Publisher(topic, attr, queue_size=1, latch=latched)
         print('publisher active')
-        return pub, attr
+        return pub
 
-    def send_command(self, input_d):
+    def send_command(self, topic, pkg, name, msgd):
         print('command received')
-        self.command = input_d
-        pub, attr = self.activate_publisher()
-        msg = self.gen_message(attr)
-        while not rospy.is_shutdown():
-            if pub.get_num_connections() > 0:
-                pub.publish(msg)
-                print('message delivered')
-                break
-            self.rate.sleep()
+        pub = DynamicNode.activate_publisher(topic, pkg, name, True)
+        msg = message_converter.convert_dictionary_to_ros_message(pkg+'/'+name, msgd)
+        pub.publish(msg)
+        rospy.sleep(3.0)
         # TODO rospy bug, unregister doesn't work correctly
         # pub.unregister()
+        print('message delivered')
 
-    def stream_command(self, input_d):
-        self.command = input_d
-        if self.command['topic'] not in self.publishers:
-            self.publishers[self.command['topic']], attr = self.activate_publisher()
-            self.rate.sleep()
+    def setup_connection(self, topic, pkg, name):
+        if topic not in self.publishers:
+            self.publishers[topic] = [DynamicNode.activate_publisher(topic, pkg, name, False), pkg, name]
+            return True
         else:
-            attr = getattr(importlib.import_module(self.command['pkg'] + '.msg'), self.command['name'])
-        msg = self.gen_message(attr)
-        self.publishers[self.command['topic']].publish(msg)
+            return False
+
+    def stream_command(self, topic, msgd):
+        if topic not in self.publishers:
+            return False
+        msg = message_converter.convert_dictionary_to_ros_message(self.publishers[topic][1] + '/' + self.publishers[topic][2], msgd)
+        self.publishers[topic][0].publish(msg)
         print('message delivered')
 
     # TODO rospy bug, unregister doesn't work correctly
-    def stop_streaming(self, topic):
-        self.publishers[topic].unregister()
+    def tear_down_connection(self, topic):
+        self.publishers[topic][0].unregister()
+        del self.publishers[topic]
 
     def read_topic(self, topic, pkg, msg):
         if topic in self.last_msg:
