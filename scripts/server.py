@@ -196,48 +196,6 @@ def read():
         return "D'OH", 500
 
 
-@app.route('/trigger', methods=['GET', 'POST', 'OPTIONS'])
-@crossdomain(origin='*')
-def trigger_capability():
-    """
-    in : capability + params
-    out : (json) msg + topic + params
-    """
-    if request.method == 'POST':
-        req_capability = json.loads(request.data)['capability']
-    elif request.method == 'GET':
-        req_capability = json.loads(str(request.args['capability']))
-    else:
-        return "Method not allowed", 403
-
-    robot_input = dict()
-    
-    # add parameters to robotinput
-    robot_input['param_values'] = req_capability['parameters']
-    fields = list(param for param in robot_input['param_values'].keys())
-    robot_input['fields'] = fields
-    
-    # get message name from capability+parameters
-    # msg = onto_server.get_message_name(req_capability['type'], req_capability['parameters'])
-
-    # bypassing the KB. All the infos come from the application. We'll see later
-    # ROS msgs and pkgs system is alwats pkg/msgName, so 0 a 1 are ok indexes for all the cases
-    msg = req_capability["message"]
-    robot_input['name'] = msg.split("/")[1]
-    
-    # get pkg
-    # pkg = onto_server.get_package(msg)
-    robot_input['pkg'] = msg.split("/")[0]
-    
-    # get topic from Msg
-    # topic = onto_server.get_topic_from_msg(msg)
-    topic = req_capability["topic"]
-
-    robot_input['topic'] = topic
-
-    return jsonify(robot_input), 200
-
-
 def check_command_consistency(msgj):
     g = onto_server.get_graph()
     qres = g.query('ASK {'
