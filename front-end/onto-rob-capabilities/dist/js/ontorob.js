@@ -31,12 +31,12 @@ function dataService () {
 	this.streamPort = 8080;
 	
 	// gianluca's laptop on eduroam
-	// this.ip = "http://137.108.118.237:"+this.serverPort+"/";
-	// this.streamIp = "http://137.108.118.237:"+this.streamPort+"/";
+	this.ip = "http://137.108.113.116:"+this.serverPort+"/";
+	this.streamIp = "http://137.108.113.116:"+this.streamPort+"/";
 	
 	// bender on eduroam
-	this.ip = "http://137.108.125.182:"+this.serverPort+"/";
-	this.streamIp = "http://137.108.125.182:"+this.streamPort+"/";
+	// this.ip = "http://137.108.125.182:"+this.serverPort+"/";
+	// this.streamIp = "http://137.108.125.182:"+this.streamPort+"/";
 	
 	// ardrone wifi
 	// this.ip = "http://192.168.1.3:"+this.serverPort+"/";
@@ -453,7 +453,7 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 			}
 		})
 		
-		console.log(programObject);
+		console.log("1", programObject);
 		
 		//send
 		$http({
@@ -966,51 +966,51 @@ function ontorobCtrl($scope, $http, $state, $compile,$interval, Data){
 		
 	}
 
-	$scope.trigger = function (capability,topic,message,capabNameIndex){
-		
-		//capName = getNameFromURI($capabNameIndex);
-		console.log("Sending action " + capability + " to the server");
-		
-		capabDiv = angular.element(document.getElementById("cap_"+capabNameIndex));
-				
-		//console.log(capabDiv.children());
-		values = {};
-		angular.forEach(capabDiv.children(),function(input) {
-			
-			inputElement = angular.element(input);
-			
-			if(inputElement[0].localName == "input") {
-				
-				//console.log(inputElement[0].value);
-				values[inputElement[0].name] = inputElement[0].value;
-				
-			}
-		});
-		
-		toSend = {};
-		toSend["type"] = capability;
-		toSend["topic"] = topic;
-		toSend["message"] = message;
-		toSend["parameters"] = values;
-		
-		console.log(toSend);
-		
-		$http({
-			
-			method: 'POST',
-			url: $scope.ip + "trigger",
-			data: {"capability": toSend}
-			
-		}).then(function successCallback(response) {
-			
-			console.log("Response "+ response.status);	
-				
-		}, function errorCallback(response) {
-			
-			console.log("Problems while contacting the KB server " + response.status);
-			
-		});
-	}
+	// $scope.trigger = function (capability,topic,message,capabNameIndex){
+//
+// 		//capName = getNameFromURI($capabNameIndex);
+// 		console.log("Sending action " + capability + " to the server");
+//
+// 		capabDiv = angular.element(document.getElementById("cap_"+capabNameIndex));
+//
+// 		//console.log(capabDiv.children());
+// 		values = {};
+// 		angular.forEach(capabDiv.children(),function(input) {
+//
+// 			inputElement = angular.element(input);
+//
+// 			if(inputElement[0].localName == "input") {
+//
+// 				//console.log(inputElement[0].value);
+// 				values[inputElement[0].name] = inputElement[0].value;
+//
+// 			}
+// 		});
+//
+// 		toSend = {};
+// 		toSend["type"] = capability;
+// 		toSend["topic"] = topic;
+// 		toSend["message"] = message;
+// 		toSend["parameters"] = values;
+//
+// 		console.log(2, toSend);
+//
+// 		$http({
+//
+// 			method: 'POST',
+// 			url: $scope.ip + "trigger",
+// 			data: {"capability": toSend}
+//
+// 		}).then(function successCallback(response) {
+//
+// 			console.log("Response "+ response.status);
+//
+// 		}, function errorCallback(response) {
+//
+// 			console.log("Problems while contacting the KB server " + response.status);
+//
+// 		});
+// 	}
 	
 	function disableAllBut (classToEnable) {
 		
