@@ -5,8 +5,6 @@ import collections
 import functools
 import uuid
 
-import json
-
 from move_base_msgs.msg import MoveBaseActionResult
 
 

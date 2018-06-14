@@ -92,6 +92,7 @@ def execute(instructions):
         else:
             send_command(ist)
 
+
 if __name__ == '__main__':
     rospy.init_node('dynamic_listener')
     rate = rospy.Rate(1)
