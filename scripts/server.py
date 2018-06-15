@@ -98,6 +98,7 @@ def ask_capability(capa):
     """
     queries the KB : which nodes evoke such capability?
     """
+    print capa
     result = ''
     g = onto_server.get_graph()
     qres = g.query(
@@ -150,6 +151,7 @@ def execute():
 @crossdomain(origin='*')
 def run():
     print 'Execute single command'
+    print request.data
     j = json.loads(request.data)
     if check_command_consistency(j):
         dynamic_node.send_command(j['topic'], j['pkg'], j['name'], DynamicNode.flat_to_nested_dict(j['message']))
@@ -158,9 +160,9 @@ def run():
         return 'ERROR', 500
 
 
-@app.route('/read', methods=['GET', 'OPTIONS'])
+@app.route('/deprecated_read', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
-def read():
+def deprecated_read():
     """
     receive a list of topic in json format
     provides the newest messesage from those topics
@@ -195,6 +197,41 @@ def read():
         return 'ERROR', 500
 
 
+@app.route('/read', methods=['POST', 'OPTIONS'])
+@crossdomain(origin='*')
+def read():
+    """
+    receive a list of topic in json format
+    provides the newest messesage from those topics
+    """
+    try:
+        qs = json.loads(request.data)
+        ret = list()
+
+        for q in qs:
+            topic = q['topic']
+            capability = q['capability']
+            topic_uri = onto_server.get_ontorob_res_namespace().topic + q['topic']
+            # this can be done in the else, by improving the query
+            # in the get_params_from_msg method (making it retrievable from the capability)
+            q_res = onto_server.get_msg_and_pkg(topic_uri, capability)
+            pkg = q_res['pkg']
+            msg = q_res['msg']
+
+            parameters_to_read = onto_server.get_params_from_msg(msg)
+
+            # performs topic subscription only once, otherwise read from an existing dictionary
+            reading = dynamic_node.read_topic(topic, OntoRobServer.get_name_from_uri(pkg),
+                                              OntoRobServer.get_name_from_uri(msg))
+            ros_msg_dict = ros_msg_2_dict(reading, parameters_to_read)
+            ret.append({'capability': capability, 'topic': topic, 'parameters': ros_msg_dict})
+
+        return app.response_class(response=json.dumps(ret), status=200, mimetype='application/json')
+    except Exception, e:
+        print str(e)
+        return 'ERROR', 500
+
+
 def check_command_consistency(msgj):
     g = onto_server.get_graph()
     qres = g.query('ASK {'
@@ -205,7 +242,8 @@ def check_command_consistency(msgj):
                     '<http://data.open.ac.uk/kmi/ontoRob/resource/' + msgj['pkg'] + '/' + msgj['name'] + '>'
                     '<http://data.open.ac.uk/kmi/ontoRob/property/publishedOn>'
                     '<http://data.open.ac.uk/kmi/ontoRob/resource/topic/' + msgj['topic'] + '> }')
-    return qres.askAnswer and qres1.askAnswer
+    # return qres.askAnswer and qres1.askAnswer
+    return qres.askAnswer
 
 
 def get_nodes():
