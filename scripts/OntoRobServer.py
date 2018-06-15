@@ -9,6 +9,7 @@ class OntoRobServer:
     __ONTOROB_PROP = Namespace("http://data.open.ac.uk/kmi/ontoRob/property/")
 
     def __init__(self):
+        self.__G = Graph()
         self.read_kb()
 
     @staticmethod
@@ -26,7 +27,6 @@ class OntoRobServer:
         self.read_kb()
 
     def read_kb(self):
-        self.__G = Graph()
         self.__G.parse(self.__GRAPHFILE, format="n3")
 
     def get_graph(self):
@@ -240,4 +240,3 @@ class OntoRobServer:
         fw = codecs.open("../temp_graph.n3", 'w')
         fw.write(s)
         fw.close()
-        return
