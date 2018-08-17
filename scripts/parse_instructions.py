@@ -104,6 +104,8 @@ def manage_repeat(ist):
     val = ist['times']
     for _ in range(0, val):
         execute(ist['do'])
+        fake_instruction = {'type': 'noop'}
+        execute(fake_instruction)
 
 
 def callback(msg, topic):
@@ -128,7 +130,7 @@ def execute(instructions):
             manage_repeat(ist)
         if ist['type'] == 'capability':
             send_command(ist)
-        if ist['type'] == "noop":
+        if ist['type'] == 'noop':
             rate.sleep()
 
 
