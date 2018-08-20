@@ -104,7 +104,7 @@ def manage_repeat(ist):
     val = ist['times']
     for _ in range(0, val):
         execute(ist['do'])
-        fake_instruction = {'type': 'noop'}
+        fake_instruction = [{'type': 'noop'}]
         execute(fake_instruction)
 
 
