@@ -576,9 +576,23 @@ def ros_msg_2_dict(ros_msg_obj, parameters_to_read):
 
     return ret
 
+def signal_handler(signal,frame):
+    print "Closing server"
+    shutdown_server()
+    sys.exit(0)
+    
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
 
 if __name__ == "__main__":
     print "Starting server"
+    
+    if "linux" in sys.platform.lower():
+        signal.signal(signal.SIGINT,signal_handler)
+    
     parse_instructions.init()
     # app.run(debug=True, use_reloader=True, threaded=True, host='0.0.0.0')
     app.run(threaded=True, host='0.0.0.0')
