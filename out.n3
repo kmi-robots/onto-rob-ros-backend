@@ -425,6 +425,15 @@
     ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Internal_Representation_Shape> ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/shape_msgs> .
 
+<http://data.open.ac.uk/kmi/ontoRob/resource/sound_play/SoundRequest> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    rdfs:label "SoundRequest"@en ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Talking> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/arg>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/command>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/sound>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/volume> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/sound_play> .
+
 <http://data.open.ac.uk/kmi/ontoRob/resource/std_msgs/Empty> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "Empty"@en ;
     ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Docking> ;
@@ -549,6 +558,13 @@
     ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/battery>,
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/charger> .
 
+<http://data.open.ac.uk/kmi/ontoRob/resource/capability/Talking> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
+    ns1:hasParamType "write"@en ;
+    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/arg>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/command>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/sound>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/volume> .
+
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Temperature_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
     ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/temperature> .
@@ -579,6 +595,8 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/angular_velocity.z> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/arg> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/array__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/axes__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
@@ -588,6 +606,8 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/buttons__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/charger> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/command> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/echoes__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
@@ -673,6 +693,8 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/relative_humidity> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/sound> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/status.status> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/tags__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
@@ -696,6 +718,8 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/valid_window.y_offset> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/velocity__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/volume> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/wrench__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
