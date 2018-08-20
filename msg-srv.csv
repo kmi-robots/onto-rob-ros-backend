@@ -28,7 +28,8 @@ msg,move_base_msgs,MoveBaseActionFeedback,[Navigation],,
 msg,move_base_msgs,MoveBaseActionGoal,[Navigation],,
 msg,move_base_msgs,MoveBaseGoal,[Navigation],,
 msg,move_base_msgs,MoveBaseAction,[Navigation],,
-msg,sensor_msgs,BatteryState,[Self_Sensing; Battery_Sensing],r,[[charge]; [charge]]
+msg,sensor_msgs,BatteryState,[Battery_Sensing],r,[[percentage]]
+msg,kobuki_msgs,SensorState,[Self_Sensing],r,[[battery; charger]]
 msg,sensor_msgs,Illuminance,[Light_Sensing],r,[[illuminance]]
 msg,sensor_msgs,RelativeHumidity,[Humidity_Sensing],r,[[relative_humidity]]
 msg,sensor_msgs,Temperature,[Temperature_Sensing],r,[[temperature]]

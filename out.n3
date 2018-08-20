@@ -147,6 +147,13 @@
         <http://data.open.ac.uk/kmi/ontoRob/resource/field/twist.twist.linear.z> ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/geometry_msgs> .
 
+<http://data.open.ac.uk/kmi/ontoRob/resource/kobuki_msgs/SensorState> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
+    rdfs:label "SensorState"@en ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Self_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/battery>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/charger> ;
+    ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/kobuki_msgs> .
+
 <http://data.open.ac.uk/kmi/ontoRob/resource/move_base_msgs/MoveBaseAction> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "MoveBaseAction"@en ;
     ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Navigation> ;
@@ -240,9 +247,8 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs/BatteryState> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "BatteryState"@en ;
-    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Battery_Sensing>,
-        <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Self_Sensing> ;
-    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/charge> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Battery_Sensing> ;
+    ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/percentage> ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/sensor_msgs> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/sensor_msgs/CompressedImage> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
@@ -421,7 +427,7 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/std_msgs/Empty> a <http://data.open.ac.uk/kmi/ontoRob#msg> ;
     rdfs:label "Empty"@en ;
-    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Trigger> ;
+    ns1:evokes <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Docking> ;
     ns1:hasField <http://data.open.ac.uk/kmi/ontoRob/resource/field/> ;
     ns1:hasPkg <http://data.open.ac.uk/kmi/ontoRob/resource/package/std_msgs> .
 
@@ -476,7 +482,11 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Battery_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
-    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/charge> .
+    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/percentage> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/capability/Docking> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
+    ns1:hasParamType "write"@en ;
+    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/GPS_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
@@ -536,7 +546,8 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Self_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
-    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/charge> .
+    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/battery>,
+        <http://data.open.ac.uk/kmi/ontoRob/resource/field/charger> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Temperature_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
@@ -545,10 +556,6 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/capability/Time_Sensing> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
     ns1:hasParamType "read"@en ;
     ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/time_ref> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/capability/Trigger> a <http://data.open.ac.uk/kmi/ontoRob#Capability> ;
-    ns1:hasParamType "write"@en ;
-    ns1:hasParameter <http://data.open.ac.uk/kmi/ontoRob/resource/field/> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
@@ -576,7 +583,11 @@
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/axes__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/battery> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/buttons__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/charger> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/echoes__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
@@ -635,6 +646,8 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/magnetic_field.z> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/name__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
+
+<http://data.open.ac.uk/kmi/ontoRob/resource/field/percentage> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/points__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
@@ -739,8 +752,6 @@
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/angular.y> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/angular.z> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
-
-<http://data.open.ac.uk/kmi/ontoRob/resource/field/charge> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
 <http://data.open.ac.uk/kmi/ontoRob/resource/field/effort__LIST> a <http://data.open.ac.uk/kmi/ontoRob#Field> .
 
