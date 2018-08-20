@@ -3,15 +3,13 @@ import json
 from rdflib import URIRef, Graph, RDF, Namespace
 import codecs
 import math
-
 from datetime import timedelta
 from functools import update_wrapper
-
+import sys
 import rosnode
 from RosNode import RosNode
-
 import parse_instructions
-
+import signal
 
 def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_to_all=True, automatic_options=True):
     """Decorator function that allows crossdomain requests.
