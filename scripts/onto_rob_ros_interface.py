@@ -1,18 +1,18 @@
 import json
 import urllib2
-import urllib
 
 
 class OntoRobRosInterface:
 
-    def __init__(self, capability=None):
+    def __init__(self, location='localhost', capability=None):
         self.cprx = 'http://data.open.ac.uk/kmi/ontoRob/resource/capability/'
         self.pprx = 'http://data.open.ac.uk/kmi/ontoRob/resource/field/'
+        self.location = 'http://'+location+':5000'
         if capability:
             # TODO how does this work?
-            contents = urllib2.urlopen('http://localhost:5000/capabilities').read()
+            contents = urllib2.urlopen(self.location+'/capabilities').read()
         else:
-            contents = urllib2.urlopen('http://localhost:5000/capabilities').read()
+            contents = urllib2.urlopen(self.location+'/capabilities').read()
 
         self.aug_topics = json.loads(contents)
         return
@@ -62,12 +62,12 @@ class OntoRobRosInterface:
             pkg, name = self.get_message_type(topic)
             data = {'capability': self.cprx + capability,
                     'name': name, 'message': message, 'topic': topic, 'pkg': pkg, 'type': 'capability'}
-            r = urllib2.Request('http://localhost:5000/run', json.dumps(data), {'Content-Type': 'application/json'})
+            r = urllib2.Request(self.location+'/run', json.dumps(data), {'Content-Type': 'application/json'})
             urllib2.urlopen(r)
 
     def read_from_topic(self, topic, capability):
         data = [{'capability': self.cprx + capability, 'topic': topic}]
-        r = urllib2.Request('http://localhost:5000/read', json.dumps(data), {'Content-Type': 'application/json'})
+        r = urllib2.Request(self.location+'/read', json.dumps(data), {'Content-Type': 'application/json'})
         f = urllib2.urlopen(r)
         response = f.read()
         f.close()
@@ -77,7 +77,7 @@ class OntoRobRosInterface:
         data = list()
         for t, c in topics, capabilities:
             data.append({'capability': self.cprx + c, 'topic': t})
-        r = urllib2.Request('http://localhost:5000/read', json.dumps(data), {'Content-Type': 'application/json'})
+        r = urllib2.Request(self.location+'/read', json.dumps(data), {'Content-Type': 'application/json'})
         f = urllib2.urlopen(r)
         response = f.read()
         f.close()
