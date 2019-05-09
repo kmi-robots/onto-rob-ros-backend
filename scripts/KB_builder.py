@@ -14,7 +14,7 @@ def readCSV(inFile):
     """
     returns csv without headers
     """
-    fr = codecs.open(inFile,"r")    
+    fr = codecs.open(inFile, "r")
     lines = fr.readlines()[1:]
     return lines
 
@@ -81,9 +81,9 @@ def buildKB(inputF):
     for l in lines:
         # TODO add capability hasCapParameter field
         current_line = l.strip().split(',')
-        for triple in addMsg(current_line):  my_graph.add( triple)
-                
-        for triple in addCapabilities(current_line) : 
+        for triple in addMsg(current_line):
+            my_graph.add(triple)
+        for triple in addCapabilities(current_line):
             # print triple
             my_graph.add(triple)
         # for triple in addParams(l): my_graph.add(triple)

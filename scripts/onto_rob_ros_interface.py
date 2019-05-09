@@ -1,5 +1,6 @@
 import json
 import urllib2
+import pprint
 
 
 class OntoRobRosInterface:
@@ -48,7 +49,7 @@ class OntoRobRosInterface:
                         for p in c['params']:
                             message.append(str(p['p']).replace(self.pprx, ''))
                         break
-                    break
+                break
         return message
 
     def get_message_type(self, topic):
